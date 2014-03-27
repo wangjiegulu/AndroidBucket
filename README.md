@@ -1,7 +1,7 @@
 AndroidBucket
 =============
 
-###Android开发常用整理（不断扩充中）<br/>包含各种工具类、线程池、日志、自定义的控件、程序崩溃捕捉处理、默认的Application配置、常用的Adaptr等
+###Android开发常用整理（不断扩充中）<br/>包含各种工具类、线程池、日志、自定义的控件、程序崩溃捕捉处理、默认的Application配置、常用的Adapter等
 
 ###注意: <br/>
 > 如果需要使用FragmentTabAdapter，则需要android-support-v4.jar的支持（以兼容低版本）
