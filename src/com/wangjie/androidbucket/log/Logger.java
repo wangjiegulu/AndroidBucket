@@ -18,11 +18,11 @@ public class Logger {
     /**
      * 是否开启调试，发布时请把DEBUG改为false
      */
-    private static boolean debug = true;
+    public static boolean debug = true;
     /**
      * 是否在客户端记录用户操作
      */
-    private static boolean logFile = false;
+    public static boolean logFile = false;
 
     private static String logFilePath;
 
