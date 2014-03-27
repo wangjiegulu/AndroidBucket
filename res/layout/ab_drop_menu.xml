@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="110dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/ab_drop_menu_lv"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="#333333"
+        android:dividerHeight="0.8dp"
+        android:listSelector="@android:color/transparent" />
+
+</LinearLayout>

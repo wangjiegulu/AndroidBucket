@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ab_drop_menu_item_title"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/holo_blue_light"
+    android:gravity="center_vertical"
+    android:paddingBottom="6dp"
+    android:paddingLeft="7dp"
+    android:paddingTop="6dp"
+    android:textColor="#ffffff"
+    android:textSize="16sp" />
