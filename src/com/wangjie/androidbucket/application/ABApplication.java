@@ -15,8 +15,8 @@ public class ABApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        initThreadPool(); // 初始化线程池
         initLogger(); // 初始化日志工具
+        initThreadPool(); // 初始化线程池
         initImageLoader(); // 初始化图片加载器
         initCrashHandler(); // 初始化程序崩溃捕捉处理
 
