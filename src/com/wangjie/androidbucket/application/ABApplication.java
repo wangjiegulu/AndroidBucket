@@ -1,9 +1,11 @@
 package com.wangjie.androidbucket.application;
 
 import android.app.Application;
+import android.content.Context;
 import com.wangjie.androidbucket.exception.ABCrashHandler;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.thread.ThreadPool;
+import com.wangjie.androidbucket.utils.PrefsUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +21,7 @@ public class ABApplication extends Application{
         initThreadPool(); // 初始化线程池
         initImageLoader(); // 初始化图片加载器
         initCrashHandler(); // 初始化程序崩溃捕捉处理
-
+        initPrefs(); // 初始化SharedPreference
     }
 
     /**
@@ -50,7 +52,12 @@ public class ABApplication extends Application{
         ABCrashHandler.init(getApplicationContext());
     }
 
-
+    /**
+     * 初始化SharedPreference
+     */
+    protected void initPrefs(){
+        PrefsUtil.init(getApplicationContext(), getPackageName() + "_preference", Context.MODE_MULTI_PROCESS);
+    }
 
 
 
