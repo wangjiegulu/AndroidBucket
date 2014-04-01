@@ -5,7 +5,7 @@ import android.content.Context;
 import com.wangjie.androidbucket.exception.ABCrashHandler;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.thread.ThreadPool;
-import com.wangjie.androidbucket.utils.PrefsUtil;
+import com.wangjie.androidbucket.utils.ABPrefsUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -56,7 +56,7 @@ public class ABApplication extends Application{
      * 初始化SharedPreference
      */
     protected void initPrefs(){
-        PrefsUtil.init(getApplicationContext(), getPackageName() + "_preference", Context.MODE_MULTI_PROCESS);
+        ABPrefsUtil.init(getApplicationContext(), getPackageName() + "_preference", Context.MODE_MULTI_PROCESS);
     }
 
 

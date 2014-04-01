@@ -124,6 +124,14 @@ public class Logger {
             writeLog(tag, msg, tr, "ERROR");
         }
     }
+    public static void e(String tag, Throwable tr) {
+        if(debug) {
+            android.util.Log.e(tag, "", tr);
+        }
+        if(logFile ){
+            writeLog(tag, "", tr, "ERROR");
+        }
+    }
 
     /**
      * 记录日志线程

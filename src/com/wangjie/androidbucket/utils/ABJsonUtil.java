@@ -9,7 +9,7 @@ import org.json.JSONObject;
  * @author wangjie
  * @version 创建时间：2013-3-26 上午11:08:45
  */
-public class JsonUtil {
+public class ABJsonUtil {
 
     public static String getString(JSONObject jo, String key){
         try {

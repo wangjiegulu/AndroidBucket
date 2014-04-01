@@ -14,8 +14,8 @@ import java.util.List;
  * Date: 13-10-10
  * Time: 上午9:25
  */
-public class FragmentTabAdapter implements RadioGroup.OnCheckedChangeListener{
-    private List<android.support.v4.app.Fragment> fragments; // 一个tab页面对应一个Fragment
+public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnCheckedChangeListener{
+    private List<T> fragments; // 一个tab页面对应一个Fragment
     private RadioGroup rgs; // 用于切换tab
     private FragmentActivity fragmentActivity; // Fragment所属的Activity
     private int fragmentContentId; // Activity中所要被替换的区域的id
@@ -24,7 +24,7 @@ public class FragmentTabAdapter implements RadioGroup.OnCheckedChangeListener{
 
     private OnRgsExtraCheckedChangedListener onRgsExtraCheckedChangedListener; // 用于让调用者在切换tab时候增加新的功能
 
-    public FragmentTabAdapter(FragmentActivity fragmentActivity, List<android.support.v4.app.Fragment> fragments, int fragmentContentId, RadioGroup rgs) {
+    public FragmentTabAdapter(FragmentActivity fragmentActivity, List<T> fragments, int fragmentContentId, RadioGroup rgs) {
         this.fragments = fragments;
         this.rgs = rgs;
         this.fragmentActivity = fragmentActivity;

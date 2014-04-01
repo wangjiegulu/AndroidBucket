@@ -172,13 +172,14 @@ public class ABTimeUtil {
 
     private static long oneHourMillis = 60 * 60 * 1000; // 一小时的毫秒数
     private static long oneDayMillis = 24 * oneHourMillis; // 一天的毫秒数
-    private static long oneYearMillis = 365 * oneDayMillis; // 一小时的毫秒数
+    private static long oneYearMillis = 365 * oneDayMillis; // 一年的毫秒数
 
     /**
      * 时间格式：
      * 1小时内用，多少分钟前；
      * 超过1小时，显示时间而无日期；
-     * 超过24小时再显示日期；
+     * 如果是昨天，则显示昨天
+     * 超过昨天再显示日期；
      * 超过1年再显示年。
      * @param millis
      * @return
@@ -191,12 +192,11 @@ public class ABTimeUtil {
             String m = millisToStringShort(now - millis, false, false);
             return "".equals(m) ? "1分钟内" : m + "前";
         }
-//        if(millis - todayStart <= oneDayMillis && millis - todayStart > 0){ // 当天超过1小时并小于今天0点时间
-//            return "今天 " + millisToStringDate(millis, "HH:mm");
-//        }
+
         if(millis >= todayStart && millis <= oneDayMillis + todayStart){ // 大于今天开始开始值，小于今天开始值加一天（即今天结束值）
             return "今天 " + millisToStringDate(millis, "HH:mm");
         }
+
         if(millis > todayStart - oneDayMillis){ // 大于（今天开始值减一天，即昨天开始值）
             return "昨天 " + millisToStringDate(millis, "HH:mm");
         }
