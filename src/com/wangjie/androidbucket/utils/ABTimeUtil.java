@@ -170,9 +170,9 @@ public class ABTimeUtil {
 
 
 
-    private static long oneHourMillis = 60 * 60 * 1000; // 一小时的毫秒数
-    private static long oneDayMillis = 24 * oneHourMillis; // 一天的毫秒数
-    private static long oneYearMillis = 365 * oneDayMillis; // 一年的毫秒数
+    public static long oneHourMillis = 60 * 60 * 1000; // 一小时的毫秒数
+    public static long oneDayMillis = 24 * oneHourMillis; // 一天的毫秒数
+    public static long oneYearMillis = 365 * oneDayMillis; // 一年的毫秒数
 
     /**
      * 时间格式：

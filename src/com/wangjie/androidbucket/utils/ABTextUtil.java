@@ -3,6 +3,8 @@ package com.wangjie.androidbucket.utils;
 import android.content.Context;
 import android.util.DisplayMetrics;
 
+import java.util.Collection;
+
 /**
  * Created with IntelliJ IDEA.
  * Author: wangjie  email:tiantian.china.2@gmail.com
@@ -37,6 +39,13 @@ public class ABTextUtil {
     }
 
 
+    /*****************************************************************/
 
+    public static boolean isEmpty(Collection collection){
+        if(null == collection){
+            return true;
+        }
+        return collection.isEmpty();
+    }
 
 }

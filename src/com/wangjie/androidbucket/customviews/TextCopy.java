@@ -35,7 +35,7 @@ public class TextCopy extends EditText {
 
     private void initialize() {
         setGravity(Gravity.TOP);
-        setBackgroundColor(Color.TRANSPARENT);
+//        setBackgroundColor(Color.TRANSPARENT);
 //        setBackground(null);
 //        setTextIsSelectable(true);
         setHighlightColor(Color.parseColor("#33B5E5"));
