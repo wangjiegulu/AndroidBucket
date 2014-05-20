@@ -130,6 +130,32 @@ public class ABFileUtil {
         }
     }
 
+    /**
+     * 先质量压缩到指定百分比（0% ~ 90%），再把bitmap保存到sd卡上
+     * @param filePath
+     * @param bm
+     * @param quality
+     * @return
+     */
+    public static int saveBitmap2SDAbsolute(String filePath, Bitmap bm, int quality){
+        File file = null;
+        FileOutputStream out = null;
+        try {
+            file = new File(filePath);
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            out = new FileOutputStream(file.getPath());
+            bm.compress(Bitmap.CompressFormat.JPEG, quality, out);
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }finally{
+            ABIOUtil.closeIO(out);
+        }
+    }
+
 
     /**
      * 压缩图片直到容量小于200kb，并保存到sdcard

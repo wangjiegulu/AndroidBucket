@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ab_sheet_item_title_tv"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="12dp"
+    android:textColor="#2198C8"
+    android:singleLine="true"
+    android:textSize="18sp" />

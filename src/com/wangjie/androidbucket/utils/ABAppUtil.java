@@ -18,6 +18,7 @@ import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import com.wangjie.androidbucket.log.Logger;
 
 import java.io.File;
@@ -339,5 +340,24 @@ public class ABAppUtil {
         return deviceInfoStr.toString();
     }
 
+    /**
+     * 是否有SDCard
+     * @return
+     */
+    public static boolean haveSDCard(){
+        return android.os.Environment.getExternalStorageState().equals(
+                android.os.Environment.MEDIA_MOUNTED);
+    }
+
+    /**
+     * 隐藏软键盘
+     */
+    public static void hideSoftInput(Context context) {
+        View view = ((Activity)context).getWindow().peekDecorView();
+        if (view != null) {
+            InputMethodManager inputmanger = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 
 }
