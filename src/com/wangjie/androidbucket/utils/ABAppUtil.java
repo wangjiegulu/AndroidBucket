@@ -19,14 +19,12 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import com.wangjie.androidbucket.log.Logger;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 当前程序是否后台运行
@@ -358,6 +356,24 @@ public class ABAppUtil {
             InputMethodManager inputmanger = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+    /**
+     * 隐藏软键盘
+     */
+    public static void hideSoftInput(Context context, EditText edit) {
+        edit.clearFocus();
+        InputMethodManager inputmanger = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputmanger.hideSoftInputFromWindow(edit.getWindowToken(), 0);
+    }
+    /**
+     * 显示软键盘
+     */
+    public static void showSoftInput(Context context, EditText edit) {
+        edit.setFocusable(true);
+        edit.setFocusableInTouchMode(true);
+        edit.requestFocus();
+        InputMethodManager inputManager = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.showSoftInput(edit, 0);
     }
 
 }
