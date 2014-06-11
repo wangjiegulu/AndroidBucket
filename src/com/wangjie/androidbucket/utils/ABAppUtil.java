@@ -376,4 +376,22 @@ public class ABAppUtil {
         inputManager.showSoftInput(edit, 0);
     }
 
+
+    /**
+     * 回到home，后台运行
+     * @param context
+     */
+    public static void goHome(Context context){
+        Logger.d(TAG, "返回键回到HOME，程序后台运行...");
+        Intent mHomeIntent = new Intent(Intent.ACTION_MAIN);
+
+        mHomeIntent.addCategory(Intent.CATEGORY_HOME);
+        mHomeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        context.startActivity(mHomeIntent);
+    }
+
+
+
+
 }

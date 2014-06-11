@@ -31,16 +31,12 @@ public abstract class WakeLocker {
         synchronized (WakeLocker.class) {
             // sanity check for null as this is a public method
             if (wakeLock != null) {
-                Logger.v(TAG, "Releasing wakelock");
                 try {
                     wakeLock.release();
                 } catch (Throwable th) {
                     // ignoring this exception, probably wakeLock was already released
                     Logger.e(TAG, "ignoring this exception, probably wakeLock was already released, ", th);
                 }
-            } else {
-                // should never happen during normal workflow
-                Logger.w(TAG, "Wakelock reference is null");
             }
             wakeLock = null;
         }

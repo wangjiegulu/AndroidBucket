@@ -210,6 +210,35 @@ public class ABTimeUtil {
     }
 
     /**
+     * 时间格式：
+     * 今天，显示时间而无日期；
+     * 如果是昨天，则显示昨天
+     * 超过昨天再显示日期；
+     * 超过1年再显示年。
+     * @param millis
+     * @return
+     */
+    public static String millisToLifeString2(long millis){
+        long now = System.currentTimeMillis();
+        long todayStart = string2Millis(millisToStringDate(now, "yyyy-MM-dd"), "yyyy-MM-dd");
+
+        if(millis >= todayStart && millis <= oneDayMillis + todayStart){ // 大于今天开始开始值，小于今天开始值加一天（即今天结束值）
+            return "今天 " + millisToStringDate(millis, "HH:mm");
+        }
+
+        if(millis > todayStart - oneDayMillis){ // 大于（今天开始值减一天，即昨天开始值）
+            return "昨天 " + millisToStringDate(millis, "HH:mm");
+        }
+
+        long thisYearStart = string2Millis(millisToStringDate(now, "yyyy"), "yyyy");
+        if(millis > thisYearStart){ // 大于今天小于今年
+            return millisToStringDate(millis, "MM-dd HH:mm");
+        }
+
+        return millisToStringDate(millis, "yyyy-MM-dd HH:mm");
+    }
+
+    /**
      * 字符串解析成毫秒数
      * @param str
      * @param pattern

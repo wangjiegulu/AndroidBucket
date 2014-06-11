@@ -89,6 +89,58 @@ public class ABIOUtil {
 
     }
 
+    /**
+     * 从文件中读取文本
+     * @param filePath
+     * @return
+     */
+    public static String readFile(String filePath){
+        StringBuilder resultSb = null;
+        InputStream is = null;
+        try {
+            is = new FileInputStream(filePath);
+        } catch (Exception e) {
+            Logger.e(TAG, e);
+        }
+        return inputStream2String(is);
+    }
+
+    /**
+     * 从assets中读取文本
+     * @param name
+     * @return
+     */
+    public static String readFileFromAssets(Context context, String name){
+        InputStream is = null;
+        try {
+            is = context.getResources().getAssets().open(name);
+        } catch (Exception e) {
+            Logger.e(TAG, e);
+        }
+        return inputStream2String(is);
+
+    }
+
+    public static String inputStream2String(InputStream is){
+        if(null == is){
+            return null;
+        }
+        StringBuilder resultSb = null;
+        try{
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+            resultSb = new StringBuilder();
+            String len;
+            while(null != (len = br.readLine())){
+                resultSb.append(len);
+            }
+        }catch(Exception ex){
+            Logger.e(TAG, ex);
+        }finally{
+            closeIO(is);
+        }
+        return null == resultSb ? null : resultSb.toString();
+    }
 
 
 

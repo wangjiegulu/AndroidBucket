@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.util.Base64;
 import android.view.View;
 import com.wangjie.androidbucket.log.Logger;
@@ -192,7 +193,7 @@ public class ABImageProcess {
 
 //        OperatePic.zoomBitmap(b, w, h);
 
-        return BitmapFactory.decodeFile(filePath, options);
+        return formatCameraPictureOriginal(filePath, BitmapFactory.decodeFile(filePath, options));
     }
 
     public static Bitmap getSmallBitmapZoom(String filePath, int w, int h) {
@@ -276,6 +277,8 @@ public class ABImageProcess {
         //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
         newOpts.inJustDecodeBounds = false;
         Bitmap bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
+
+        bitmap = formatCameraPictureOriginal(srcPath, bitmap); // 保证图片方向正常
 
         ByteArrayInputStream isBm = compressImage(bitmap, size);//把压缩后的数据baos存放到ByteArrayInputStream中
 
@@ -510,5 +513,98 @@ public class ABImageProcess {
     }
 
     /***********************************图片基本处理（缩放/转换）BEGIN*************************************/
+
+
+
+    /***********************************图片基本基本信息 BEGIN*************************************/
+
+    /**
+     * 读取图片属性：旋转的角度
+     * @param path 图片绝对路径
+     * @return degree旋转的角度
+     */
+    public static int readPictureDegreeFromExif(String path) {
+        int degree  = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            Logger.e(TAG, e);
+        }
+        return degree;
+    }
+
+    /*
+     * 旋转图片
+     * @param angle
+     * @param bitmap
+     * @return Bitmap
+     */
+    public static Bitmap rotaingImage(int angle , Bitmap bitmap){
+        //旋转图片 动作
+        Matrix matrix = new Matrix();;
+        matrix.postRotate(angle);
+        // 创建新的图片
+        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        return resizedBitmap;
+    }
+
+    /**
+     * 处理相机照片旋转角度
+     * @param path 用于获取原图的信息
+     * @return 原图的bitmap（可以是被压缩过的）
+     */
+    public static Bitmap formatCameraPictureOriginal(String path, Bitmap bitmap){
+        /**
+         * 获取图片的旋转角度，有些系统把拍照的图片旋转了，有的没有旋转
+         */
+        int degree = ABImageProcess.readPictureDegreeFromExif(path);
+        if(0 == degree){
+            return bitmap;
+        }
+        /**
+         * 把图片旋转为正的方向
+         */
+        Bitmap newbitmap = rotaingImage(degree, bitmap);
+        return newbitmap;
+    }
+    /**
+     * 处理相机照片旋转角度
+     * @param path
+     * @return
+     */
+    public static Bitmap formatCameraPicture(String path){
+        /**
+         * 获取图片的旋转角度，有些系统把拍照的图片旋转了，有的没有旋转
+         */
+        int degree = ABImageProcess.readPictureDegreeFromExif(path);
+        BitmapFactory.Options opts=new BitmapFactory.Options();//获取缩略图显示到屏幕上
+        opts.inSampleSize = 2;
+        Bitmap cbitmap = BitmapFactory.decodeFile(path,opts);
+        /**
+         * 把图片旋转为正的方向
+         */
+        Bitmap newbitmap = rotaingImage(degree, cbitmap);
+        return newbitmap;
+    }
+
+    /***********************************图片基本基本信息 END*************************************/
+
+
+
+
+
+
 
 }

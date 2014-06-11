@@ -50,7 +50,7 @@ public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnChec
                 getCurrentFragment().onPause(); // 暂停当前tab
 //                getCurrentFragment().onStop(); // 暂停当前tab
 //                fragment.onSwitchPause();
-
+                showTab(i); // 显示目标tab
                 if(fragment.isAdded()){
 //                    fragment.onStart(); // 启动目标tab的onStart()
                     fragment.onResume(); // 启动目标tab的onResume()
@@ -58,7 +58,7 @@ public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnChec
                 }else{
                     ft.add(fragmentContentId, fragment);
                 }
-                showTab(i); // 显示目标tab
+//                showTab(i); // 显示目标tab
                 ft.commit();
 
                 // 如果设置了切换tab额外功能功能接口
