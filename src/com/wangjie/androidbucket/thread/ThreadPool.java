@@ -16,10 +16,13 @@ public class ThreadPool {
     static ExecutorService threadPool;
 
     public static void initThreadPool(int max){ // 需要在Application中进行配置
-        if(max <= 3){
-            max = 3;
+        if(max > 0){
+            max = max < 3 ? 3 : max;
+            threadPool = Executors.newFixedThreadPool(max);
+        }else{
+            threadPool = Executors.newCachedThreadPool();
         }
-        threadPool = Executors.newFixedThreadPool(max);
+
         Logger.d(TAG, "[ThreadPool]ThreadPool init success...max thread: " + max);
 
     }

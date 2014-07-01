@@ -22,6 +22,9 @@ public class ABApplication extends Application{
         initImageLoader(); // 初始化图片加载器
         initCrashHandler(); // 初始化程序崩溃捕捉处理
         initPrefs(); // 初始化SharedPreference
+
+        initABActionbar(); // 初始化Actionbar配置
+
     }
 
     /**
@@ -59,6 +62,11 @@ public class ABApplication extends Application{
         ABPrefsUtil.init(getApplicationContext(), getPackageName() + "_preference", Context.MODE_MULTI_PROCESS);
     }
 
+    /**
+     * 初始化Actionbar配置（如果要使用Actionbar，则需要子类重写）
+     */
+    protected void initABActionbar(){
 
+    }
 
 }

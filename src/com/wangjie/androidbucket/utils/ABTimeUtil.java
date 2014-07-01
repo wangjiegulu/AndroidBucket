@@ -1,5 +1,7 @@
 package com.wangjie.androidbucket.utils;
 
+import com.wangjie.androidbucket.log.Logger;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +12,8 @@ import java.util.Date;
  * @version 创建时间：2013-2-19 上午11:35:53
  */
 public class ABTimeUtil {
+    public static final String TAG = ABTimeUtil.class.getSimpleName();
+
 	/**
 	 * 把一个毫秒数转化成时间字符串。格式为小时/分/秒/毫秒（如：24903600 --> 06小时55分03秒600毫秒）。
 	 * @author wangjie
@@ -250,12 +254,19 @@ public class ABTimeUtil {
         try {
             millis = format.parse(str).getTime();
         } catch (ParseException e) {
-            e.printStackTrace();
+            Logger.e(TAG, e);
         }
         return millis;
     }
 
-
+    /**
+     * 获得今天开始的毫秒值
+     * @return
+     */
+    public static long getTodayStartMillis(){
+        String dateStr = millisToStringDate(System.currentTimeMillis(), "yyyy-MM-dd");
+        return string2Millis(dateStr, "yyyy-MM-dd");
+    }
 
 
 	

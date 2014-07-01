@@ -1,6 +1,7 @@
 package com.wangjie.androidbucket.utils;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import java.util.Collection;
@@ -39,6 +40,29 @@ public class ABTextUtil {
     }
 
 
+    /**
+     * 将px值转换为sp值，保证文字大小不变
+     *
+     * @param pxValue
+     * @return
+     */
+    public static int px2sp(Context context, float pxValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (pxValue / fontScale + 0.5f);
+    }
+
+    /**
+     * 将sp值转换为px值，保证文字大小不变
+     *
+     * @param spValue
+     * @return
+     */
+    public static int sp2px(Context context, float spValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
+    }
+
+
     /*****************************************************************/
 
     public static boolean isEmpty(Collection collection){
@@ -46,6 +70,14 @@ public class ABTextUtil {
             return true;
         }
         return collection.isEmpty();
+    }
+
+    public static boolean isEmpty(CharSequence charSequence){
+        return null == charSequence || charSequence.length() <= 0;
+    }
+
+    public static boolean isBlank(CharSequence charSequence){
+        return null == charSequence || charSequence.toString().trim().length() <= 0;
     }
 
 }

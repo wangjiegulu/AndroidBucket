@@ -8,6 +8,7 @@ import android.media.ExifInterface;
 import android.util.Base64;
 import android.view.View;
 import com.wangjie.androidbucket.log.Logger;
+import com.wangjie.androidbucket.utils.ABViewUtil;
 import com.wangjie.androidbucket.utils.imageprocess.blur.FastBlur;
 
 import java.io.*;
@@ -90,7 +91,7 @@ public class ABImageProcess {
             Logger.e(TAG, "fast blur error(result[overlay] is null)");
             return;
         }
-        view.setBackground(new BitmapDrawable(context.getResources(), overlay));
+        ABViewUtil.setBackgroundDrawable(view, new BitmapDrawable(context.getResources(), overlay));
     }
     /***************************************BLUR END****************************************/
 
