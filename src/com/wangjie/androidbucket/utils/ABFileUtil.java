@@ -1,12 +1,14 @@
 package com.wangjie.androidbucket.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
+import android.webkit.MimeTypeMap;
 
 import java.io.*;
 
@@ -294,8 +296,26 @@ public class ABFileUtil {
     }
 
 
+    public static void openFile(Context context, String path){
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
+        String type = getMimeType(path);
+        //参数二type见下面
+        intent.setDataAndType(Uri.fromFile(new File(path)), type);
+        context.startActivity(intent);
+    }
 
-
+    public static String getMimeType(String uri)
+    {
+        String type = null;
+        String extension = MimeTypeMap.getFileExtensionFromUrl(uri);
+        if (extension != null) {
+            MimeTypeMap mime = MimeTypeMap.getSingleton();
+            type = mime.getMimeTypeFromExtension(extension);
+        }
+        return type;
+    }
 
 
 

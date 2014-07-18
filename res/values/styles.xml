@@ -21,6 +21,12 @@
         <item name="@android:windowExitAnimation">@anim/push_down_out</item>
     </style>
 
+    <style name="animDialogPushDown" parent="android:Animation">
+        <!-- 进入时的动画 -->
+        <item name="@android:windowEnterAnimation">@anim/push_down_in</item>
+        <!-- 退出时的动画 -->
+        <item name="@android:windowExitAnimation">@anim/push_up_out</item>
+    </style>
 
 
 </resources>

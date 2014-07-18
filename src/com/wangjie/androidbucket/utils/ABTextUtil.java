@@ -72,6 +72,13 @@ public class ABTextUtil {
         return collection.isEmpty();
     }
 
+    public static boolean isEmpty(Object[] objs){
+        if(null == objs){
+            return true;
+        }
+        return objs.length <= 0;
+    }
+
     public static boolean isEmpty(CharSequence charSequence){
         return null == charSequence || charSequence.length() <= 0;
     }

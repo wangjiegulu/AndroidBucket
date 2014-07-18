@@ -4,6 +4,7 @@ import com.wangjie.androidbucket.log.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -207,10 +208,10 @@ public class ABTimeUtil {
 
         long thisYearStart = string2Millis(millisToStringDate(now, "yyyy"), "yyyy");
         if(millis > thisYearStart){ // 大于今天小于今年
-            return millisToStringDate(millis, "MM-dd HH:mm");
+            return millisToStringDate(millis, "MM月dd日 HH:mm");
         }
 
-        return millisToStringDate(millis, "yyyy-MM-dd HH:mm");
+        return millisToStringDate(millis, "yyyy年MM月dd日 HH:mm");
     }
 
     /**
@@ -236,10 +237,10 @@ public class ABTimeUtil {
 
         long thisYearStart = string2Millis(millisToStringDate(now, "yyyy"), "yyyy");
         if(millis > thisYearStart){ // 大于今天小于今年
-            return millisToStringDate(millis, "MM-dd HH:mm");
+            return millisToStringDate(millis, "MM月dd日 HH:mm");
         }
 
-        return millisToStringDate(millis, "yyyy-MM-dd HH:mm");
+        return millisToStringDate(millis, "yyyy年MM月dd日 HH:mm");
     }
 
     /**
@@ -267,6 +268,7 @@ public class ABTimeUtil {
         String dateStr = millisToStringDate(System.currentTimeMillis(), "yyyy-MM-dd");
         return string2Millis(dateStr, "yyyy-MM-dd");
     }
+
 
 
 	

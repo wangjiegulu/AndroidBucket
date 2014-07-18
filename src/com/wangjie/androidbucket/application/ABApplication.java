@@ -31,7 +31,7 @@ public class ABApplication extends Application{
      * 初始化线程池
      */
     protected void initThreadPool(){
-        ThreadPool.initThreadPool(7);
+        ThreadPool.initThreadPool(-1);
     }
 
     /**
