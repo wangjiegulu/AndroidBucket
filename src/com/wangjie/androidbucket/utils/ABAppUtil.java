@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -142,6 +143,7 @@ public class ABAppUtil {
      * 初始化View的高宽
      * @param view
      */
+    @Deprecated
     public static void initViewWH(final View view){
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -156,6 +158,7 @@ public class ABAppUtil {
      * 初始化View的高宽并显示不可见
      * @param view
      */
+    @Deprecated
     public static void initViewWHAndGone(final View view){
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -391,6 +394,16 @@ public class ABAppUtil {
         context.startActivity(mHomeIntent);
     }
 
+    /**
+     * 获取状态栏高度
+     * @param activity
+     * @return
+     */
+    public static int getStatusBarHeight(Activity activity){
+        Rect frame = new Rect();
+        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        return frame.top;
+    }
 
 
 

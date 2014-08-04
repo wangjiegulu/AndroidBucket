@@ -1,10 +1,17 @@
 package com.wangjie.androidbucket.utils;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
+import com.wangjie.androidbucket.log.Logger;
 
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +20,7 @@ import java.util.Collection;
  * Time: 上午10:57
  */
 public class ABTextUtil {
+    public static final String TAG = ABTextUtil.class.getSimpleName();
     /**
      * 获得字体的缩放密度
      * @param context
@@ -86,5 +94,45 @@ public class ABTextUtil {
     public static boolean isBlank(CharSequence charSequence){
         return null == charSequence || charSequence.toString().trim().length() <= 0;
     }
+
+
+    /**
+     * 替换文本为图片
+     * @param charSequence
+     * @param regPattern
+     * @param drawable
+     * @return
+     */
+    public static SpannableString replaceImageSpan(CharSequence charSequence, String regPattern, Drawable drawable){
+        SpannableString ss = charSequence instanceof SpannableString ? (SpannableString) charSequence : new SpannableString(charSequence);
+        try{
+            ImageSpan is = new ImageSpan(drawable);
+            Pattern pattern = Pattern.compile(regPattern);
+            Matcher matcher = pattern.matcher(ss);
+            while(matcher.find()){
+                String key = matcher.group();
+                ss.setSpan(is, matcher.start(), matcher.start() + key.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            }
+        }catch(Exception ex){
+            Logger.e(TAG, ex);
+        }
+
+        return ss;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

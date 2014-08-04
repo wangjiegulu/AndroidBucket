@@ -1,6 +1,7 @@
 package com.wangjie.androidbucket.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.ClipboardManager;
 import com.wangjie.androidbucket.log.Logger;
 
@@ -47,6 +48,25 @@ public class ABIOUtil {
                 Logger.e(TAG, "close IO ERROR...", e);
             }
         }
+    }
+
+    /**
+     * recyle bitmaps
+     * @param bitmaps
+     */
+    public static void recycleBitmap(Bitmap... bitmaps){
+        if(ABTextUtil.isEmpty(bitmaps)){
+            return;
+        }
+
+        for(Bitmap bm : bitmaps){
+            if(null != bm && !bm.isRecycled()){
+                bm.recycle();
+            }
+            bm = null;
+        }
+        System.gc();
+
     }
 
 

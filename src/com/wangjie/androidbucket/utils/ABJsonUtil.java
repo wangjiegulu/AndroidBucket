@@ -132,6 +132,10 @@ public class ABJsonUtil {
 
 
 
+    // util
+    public static boolean isEmpty(JSONArray ja){
+        return null == ja || ja.length() <= 0;
+    }
 
 
 }

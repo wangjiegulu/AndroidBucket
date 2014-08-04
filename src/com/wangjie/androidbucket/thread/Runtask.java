@@ -21,7 +21,7 @@ public abstract class Runtask<U, R> implements Runnable{
 
     private boolean isCanceled;
 
-    private Handler rHandler = new Handler(){
+    protected Handler rHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);

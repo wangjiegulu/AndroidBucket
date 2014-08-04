@@ -8,6 +8,7 @@ import android.media.ExifInterface;
 import android.util.Base64;
 import android.view.View;
 import com.wangjie.androidbucket.log.Logger;
+import com.wangjie.androidbucket.utils.ABIOUtil;
 import com.wangjie.androidbucket.utils.ABViewUtil;
 import com.wangjie.androidbucket.utils.imageprocess.blur.FastBlur;
 
@@ -282,15 +283,18 @@ public class ABImageProcess {
         bitmap = formatCameraPictureOriginal(srcPath, bitmap); // 保证图片方向正常
 
         ByteArrayInputStream isBm = compressImage(bitmap, size);//把压缩后的数据baos存放到ByteArrayInputStream中
-
+        OutputStream os = null;
         try {
-            OutputStream os = new FileOutputStream(file);
+            os = new FileOutputStream(file);
             byte[] buffer = new byte[isBm.available()];
             isBm.read(buffer);
             os.write(buffer, 0, buffer.length);
             os.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.e(TAG, e);
+        }finally{
+            ABIOUtil.closeIO(isBm, os);
+            ABIOUtil.recycleBitmap(bitmap);
         }
 
     }
@@ -454,6 +458,24 @@ public class ABImageProcess {
         Bitmap newbmp = Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
         return newbmp;
     }
+    /**
+     * 放缩图片处理
+     * @author com.tiantian
+     * @param bitmap 要放缩的Bitmap对象
+     * @param widthScale 放缩率
+     * @param heightScale 放缩率
+     * @return 放缩后的Bitmap对象
+     */
+    public static Bitmap zoomBitmapScale(Bitmap bitmap, float widthScale, float heightScale) {
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+        Matrix matrix = new Matrix();
+        float scaleWidth = widthScale;
+        float scaleHeight = heightScale;
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap newbmp = Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
+        return newbmp;
+    }
 
     /**
      * Drawable缩放
@@ -558,6 +580,7 @@ public class ABImageProcess {
         matrix.postRotate(angle);
         // 创建新的图片
         Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        ABIOUtil.recycleBitmap(bitmap);
         return resizedBitmap;
     }
 
@@ -578,6 +601,7 @@ public class ABImageProcess {
          * 把图片旋转为正的方向
          */
         Bitmap newbitmap = rotaingImage(degree, bitmap);
+        ABIOUtil.recycleBitmap(bitmap);
         return newbitmap;
     }
     /**
@@ -603,9 +627,26 @@ public class ABImageProcess {
     /***********************************图片基本基本信息 END*************************************/
 
 
+    /***********************************图片初始化 BEGIN*************************************/
+    /**
+     * 从Resource中获取Drawable，并初始化bound
+     * @param context
+     * @param drawableResId
+     * @param bound
+     * @return
+     */
+    public static Drawable getResourceDrawableBounded(Context context, int drawableResId, int bound){
+        Drawable drawable = null;
+        try{
+            drawable = context.getResources().getDrawable(drawableResId);
+            drawable.setBounds(0, 0, bound, bound);
+        }catch (Exception ex){
+            Logger.e(TAG, ex);
+        }
+        return drawable;
+    }
 
-
-
+    /***********************************图片初始化 END*************************************/
 
 
 }

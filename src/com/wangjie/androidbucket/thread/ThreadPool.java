@@ -15,7 +15,7 @@ public class ThreadPool {
     public static final String TAG = ThreadPool.class.getSimpleName();
     static ExecutorService threadPool;
 
-    public static void initThreadPool(int max){ // 需要在Application中进行配置
+    public static void initThreadPool(int max){ // 可以在Application中进行配置
         if(max > 0){
             max = max < 3 ? 3 : max;
             threadPool = Executors.newFixedThreadPool(max);
@@ -40,7 +40,13 @@ public class ThreadPool {
         threadPool.execute(runtask);
     }
 
-
+    public synchronized static void go(Runnable runnable){
+        if(null == threadPool){
+            Logger.e(TAG, "ThreadPool没有被初始化，请在Application中进行初始化操作...");
+            return;
+        }
+        threadPool.execute(runnable);
+    }
 
 
 
