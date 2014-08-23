@@ -10,6 +10,7 @@ import android.util.DisplayMetrics;
 import com.wangjie.androidbucket.log.Logger;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,17 +75,14 @@ public class ABTextUtil {
     /*****************************************************************/
 
     public static boolean isEmpty(Collection collection){
-        if(null == collection){
-            return true;
-        }
-        return collection.isEmpty();
+        return null == collection || collection.isEmpty();
+    }
+    public static boolean isEmpty(Map map){
+        return null == map || map.isEmpty();
     }
 
     public static boolean isEmpty(Object[] objs){
-        if(null == objs){
-            return true;
-        }
-        return objs.length <= 0;
+        return null == objs || objs.length <= 0;
     }
 
     public static boolean isEmpty(CharSequence charSequence){

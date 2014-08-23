@@ -48,7 +48,7 @@
                 android:padding="12dp"
                 android:layout_marginTop="10dp"
                 android:singleLine="true"
-                android:background="@drawable/selector_bg_sheet_corner_bottom_lr"
+                android:background="@drawable/selector_bg_sheet_corner_all"
                 />
 
     </LinearLayout>

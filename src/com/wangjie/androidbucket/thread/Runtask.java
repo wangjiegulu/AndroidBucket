@@ -16,8 +16,9 @@ public abstract class Runtask<U, R> implements Runnable{
         this.objs = objs;
     }
 
-    private static final int TASK_UPDATE_UI = 0x001;
-    private static final int TASK_RESULT = 0x002;
+    private static final int TASK_BEFORE_UI = 0X001;
+    private static final int TASK_UPDATE_UI = 0x002;
+    private static final int TASK_RESULT = 0x003;
 
     private boolean isCanceled;
 
@@ -26,6 +27,9 @@ public abstract class Runtask<U, R> implements Runnable{
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch(msg.arg1){
+                case TASK_BEFORE_UI:
+                    onBefore();
+                    break;
                 case TASK_UPDATE_UI:
                     onUpdateUiCallBack((U)msg.obj);
                     break;
@@ -43,11 +47,20 @@ public abstract class Runtask<U, R> implements Runnable{
         if(isCanceled){
             return;
         }
+
+        Message msg = rHandler.obtainMessage();
+        msg.arg1 = TASK_BEFORE_UI;
+        rHandler.sendMessage(msg);
+
+        if(isCanceled){
+            return;
+        }
         R result = runInBackground();
         if(isCanceled){
             return;
         }
-        Message msg = rHandler.obtainMessage();
+
+        msg = rHandler.obtainMessage();
         msg.arg1 = TASK_RESULT;
         msg.obj = result;
         rHandler.sendMessage(msg);

@@ -124,6 +124,9 @@ public class ABIOUtil {
         }
         return inputStream2String(is);
     }
+    public static String readFile(File file){
+        return readFile(file.getPath());
+    }
 
     /**
      * 从assets中读取文本

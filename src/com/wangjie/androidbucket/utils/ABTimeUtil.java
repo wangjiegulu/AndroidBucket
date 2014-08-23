@@ -227,11 +227,18 @@ public class ABTimeUtil {
         long now = System.currentTimeMillis();
         long todayStart = string2Millis(millisToStringDate(now, "yyyy-MM-dd"), "yyyy-MM-dd");
 
+        if(millis > todayStart + oneDayMillis && millis < todayStart + 2 * oneDayMillis){ // 明天
+            return "明天" + millisToStringDate(millis, "HH:mm");
+        }
+        if(millis > todayStart + 2 * oneDayMillis && millis < todayStart + 3 * oneDayMillis){ // 后天
+            return "后天" + millisToStringDate(millis, "HH:mm");
+        }
+
         if(millis >= todayStart && millis <= oneDayMillis + todayStart){ // 大于今天开始开始值，小于今天开始值加一天（即今天结束值）
             return "今天 " + millisToStringDate(millis, "HH:mm");
         }
 
-        if(millis > todayStart - oneDayMillis){ // 大于（今天开始值减一天，即昨天开始值）
+        if(millis > todayStart - oneDayMillis && millis < todayStart){ // 大于（今天开始值减一天，即昨天开始值）
             return "昨天 " + millisToStringDate(millis, "HH:mm");
         }
 
@@ -241,6 +248,37 @@ public class ABTimeUtil {
         }
 
         return millisToStringDate(millis, "yyyy年MM月dd日 HH:mm");
+    }
+
+    /**
+     * 时间格式：
+     * 今天，显示时间而无日期；
+     * 如果是昨天，则显示昨天
+     * 超过昨天再显示日期；
+     * 超过1年再显示年。
+     * @param millis
+     * @return
+     */
+    public static String millisToLifeString3(long millis){
+        long now = System.currentTimeMillis();
+        long todayStart = string2Millis(millisToStringDate(now, "yyyy-MM-dd"), "yyyy-MM-dd");
+
+        if(millis > todayStart + oneDayMillis && millis < todayStart + 2 * oneDayMillis){ // 明天
+            return "明天";
+        }
+        if(millis > todayStart + 2 * oneDayMillis && millis < todayStart + 3 * oneDayMillis){ // 后天
+            return "后天";
+        }
+
+        if(millis >= todayStart && millis <= oneDayMillis + todayStart){ // 大于今天开始开始值，小于今天开始值加一天（即今天结束值）
+            return millisToStringDate(millis, "HH:mm");
+        }
+
+        if(millis > todayStart - oneDayMillis && millis < todayStart){ // 大于（今天开始值减一天，即昨天开始值）
+            return "昨天 ";
+        }
+
+        return millisToStringDate(millis, "MM月dd日");
     }
 
     /**
@@ -265,11 +303,15 @@ public class ABTimeUtil {
      * @return
      */
     public static long getTodayStartMillis(){
-        String dateStr = millisToStringDate(System.currentTimeMillis(), "yyyy-MM-dd");
-        return string2Millis(dateStr, "yyyy-MM-dd");
+//        String dateStr = millisToStringDate(System.currentTimeMillis(), "yyyy-MM-dd");
+//        return string2Millis(dateStr, "yyyy-MM-dd");
+        return getOneDayStartMillis(System.currentTimeMillis());
     }
 
-
+    public static long getOneDayStartMillis(long millis){
+        String dateStr = millisToStringDate(millis, "yyyy-MM-dd");
+        return string2Millis(dateStr, "yyyy-MM-dd");
+    }
 
 	
 }

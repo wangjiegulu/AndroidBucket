@@ -3,6 +3,7 @@ package com.wangjie.androidbucket.customviews.sublayout;
 import android.content.Context;
 import android.view.ViewGroup;
 import com.wangjie.androidbucket.log.Logger;
+import com.wangjie.androidbucket.manager.OnActivityLifeCycleListener;
 import com.wangjie.androidbucket.objs.DelayObj;
 
 import java.lang.reflect.Constructor;
@@ -120,9 +121,14 @@ public class SubLayoutManager<T extends SubLayout> {
                 return;
             }
 
+            T curObj = subLayouts.get(currentItemIndex).getDelayObj();
+
             // 调用上一个SubLayout的回调方法onPause方法
             if(-1 != currentItemIndex){
-                subLayouts.get(currentItemIndex).getDelayObj().onPause();
+                if(OnActivityLifeCycleListener.class.isAssignableFrom(curObj.getClass())){
+                    ((OnActivityLifeCycleListener)curObj).onActivityPauseCallback();
+                }
+
             }
 
             // 真正的替换过程
@@ -134,7 +140,10 @@ public class SubLayoutManager<T extends SubLayout> {
 
             // 调用这一个SubLayout的回调方法onResume方法
             currentItemIndex = position;
-            subLayouts.get(currentItemIndex).getDelayObj().onResume();
+
+            if(OnActivityLifeCycleListener.class.isAssignableFrom(curObj.getClass())){
+                ((OnActivityLifeCycleListener)curObj).onActivityResumeCallback();
+            }
 
             if(null != switchListener){ // 如果设置了监听器，则回调
                 switchListener.switchCompleted(subLayout, position);
