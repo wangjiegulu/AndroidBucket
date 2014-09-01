@@ -1,7 +1,9 @@
 package com.wangjie.androidbucket.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import java.util.Map;
 import java.util.Set;
@@ -71,9 +73,11 @@ public class ABPrefsUtil {
         return this.prefs.getLong(key, 0l);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public Set<String> getStringSet(String key, Set<String> defaultVal){
         return this.prefs.getStringSet(key, defaultVal);
     }
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public Set<String> getStringSet(String key){
         return this.prefs.getStringSet(key, null);
     }
@@ -83,34 +87,44 @@ public class ABPrefsUtil {
     }
 
 
-    public void putString(String key, String value){
+    public ABPrefsUtil putString(String key, String value){
         editor.putString(key, value);
-        editor.commit();
+//        editor.commit();
+        return this;
     }
 
-    public void putInt(String key, int value){
+    public ABPrefsUtil putInt(String key, int value){
         editor.putInt(key, value);
-        editor.commit();
+//        editor.commit();
+        return this;
     }
 
-    public void putFloat(String key, float value){
+    public ABPrefsUtil putFloat(String key, float value){
         editor.putFloat(key, value);
-        editor.commit();
+//        editor.commit();
+        return this;
     }
 
-    public void putLong(String key, long value){
+    public ABPrefsUtil putLong(String key, long value){
         editor.putLong(key, value);
-        editor.commit();
+//        editor.commit();
+        return this;
     }
 
-    public void putBoolean(String key, boolean value){
+    public ABPrefsUtil putBoolean(String key, boolean value){
         editor.putBoolean(key, value);
+//        editor.commit();
+        return this;
+    }
+    public void commit(){
         editor.commit();
     }
 
-    public void putStringSet(String key, Set<String> value){
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public ABPrefsUtil putStringSet(String key, Set<String> value){
         editor.putStringSet(key, value);
         editor.commit();
+        return this;
     }
 
 

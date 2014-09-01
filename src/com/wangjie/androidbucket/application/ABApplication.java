@@ -19,6 +19,7 @@ public class ABApplication extends Application{
         super.onCreate();
         initLogger(); // 初始化日志工具
         initThreadPool(); // 初始化线程池
+        initNetWorkSSLScheme(); // 初始化AINetWork中SSL Scheme
         initImageLoader(); // 初始化图片加载器
         initCrashHandler(); // 初始化程序崩溃捕捉处理
         initPrefs(); // 初始化SharedPreference
@@ -34,6 +35,10 @@ public class ABApplication extends Application{
         ThreadPool.initThreadPool(-1);
     }
 
+    /**
+     * 初始化AINetWork中SSL Scheme
+     */
+    protected void initNetWorkSSLScheme(){}
     /**
      * 初始化日志
      */

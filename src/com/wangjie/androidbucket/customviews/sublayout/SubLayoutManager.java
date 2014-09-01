@@ -103,17 +103,17 @@ public class SubLayoutManager<T extends SubLayout> {
             if(position == currentItemIndex){ // 如果切换的依然是当前页
 //            subLayouts.get(position).refreshView();
                 if(null != switchListener){ // 如果设置了监听器，则回调
-                    switchListener.switchSelf(subLayouts.get(position).getDelayObj(), position);
+                    switchListener.switchSelf(subLayouts.get(position).getObj(), position);
                 }
                 return;
             }
 
             DelayObj<T> delayObj = subLayouts.get(position); // 获取指定position的延迟对象
-            T subLayout = delayObj.getDelayObj();
+            T subLayout = delayObj.getObj();
             if(null == subLayout){ // 如果延迟对象还没有生成，则反射生成
                 Constructor<? extends T> cons = delayObj.getClazz().getConstructor(new Class[]{Context.class});
                 subLayout = cons.newInstance(context);
-                delayObj.setDelayObj(subLayout);
+                delayObj.setObj(subLayout);
             }
 
             if(null == subLayout.getLayout()){ // 如果layout为空，即setContentView方法未调用
@@ -121,7 +121,7 @@ public class SubLayoutManager<T extends SubLayout> {
                 return;
             }
 
-            T curObj = subLayouts.get(currentItemIndex).getDelayObj();
+            T curObj = subLayouts.get(currentItemIndex).getObj();
 
             // 调用上一个SubLayout的回调方法onPause方法
             if(-1 != currentItemIndex){

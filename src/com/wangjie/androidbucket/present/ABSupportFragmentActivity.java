@@ -29,6 +29,25 @@ public class ABSupportFragmentActivity extends FragmentActivity{
 
     }
 
+    private boolean isFirstFocused = true;
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        synchronized (this.getClass()){
+            if(isFirstFocused && hasFocus){
+                isFirstFocused = false;
+                onWindowInitialized();
+            }
+        }
+
+    }
+    /**
+     * 界面渲染完毕，可在这里进行初始化工作，建议在这里启动线程进行初始化工作
+     */
+    public void onWindowInitialized(){}
+
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

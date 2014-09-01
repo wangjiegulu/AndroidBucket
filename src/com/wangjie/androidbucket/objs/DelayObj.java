@@ -5,29 +5,31 @@ package com.wangjie.androidbucket.objs;
  */
 public class DelayObj<T> {
     private Class<? extends T> clazz;
-    private T delayObj;
+    private T obj;
 
     public Class<? extends T> getClazz() {
         return clazz;
     }
 
-    public void setClazz(Class<? extends T> clazz) {
+    public DelayObj<T> setClazz(Class<? extends T> clazz) {
         this.clazz = clazz;
+        return this;
     }
 
-    public T getDelayObj() {
-        return delayObj;
+    public T getObj() {
+        return obj;
     }
 
-    public void setDelayObj(T delayObj) {
-        this.delayObj = delayObj;
+    public DelayObj<T> setObj(T obj) {
+        this.obj = obj;
+        return this;
     }
 
     @Override
     public String toString() {
         return "DelayObj{" +
                 "clazz=" + clazz +
-                ", delayObj=" + delayObj +
+                ", obj=" + obj +
                 '}';
     }
 }
