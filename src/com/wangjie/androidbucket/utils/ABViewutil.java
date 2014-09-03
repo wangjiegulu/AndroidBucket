@@ -1,12 +1,9 @@
 package com.wangjie.androidbucket.utils;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.SparseArray;
-import android.view.LayoutInflater;
 import android.view.View;
-import com.wangjie.androidbucket.adapter.listener.AdapterListener;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,12 +34,6 @@ public class ABViewUtil {
         }
         return (T) childView;
     }
-
-    public static void bindViewListener(View view, AdapterListener listener, int position){
-
-
-    }
-
 
 
     /**

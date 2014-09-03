@@ -6,4 +6,10 @@
 
 
     <item type="id" name="ids_adapter_on_adapter_click_listener" />
+
+    <!-- adapter getView中设置listener tag的key -->
+    <item type="id" name="ab__id_adapter_group_position" />
+    <item type="id" name="ab__id_adapter_child_position" />
+    <item type="id" name="ab__id_adapter_item_position" />
+
 </resources>
