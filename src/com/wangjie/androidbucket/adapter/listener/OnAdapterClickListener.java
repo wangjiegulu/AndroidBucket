@@ -1,5 +1,7 @@
 package com.wangjie.androidbucket.adapter.listener;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.view.View;
 import com.wangjie.androidbucket.R;
 
@@ -15,6 +17,7 @@ public abstract class OnAdapterClickListener implements View.OnClickListener{
         this.positionIds = positionIds;
     }
 
+    @TargetApi(Build.VERSION_CODES.DONUT)
     @Override
     public void onClick(View v) {
         int len = positionIds.length;
