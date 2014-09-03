@@ -13,7 +13,14 @@ import com.wangjie.androidbucket.utils.ABPrefsUtil;
  * Date: 14-3-26
  * Time: 下午4:37
  */
-public class ABApplication extends Application{
+public class ABApplication extends Application {
+
+    private static ABApplication application;
+
+    public static ABApplication getApplication() {
+        return application;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -31,46 +38,48 @@ public class ABApplication extends Application{
     /**
      * 初始化线程池
      */
-    protected void initThreadPool(){
+    protected void initThreadPool() {
         ThreadPool.initThreadPool(-1);
     }
 
     /**
      * 初始化AINetWork中SSL Scheme
      */
-    protected void initNetWorkSSLScheme(){}
+    protected void initNetWorkSSLScheme() {
+    }
+
     /**
      * 初始化日志
      */
-    protected void initLogger(){
+    protected void initLogger() {
         Logger.initLogger(null);
     }
 
     /**
      * 初始化图片加载器（子类需要重写）
      */
-    protected void initImageLoader(){
+    protected void initImageLoader() {
 
     }
 
     /**
      * 初始化程序崩溃捕捉处理
      */
-    protected void initCrashHandler(){
+    protected void initCrashHandler() {
         ABCrashHandler.init(getApplicationContext());
     }
 
     /**
      * 初始化SharedPreference
      */
-    protected void initPrefs(){
+    protected void initPrefs() {
         ABPrefsUtil.init(getApplicationContext(), getPackageName() + "_preference", Context.MODE_MULTI_PROCESS);
     }
 
     /**
      * 初始化Actionbar配置（如果要使用Actionbar，则需要子类重写）
      */
-    protected void initABActionbar(){
+    protected void initABActionbar() {
 
     }
 

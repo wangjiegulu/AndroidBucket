@@ -2,6 +2,7 @@ package com.wangjie.androidbucket.thread;
 
 import android.os.Handler;
 import android.os.Message;
+import com.wangjie.androidbucket.services.CancelableTask;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,7 +10,7 @@ import android.os.Message;
  * Date: 14-2-26
  * Time: 下午3:50
  */
-public abstract class Runtask<U, R> implements Runnable{
+public abstract class Runtask<U, R> implements Runnable, CancelableTask {
     public Object[] objs;
 
     protected Runtask(Object... objs) {
@@ -22,19 +23,19 @@ public abstract class Runtask<U, R> implements Runnable{
 
     private boolean isCanceled;
 
-    protected Handler rHandler = new Handler(){
+    protected Handler rHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch(msg.arg1){
+            switch (msg.arg1) {
                 case TASK_BEFORE_UI:
                     onBefore();
                     break;
                 case TASK_UPDATE_UI:
-                    onUpdateUiCallBack((U)msg.obj);
+                    onUpdateUiCallBack((U) msg.obj);
                     break;
                 case TASK_RESULT:
-                    onResult((R)msg.obj);
+                    onResult((R) msg.obj);
                     break;
             }
 
@@ -44,7 +45,7 @@ public abstract class Runtask<U, R> implements Runnable{
 
     @Override
     public void run() {
-        if(isCanceled){
+        if (isCanceled) {
             return;
         }
 
@@ -52,11 +53,11 @@ public abstract class Runtask<U, R> implements Runnable{
         msg.arg1 = TASK_BEFORE_UI;
         rHandler.sendMessage(msg);
 
-        if(isCanceled){
+        if (isCanceled) {
             return;
         }
         R result = runInBackground();
-        if(isCanceled){
+        if (isCanceled) {
             return;
         }
 
@@ -68,24 +69,35 @@ public abstract class Runtask<U, R> implements Runnable{
 
     public abstract R runInBackground();
 
-    public void updateUi(U obj){
+    public void updateUi(U obj) {
         Message msg = rHandler.obtainMessage();
         msg.arg1 = TASK_UPDATE_UI;
         msg.obj = obj;
         rHandler.sendMessage(msg);
     }
 
-    public void onBefore(){}
-    public void onUpdateUiCallBack(U obj){}
-    public void onResult(R result){}
+    public void onBefore() {
+    }
 
-    public void cancel(){
-        if(!isCanceled){
+    public void onUpdateUiCallBack(U obj) {
+    }
+
+    public void onResult(R result) {
+    }
+
+    public void cancel() {
+        if (!isCanceled) {
             isCanceled = true;
         }
     }
 
-    public boolean isCanceled(){
+    @Override
+    public boolean cancel(boolean isCanceled) {
+        cancel();
+        return isCanceled;
+    }
+
+    public boolean isCanceled() {
         return isCanceled;
     }
 
