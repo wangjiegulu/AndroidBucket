@@ -3,16 +3,21 @@
     <!-- 自定义对话框风格 -->
     <style name="customDialogStyle" parent="android:Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowFrame">@null</item><!--无边框 -->
-        <item name="android:windowNoTitle">true</item><!--没有标题-->
-        <item name="android:windowIsFloating">true</item><!--是否浮在activity之上-->
-        <item name="android:windowIsTranslucent">true</item><!--背景是否半透明-->
-        <item name="android:windowContentOverlay">@null</item><!--对话框是否有遮盖 -->
-        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item><!--动画样式-->
-        <item name="android:backgroundDimEnabled">false</item><!--背景是否模糊-->
+        <item name="android:windowFrame">@null</item>
+        <!--无边框 -->
+        <item name="android:windowNoTitle">true</item>
+        <!--没有标题-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否浮在activity之上-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--背景是否半透明-->
+        <item name="android:windowContentOverlay">@null</item>
+        <!--对话框是否有遮盖 -->
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <!--动画样式-->
+        <item name="android:backgroundDimEnabled">false</item>
+        <!--背景是否模糊-->
     </style>
-
-
 
     <style name="animDialogPushUp" parent="android:Animation">
         <!-- 进入时的动画 -->
@@ -26,6 +31,25 @@
         <item name="@android:windowEnterAnimation">@anim/push_down_in</item>
         <!-- 退出时的动画 -->
         <item name="@android:windowExitAnimation">@anim/push_up_out</item>
+    </style>
+
+    <!-- 进度对话框风格 -->
+    <style name="LoadingDialogStyle" parent="android:Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <!--无边框 -->
+        <item name="android:windowNoTitle">true</item>
+        <!--没有标题-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否浮在activity之上-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--背景是否半透明-->
+        <item name="android:windowContentOverlay">@null</item>
+        <!--对话框是否有遮盖 -->
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <!--动画样式-->
+        <item name="android:backgroundDimEnabled">false</item>
+        <!--背景是否模糊-->
     </style>
 
 

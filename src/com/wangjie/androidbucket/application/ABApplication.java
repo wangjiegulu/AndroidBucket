@@ -15,10 +15,10 @@ import com.wangjie.androidbucket.utils.ABPrefsUtil;
  */
 public class ABApplication extends Application {
 
-    private static ABApplication application;
+    private static ABApplication instance;
 
-    public static ABApplication getApplication() {
-        return application;
+    public static ABApplication getInstance() {
+        return instance;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ABApplication extends Application {
         initPrefs(); // 初始化SharedPreference
 
         initABActionbar(); // 初始化Actionbar配置
-
+        instance = this;
     }
 
     /**

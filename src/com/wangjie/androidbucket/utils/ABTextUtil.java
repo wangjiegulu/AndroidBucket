@@ -8,11 +8,15 @@ import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import com.wangjie.androidbucket.log.Logger;
+import org.apache.http.HttpResponse;
 
+import java.io.*;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,12 +26,14 @@ import java.util.regex.Pattern;
  */
 public class ABTextUtil {
     public static final String TAG = ABTextUtil.class.getSimpleName();
+
     /**
      * 获得字体的缩放密度
+     *
      * @param context
      * @return
      */
-    public static float getScaledDensity(Context context){
+    public static float getScaledDensity(Context context) {
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         return dm.scaledDensity;
     }
@@ -72,46 +78,50 @@ public class ABTextUtil {
     }
 
 
-    /*****************************************************************/
+    /**
+     * *************************************************************
+     */
 
-    public static boolean isEmpty(Collection collection){
+    public static boolean isEmpty(Collection collection) {
         return null == collection || collection.isEmpty();
     }
-    public static boolean isEmpty(Map map){
+
+    public static boolean isEmpty(Map map) {
         return null == map || map.isEmpty();
     }
 
-    public static boolean isEmpty(Object[] objs){
+    public static boolean isEmpty(Object[] objs) {
         return null == objs || objs.length <= 0;
     }
 
-    public static boolean isEmpty(CharSequence charSequence){
+    public static boolean isEmpty(CharSequence charSequence) {
         return null == charSequence || charSequence.length() <= 0;
     }
 
-    public static boolean isBlank(CharSequence charSequence){
+    public static boolean isBlank(CharSequence charSequence) {
         return null == charSequence || charSequence.toString().trim().length() <= 0;
     }
 
 
     /**
      * 替换文本为图片
+     *
      * @param charSequence
      * @param regPattern
      * @param drawable
      * @return
      */
-    public static SpannableString replaceImageSpan(CharSequence charSequence, String regPattern, Drawable drawable){
+    public static SpannableString replaceImageSpan(CharSequence charSequence, String regPattern, Drawable drawable) {
         SpannableString ss = charSequence instanceof SpannableString ? (SpannableString) charSequence : new SpannableString(charSequence);
-        try{
+        try {
             ImageSpan is = new ImageSpan(drawable);
             Pattern pattern = Pattern.compile(regPattern);
             Matcher matcher = pattern.matcher(ss);
-            while(matcher.find()){
+            while (matcher.find()) {
                 String key = matcher.group();
                 ss.setSpan(is, matcher.start(), matcher.start() + key.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             Logger.e(TAG, ex);
         }
 
@@ -119,18 +129,74 @@ public class ABTextUtil {
     }
 
 
+    /**
+     * 压缩字符串到Zip
+     *
+     * @param str
+     * @return 压缩后字符串
+     * @throws IOException
+     */
+    public static String compress(String str) throws IOException {
+        if (str == null || str.length() == 0) {
+            return str;
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        GZIPOutputStream gzip = new GZIPOutputStream(out);
+        gzip.write(str.getBytes());
+        gzip.close();
+        return out.toString("ISO-8859-1");
+    }
 
+    /**
+     * 解压Zip字符串
+     *
+     * @param str
+     * @return 解压后字符串
+     * @throws IOException
+     */
+    public static String uncompress(String str) throws IOException {
+        if (str == null || str.length() == 0) {
+            return str;
+        }
+        ByteArrayInputStream in = new ByteArrayInputStream(str
+                .getBytes("UTF-8"));
+        return uncompress(in);
+    }
 
+    /**
+     * 解压Zip字符串
+     *
+     * @param inputStream
+     * @return 解压后字符串
+     * @throws IOException
+     */
+    public static String uncompress(InputStream inputStream) throws IOException {
+        if (inputStream == null) {
+            return null;
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        GZIPInputStream gunzip = new GZIPInputStream(inputStream);
+        byte[] buffer = new byte[256];
+        int n;
+        while ((n = gunzip.read(buffer)) >= 0) {
+            out.write(buffer, 0, n);
+        }
+        return out.toString();
+    }
 
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * InputStream convert to string
+     *
+     * @param in
+     * @return
+     * @throws IOException
+     */
+    public static String inputStream2String(InputStream in) throws IOException {
+        StringBuffer out = new StringBuffer();
+        byte[] b = new byte[4096];
+        for (int n; (n = in.read(b)) != -1; ) {
+            out.append(new String(b, 0, n));
+        }
+        return out.toString();
+    }
 }
