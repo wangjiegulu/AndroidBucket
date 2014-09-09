@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/shape_corners_black"
-    android:paddingLeft="38dp"
-    android:paddingRight="38dp"
-    android:paddingBottom="30dp"
-    android:paddingTop="20dp"
-    android:gravity="center"
-    android:orientation="vertical" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@drawable/ab__shape_corners_black"
+              android:paddingLeft="38dp"
+              android:paddingRight="38dp"
+              android:paddingBottom="30dp"
+              android:paddingTop="20dp"
+              android:gravity="center"
+              android:orientation="vertical">
 
     <ProgressBar
-        android:id="@+id/progressBar1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@android:color/transparent" />
+            android:id="@+id/progressBar1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"/>
     <TextView
             android:id="@+id/dialog_content_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="正在加载"
-        android:textSize="16sp"
-        android:textColor="#ffffff"
-        />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="正在加载"
+            android:textSize="16sp"
+            android:textColor="#ffffff"
+            />
 
 </LinearLayout>

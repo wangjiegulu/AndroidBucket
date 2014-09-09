@@ -1,71 +1,122 @@
 package com.wangjie.androidbucket.services.http;
 
 import com.wangjie.androidbucket.services.BaseAccessParameter;
+import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * @author Hubert He
  * @version V1.0
- * @Description
+ * @Description Http访问参数
  * @Createdate 14-9-4 10:09
  */
 public class HttpAccessParameter extends BaseAccessParameter {
 
-    // URL
-    private String url;
 
-    // SSL开启
-    private boolean enableSSL;
+    public enum SessionEnableMethod {ENABLE, DISABLE, AUTO}
+
+    // URL
+    private String webApi;
 
     // HTTP访问方法
-    private HttpMethod method;
+    private ABHttpMethod method;
 
-    // 表单
-    private List<NameValuePair> nameValuePairs;
+    // 表单参数
+    private NameValuePair[] paramNameValuePairs;
 
+    // HTTP头参数
+    private NameValuePair[] headNameValuePairs;
+
+    // 是否传递raw
+    private boolean isRaw;
+
+    // 传递的Entity
+    private HttpEntity rawEntity;
+
+    private SessionEnableMethod sessionEnableMethod;
+
+    /**
+     * 无参构造函数初始化url为空，SSL连接false，Http Method为GET，表单参数为空
+     */
     public HttpAccessParameter() {
-        this("", false, HttpMethod.GET, null);
+        this("", ABHttpMethod.GET, null);
     }
 
-    public HttpAccessParameter(String url, boolean enableSSL, HttpMethod method, List<NameValuePair> nameValuePairs) {
-        this.url = url;
-        this.enableSSL = enableSSL;
+    /**
+     * 构造函数
+     *
+     * @param webApi              URL
+     * @param method              Http方法参见HttpMethod枚举值
+     * @param paramNameValuePairs 表单参数
+     */
+    public HttpAccessParameter(String webApi, ABHttpMethod method, NameValuePair... paramNameValuePairs) {
+        this.webApi = webApi;
         this.method = method;
-        this.nameValuePairs = nameValuePairs;
+        this.paramNameValuePairs = paramNameValuePairs;
+        isRaw = false;
     }
 
-    public String getUrl() {
-        return url;
+    public String getWebApi() {
+        return webApi;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public HttpAccessParameter setWebApi(String webApi) {
+        this.webApi = webApi;
+        return this;
     }
 
-    public boolean isEnableSSL() {
-        return enableSSL;
-    }
-
-    public void setEnableSSL(boolean enableSSL) {
-        this.enableSSL = enableSSL;
-    }
-
-    public HttpMethod getMethod() {
+    public ABHttpMethod getMethod() {
         return method;
     }
 
-    public void setMethod(HttpMethod method) {
+    public HttpAccessParameter setMethod(ABHttpMethod method) {
         this.method = method;
+        return this;
     }
 
-    public List<NameValuePair> getNameValuePairs() {
-        return nameValuePairs;
+    public NameValuePair[] getParamNameValuePairs() {
+        return paramNameValuePairs;
     }
 
-    public void setNameValuePairs(List<NameValuePair> nameValuePairs) {
-        this.nameValuePairs = nameValuePairs;
+    public HttpAccessParameter setParamNameValuePairs(NameValuePair... paramNameValuePairs) {
+        this.paramNameValuePairs = paramNameValuePairs;
+        return this;
+    }
+
+    public NameValuePair[] getHeadNameValuePairs() {
+        return headNameValuePairs;
+    }
+
+    public HttpAccessParameter setHeadNameValuePairs(NameValuePair... headNameValuePairs) {
+        this.headNameValuePairs = headNameValuePairs;
+        return this;
+    }
+
+    public boolean isRaw() {
+        return isRaw;
+    }
+
+    public HttpAccessParameter setRaw(boolean isRaw) {
+        this.isRaw = isRaw;
+        return this;
+    }
+
+    public HttpEntity getRawEntity() {
+        return rawEntity;
+    }
+
+    public HttpAccessParameter setRawEntity(HttpEntity rawEntity) {
+        isRaw = true;
+        this.rawEntity = rawEntity;
+        return this;
+    }
+
+    public SessionEnableMethod getSessionEnableMethod() {
+        return sessionEnableMethod;
+    }
+
+    public HttpAccessParameter setSessionEnableMethod(SessionEnableMethod sessionEnableMethod) {
+        this.sessionEnableMethod = sessionEnableMethod;
+        return this;
     }
 }

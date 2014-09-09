@@ -1,7 +1,5 @@
 package com.wangjie.androidbucket.services;
 
-import com.wangjie.androidbucket.services.http.BaseHttpResponse;
-
 /**
  * @author Hubert He
  * @version V1.0
@@ -14,6 +12,4 @@ public interface OnResponseEvent<T extends BaseAccessResponse> {
      */
     T onResponse(Object object);
 
-    // 非UI线程返回UI线程
-    void onResult(T object);
 }

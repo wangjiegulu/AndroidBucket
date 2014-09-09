@@ -6,6 +6,6 @@ package com.wangjie.androidbucket.services.http;
  * @Description
  * @Createdate 14-9-4 10:10
  */
-public enum HttpMethod {
+public enum ABHttpMethod {
     GET, POST, DELETE
 };

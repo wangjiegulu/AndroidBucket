@@ -7,37 +7,49 @@ package com.wangjie.androidbucket.services;
  * @Createdate 14-9-4 10:35
  */
 public class BaseAccessResponse {
+
     // 是否成功标记
-    private boolean success = false;
+    private boolean success;
 
     // 错误代码
     private int code;
 
     // 消息说明
-    private String msg = "Default error message.";
+    private String msg;
+
+    /**
+     * 无参构造函数，初始化success为false
+     */
+    public BaseAccessResponse() {
+        success = false;
+        msg = "Default error message.";
+    }
 
     public boolean isSuccess() {
         return success;
     }
 
-    public void setSuccess(boolean success) {
+    public BaseAccessResponse setSuccess(boolean success) {
         this.success = success;
+        return this;
     }
 
     public int getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public BaseAccessResponse setCode(int code) {
         this.code = code;
+        return this;
     }
 
     public String getMsg() {
         return msg;
     }
 
-    public void setMsg(String msg) {
+    public BaseAccessResponse setMsg(String msg) {
         this.msg = msg;
+        return this;
     }
 
     @Override

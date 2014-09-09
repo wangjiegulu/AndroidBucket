@@ -6,6 +6,7 @@ import com.wangjie.androidbucket.exception.ABCrashHandler;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.thread.ThreadPool;
 import com.wangjie.androidbucket.utils.ABPrefsUtil;
+import com.wangjie.androidbucket.services.http.ABHttpUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,15 +25,16 @@ public class ABApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         initLogger(); // 初始化日志工具
         initThreadPool(); // 初始化线程池
         initNetWorkSSLScheme(); // 初始化AINetWork中SSL Scheme
         initImageLoader(); // 初始化图片加载器
         initCrashHandler(); // 初始化程序崩溃捕捉处理
         initPrefs(); // 初始化SharedPreference
-
         initABActionbar(); // 初始化Actionbar配置
-        instance = this;
+        // 初始化Http连接
+        initHttpConfig();
     }
 
     /**
@@ -81,6 +83,10 @@ public class ABApplication extends Application {
      */
     protected void initABActionbar() {
 
+    }
+
+    protected void initHttpConfig() {
+        ABHttpUtil.initHttpConfig(null, null);
     }
 
 }
