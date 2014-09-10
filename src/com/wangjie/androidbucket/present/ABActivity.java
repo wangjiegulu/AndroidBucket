@@ -2,7 +2,6 @@ package com.wangjie.androidbucket.present;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.widget.Toast;
 import com.wangjie.androidbucket.manager.BaseActivityManager;
@@ -32,7 +31,7 @@ public class ABActivity extends Activity implements ABActivityViewer {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        synchronized (this.getClass()) {
+        synchronized (((Object)this).getClass()) {
             if (isFirstFocused && hasFocus) {
                 isFirstFocused = false;
                 onWindowInitialized();

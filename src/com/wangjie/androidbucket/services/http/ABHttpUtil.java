@@ -250,15 +250,15 @@ public class ABHttpUtil {
      * @return
      */
     private static String generateUrl(HttpAccessParameter accessParameter) throws Exception {
-        String url = httpConfig.getDomain() + "/" + accessParameter.getWebApi();
+        String url = httpConfig.getDomain() + accessParameter.getWebApi();
         HttpAccessParameter.SessionEnableMethod sessionEnableMethod = accessParameter.getSessionEnableMethod();
         if (sessionEnableMethod == HttpAccessParameter.SessionEnableMethod.AUTO) {
             if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.sessionParameterUrl() != null) {
-                url += "?" + onHttpSessionConnectListener.sessionParameterUrl();
+                url += (url.contains("?") ? "&" : "?") + onHttpSessionConnectListener.sessionParameterUrl();
             }
         } else if (sessionEnableMethod == HttpAccessParameter.SessionEnableMethod.ENABLE) {
             if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.sessionParameterUrl() != null) {
-                url += "?" + onHttpSessionConnectListener.sessionParameterUrl();
+                url += (url.contains("?") ? "&" : "?") + onHttpSessionConnectListener.sessionParameterUrl();
             } else {
                 throw new Exception("None session configuration problem.");
             }
