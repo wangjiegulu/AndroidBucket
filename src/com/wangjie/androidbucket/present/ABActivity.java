@@ -98,6 +98,8 @@ public class ABActivity extends Activity implements ABActivityViewer {
     }
 
 
+    /********************** ABActivityViewer impl *********************/
+
     @Override
     public void showToastMessage(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -116,4 +118,16 @@ public class ABActivity extends Activity implements ABActivityViewer {
                 .setPositiveButton("OK", null)
                 .show();
     }
+
+    @Override
+    public void showLoadingDialog(String message) {
+
+    }
+
+    @Override
+    public void cancelLoadingDialog() {
+
+    }
+
+
 }

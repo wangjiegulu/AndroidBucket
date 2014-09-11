@@ -1,13 +1,16 @@
 package com.wangjie.androidbucket.present;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 import com.wangjie.androidbucket.manager.BaseActivityManager;
+import com.wangjie.androidbucket.mvp.ABActivityViewer;
 
 /**
  * Created by wangjie on 6/15/14.
  */
-public class ABSupportFragmentActivity extends FragmentActivity{
+public class ABSupportFragmentActivity extends FragmentActivity implements ABActivityViewer {
     private BaseActivityManager baseActivityManager;
 
     private boolean isActivityLifeCycleAutoCallBack;
@@ -33,7 +36,7 @@ public class ABSupportFragmentActivity extends FragmentActivity{
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        synchronized (this.getClass()){
+        synchronized (((Object)this).getClass()){
             if(isFirstFocused && hasFocus){
                 isFirstFocused = false;
                 onWindowInitialized();
@@ -90,4 +93,36 @@ public class ABSupportFragmentActivity extends FragmentActivity{
     }
 
 
+
+
+    /********************** ABActivityViewer impl *********************/
+
+    @Override
+    public void showToastMessage(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showInfoDialog(String message) {
+        showInfoDialog(null, message);
+    }
+
+    @Override
+    public void showInfoDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .show();
+    }
+
+    @Override
+    public void showLoadingDialog(String message) {
+
+    }
+
+    @Override
+    public void cancelLoadingDialog() {
+
+    }
 }

@@ -31,5 +31,15 @@ public interface ABActivityViewer {
      */
     void showInfoDialog(String title, String message);
 
+    /**
+     * 显示正在加载对话框
+     * @param message
+     */
+    void showLoadingDialog(String message);
+
+    /**
+     * 取消加载对话框
+     */
+    void cancelLoadingDialog();
 
 }
