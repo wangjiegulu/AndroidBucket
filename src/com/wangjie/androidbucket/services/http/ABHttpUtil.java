@@ -47,7 +47,9 @@ public class ABHttpUtil {
     }
 
     public static interface OnHttpSessionConnectListener {
-        String sessionParameterUrl();
+        String getSessionParameterUrl();
+        String getDomain();
+        int[] getPorts();
     }
 
     private static OnHttpSessionConnectListener onHttpSessionConnectListener;
@@ -83,8 +85,16 @@ public class ABHttpUtil {
             HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
 
             SchemeRegistry registry = new SchemeRegistry();
-            registry.register(new Scheme("http", sf, httpConfig.getHttpPort()));
-            registry.register(new Scheme("https", sf, httpConfig.getHttpsPort()));
+
+            int[] ports;
+            if(null == onHttpSessionConnectListener || null == (ports = onHttpSessionConnectListener.getPorts()) || ports.length < 2){
+                registry.register(new Scheme("http", sf, httpConfig.getHttpPort()));
+                registry.register(new Scheme("https", sf, httpConfig.getHttpsPort()));
+            }else{
+                registry.register(new Scheme("http", sf, ports[0]));
+                registry.register(new Scheme("https", sf, ports[1]));
+            }
+
 
             ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
 
@@ -250,15 +260,17 @@ public class ABHttpUtil {
      * @return
      */
     private static String generateUrl(HttpAccessParameter accessParameter) throws Exception {
-        String url = httpConfig.getDomain() + accessParameter.getWebApi();
+        String url =
+                null == onHttpSessionConnectListener ? httpConfig.getDomain() : onHttpSessionConnectListener.getDomain()
+                + accessParameter.getWebApi();
         HttpAccessParameter.SessionEnableMethod sessionEnableMethod = accessParameter.getSessionEnableMethod();
         if (sessionEnableMethod == HttpAccessParameter.SessionEnableMethod.AUTO) {
-            if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.sessionParameterUrl() != null) {
-                url += (url.contains("?") ? "&" : "?") + onHttpSessionConnectListener.sessionParameterUrl();
+            if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.getSessionParameterUrl() != null) {
+                url += (url.contains("?") ? "&" : "?") + onHttpSessionConnectListener.getSessionParameterUrl();
             }
         } else if (sessionEnableMethod == HttpAccessParameter.SessionEnableMethod.ENABLE) {
-            if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.sessionParameterUrl() != null) {
-                url += (url.contains("?") ? "&" : "?") + onHttpSessionConnectListener.sessionParameterUrl();
+            if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.getSessionParameterUrl() != null) {
+                url += (url.contains("?") ? "&" : "?") + onHttpSessionConnectListener.getSessionParameterUrl();
             } else {
                 throw new Exception("None session configuration problem.");
             }

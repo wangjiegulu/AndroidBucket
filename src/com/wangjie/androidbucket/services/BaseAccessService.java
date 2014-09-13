@@ -1,10 +1,6 @@
 package com.wangjie.androidbucket.services;
 
-import android.app.Application;
-import android.content.Context;
 import android.os.AsyncTask;
-import com.wangjie.androidbucket.application.ABApplication;
-import com.wangjie.androidbucket.controls.dialog.LoadingDialog;
 
 /**
  * @author Hubert He

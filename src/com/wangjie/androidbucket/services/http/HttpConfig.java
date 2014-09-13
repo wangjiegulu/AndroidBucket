@@ -38,6 +38,10 @@ public class HttpConfig {
         this.connectionTimeout = connectionTimeout;
     }
 
+    public HttpConfig(String domain, int soTimeout, int connectionTimeout) {
+        this(domain, 80, 443, soTimeout, connectionTimeout);
+    }
+
     public int getSoTimeout() {
         return soTimeout;
     }
