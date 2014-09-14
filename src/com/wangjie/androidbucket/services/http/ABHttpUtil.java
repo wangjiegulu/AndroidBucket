@@ -19,6 +19,7 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * @author Hubert He
@@ -236,8 +238,10 @@ public class ABHttpUtil {
         try {
             // 设置参数
             if (!accessParameter.isRaw()) {
-                httpPost.setEntity(new UrlEncodedFormEntity(Arrays.asList(accessParameter.getParamNameValuePairs()),
-                        HTTP.UTF_8));
+                NameValuePair[] params = accessParameter.getParamNameValuePairs();
+                if(!ABTextUtil.isEmpty(params)){
+                    httpPost.setEntity(new UrlEncodedFormEntity(Arrays.asList(params), HTTP.UTF_8));
+                }
             } else {
                 httpPost.setEntity(accessParameter.getRawEntity());
             }
@@ -290,4 +294,25 @@ public class ABHttpUtil {
     private static boolean isEnableSSL(String url) {
         return url.toLowerCase().startsWith("https");
     }
+
+
+    /**
+     * map转为NameValuePairs
+     * @param map
+     * @return
+     */
+    public static NameValuePair[] convert2NameValuePairs(Map<String, Object> map){
+        if(ABTextUtil.isEmpty(map)){
+            return null;
+        }
+        NameValuePair[] nvps = new NameValuePair[map.size()];
+        int i = 0;
+        for(Map.Entry<String, Object> entry : map.entrySet()){
+            nvps[i] = new BasicNameValuePair(entry.getKey(), entry.getValue() + "");
+            i++;
+        }
+        return nvps;
+    }
+
+
 }
