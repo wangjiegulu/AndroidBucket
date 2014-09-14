@@ -12,4 +12,6 @@
     <item type="id" name="ab__id_adapter_child_position" />
     <item type="id" name="ab__id_adapter_item_position" />
 
+    <item type="id" name="ab__id_adapter_item_type_render" />
+
 </resources>
