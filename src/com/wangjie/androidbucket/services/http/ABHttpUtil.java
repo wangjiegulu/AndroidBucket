@@ -4,6 +4,7 @@ import android.util.Log;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.utils.ABTextUtil;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -26,7 +27,9 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
 import java.util.Arrays;
@@ -50,7 +53,9 @@ public class ABHttpUtil {
 
     public static interface OnHttpSessionConnectListener {
         String getSessionParameterUrl();
+
         String getDomain();
+
         int[] getPorts();
     }
 
@@ -89,10 +94,10 @@ public class ABHttpUtil {
             SchemeRegistry registry = new SchemeRegistry();
 
             int[] ports;
-            if(null == onHttpSessionConnectListener || null == (ports = onHttpSessionConnectListener.getPorts()) || ports.length < 2){
+            if (null == onHttpSessionConnectListener || null == (ports = onHttpSessionConnectListener.getPorts()) || ports.length < 2) {
                 registry.register(new Scheme("http", sf, httpConfig.getHttpPort()));
                 registry.register(new Scheme("https", sf, httpConfig.getHttpsPort()));
-            }else{
+            } else {
                 registry.register(new Scheme("http", sf, ports[0]));
                 registry.register(new Scheme("https", sf, ports[1]));
             }
@@ -239,7 +244,7 @@ public class ABHttpUtil {
             // 设置参数
             if (!accessParameter.isRaw()) {
                 NameValuePair[] params = accessParameter.getParamNameValuePairs();
-                if(!ABTextUtil.isEmpty(params)){
+                if (!ABTextUtil.isEmpty(params)) {
                     httpPost.setEntity(new UrlEncodedFormEntity(Arrays.asList(params), HTTP.UTF_8));
                 }
             } else {
@@ -266,7 +271,7 @@ public class ABHttpUtil {
     private static String generateUrl(HttpAccessParameter accessParameter) throws Exception {
         String url =
                 null == onHttpSessionConnectListener ? httpConfig.getDomain() : onHttpSessionConnectListener.getDomain()
-                + accessParameter.getWebApi();
+                        + accessParameter.getWebApi();
         HttpAccessParameter.SessionEnableMethod sessionEnableMethod = accessParameter.getSessionEnableMethod();
         if (sessionEnableMethod == HttpAccessParameter.SessionEnableMethod.AUTO) {
             if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.getSessionParameterUrl() != null) {
@@ -298,21 +303,21 @@ public class ABHttpUtil {
 
     /**
      * map转为NameValuePairs
+     *
      * @param map
      * @return
      */
-    public static NameValuePair[] convert2NameValuePairs(Map<String, Object> map){
-        if(ABTextUtil.isEmpty(map)){
+    public static NameValuePair[] convert2NameValuePairs(Map<String, Object> map) {
+        if (ABTextUtil.isEmpty(map)) {
             return null;
         }
         NameValuePair[] nvps = new NameValuePair[map.size()];
         int i = 0;
-        for(Map.Entry<String, Object> entry : map.entrySet()){
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
             nvps[i] = new BasicNameValuePair(entry.getKey(), entry.getValue() + "");
             i++;
         }
         return nvps;
     }
-
 
 }

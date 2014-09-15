@@ -21,4 +21,8 @@ public class HttpConstants {
     public final static String CONTENT_TYPE_IMAGE = "image/*";
 
     public final static String CONTENT_TYPE_EMPTY = "";
+
+    public static class HeaderType {
+        public final static String HTTP_REFERER_HEADER = "referer";
+    }
 }

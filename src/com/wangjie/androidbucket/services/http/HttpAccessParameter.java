@@ -39,7 +39,7 @@ public class HttpAccessParameter extends BaseAccessParameter {
      * 无参构造函数初始化url为空，SSL连接false，Http Method为GET，表单参数为空
      */
     public HttpAccessParameter() {
-        this("", ABHttpMethod.GET, null);
+        this("", ABHttpMethod.GET);
     }
 
     /**

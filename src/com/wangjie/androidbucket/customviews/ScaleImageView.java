@@ -1,9 +1,11 @@
 package com.wangjie.androidbucket.customviews;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -52,6 +54,7 @@ public class ScaleImageView extends ImageView {
         sharedConstructing(context);
     }
 
+    @TargetApi(Build.VERSION_CODES.FROYO)
     private void sharedConstructing(Context context) {
         super.setClickable(true);
         this.context = context;
@@ -112,6 +115,7 @@ public class ScaleImageView extends ImageView {
         maxScale = x;
     }
 
+    @TargetApi(Build.VERSION_CODES.FROYO)
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public boolean onScaleBegin(ScaleGestureDetector detector) {
