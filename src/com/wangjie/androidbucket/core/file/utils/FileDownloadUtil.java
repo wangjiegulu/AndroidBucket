@@ -1,6 +1,5 @@
 package com.wangjie.androidbucket.core.file.utils;
 
-import com.wangjie.androidbucket.services.http.ABHttpUtil;
 import com.wangjie.androidbucket.utils.ABIOUtil;
 import com.wangjie.androidbucket.utils.ABTextUtil;
 import org.apache.http.HttpResponse;
@@ -8,6 +7,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,7 +33,7 @@ public class FileDownloadUtil {
      */
     public static File download(String url, String filePath, NameValuePair... headers) throws IOException {
         File file = new File(filePath);
-        HttpClient client = ABHttpUtil.getSSLHttpClient();
+        HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(url);
         if (!ABTextUtil.isEmpty(headers)) {
             for (NameValuePair header : headers) {
@@ -56,7 +56,7 @@ public class FileDownloadUtil {
             }
         } catch (IOException e) {
             throw e;
-        }finally {
+        } finally {
             ABIOUtil.closeIO(is, fos);
         }
 
