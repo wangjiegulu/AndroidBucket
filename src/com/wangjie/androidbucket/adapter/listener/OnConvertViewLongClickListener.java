@@ -5,16 +5,14 @@ import android.os.Build;
 import android.view.View;
 
 /**
- * 已经弃用，推荐使用OnConvertViewLongClickListener
  * Author: wangjie
  * Email: tiantian.china.2@gmail.com
  * Date: 9/2/14.
  */
-@Deprecated
-public abstract class OnAdapterLongClickListener implements View.OnLongClickListener{
+public abstract class OnConvertViewLongClickListener implements View.OnLongClickListener{
     private View convertView;
     private int[] positionIds;
-    public OnAdapterLongClickListener(View convertView, int... positionIds) {
+    public OnConvertViewLongClickListener(View convertView, int... positionIds) {
         this.convertView = convertView;
         this.positionIds = positionIds;
     }
@@ -27,10 +25,10 @@ public abstract class OnAdapterLongClickListener implements View.OnLongClickList
         for(int i = 0; i < len; i++){
             positions[i] = (int) convertView.getTag(positionIds[i]);
         }
-        onLongClickCallBack(positions);
+        onLongClickCallBack(v, positions);
         return true;
     }
 
-    public abstract void onLongClickCallBack(int... positionIds);
+    public abstract void onLongClickCallBack(View registedView, int... positionIds);
 
 }

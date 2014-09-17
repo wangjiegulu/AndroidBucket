@@ -6,8 +6,10 @@ import android.view.View;
 import com.wangjie.androidbucket.R;
 
 /**
+ * 已经弃用，推荐使用OnConvertViewClickListener
  * Created by wangjie on 6/24/14.
  */
+@Deprecated
 public abstract class OnAdapterClickListener implements View.OnClickListener{
 
     private View convertView;
