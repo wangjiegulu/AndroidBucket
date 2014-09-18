@@ -2,6 +2,7 @@ package com.wangjie.androidbucket.services.http;
 
 import android.util.Log;
 import com.wangjie.androidbucket.log.Logger;
+import com.wangjie.androidbucket.services.http.interceptor.HttpMethodInterceptor;
 import com.wangjie.androidbucket.utils.ABTextUtil;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -65,6 +66,13 @@ public class ABHttpUtil {
         ABHttpUtil.httpConfig = getDefaultHttpConfig(httpConfig);
         ABHttpUtil.onHttpSessionConnectListener = onHttpSessionConnectListener;
     }
+
+    private static HttpMethodInterceptor interceptor;
+    public static void registerHttpMethodInterceptor(HttpMethodInterceptor interceptor){
+        ABHttpUtil.interceptor = interceptor;
+    }
+
+
 
     /**
      * 获取SSL连接
@@ -182,13 +190,23 @@ public class ABHttpUtil {
 
         // 如果没有参数则为Get请求
         if (ABHttpMethod.GET == method) {
+            if(null != interceptor){
+                interceptor.interceptGet(accessParameter);
+            }
+
             Logger.d(TAG, "Initial Http Get connection");
             // 构造访问字符串
             httpRequest = new HttpGet(url);
         } else if (ABHttpMethod.POST == method) {
+            if(null != interceptor){
+                interceptor.interceptPost(accessParameter);
+            }
             Logger.d(TAG, "Initial Http Post connection");
             httpRequest = getHttpPostRequest(accessParameter, url);
         } else if (ABHttpMethod.DELETE == method) {
+            if(null != interceptor){
+                interceptor.interceptDelete(accessParameter);
+            }
             Logger.d(TAG, "Initial Http Delete connection");
             // 构造访问字符串
             httpRequest = new HttpDelete(url);
