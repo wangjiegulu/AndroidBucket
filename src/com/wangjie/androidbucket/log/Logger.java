@@ -306,7 +306,7 @@ public class Logger {
     }
     */
 
-    private static StringBuilder transformStackTrace(StackTraceElement[] elements){
+    public static StringBuilder transformStackTrace(StackTraceElement[] elements){
         StringBuilder sb = new StringBuilder();
         for(StackTraceElement element : elements){
             sb.append(element.toString() + "\r\n");

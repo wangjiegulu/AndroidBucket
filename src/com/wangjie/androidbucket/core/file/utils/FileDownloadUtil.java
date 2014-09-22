@@ -33,6 +33,10 @@ public class FileDownloadUtil {
      */
     public static File download(String url, String filePath, NameValuePair... headers) throws IOException {
         File file = new File(filePath);
+        if(file.exists()){
+            file.delete();
+        }
+        file.createNewFile();
         HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(url);
         if (!ABTextUtil.isEmpty(headers)) {
@@ -72,6 +76,6 @@ public class FileDownloadUtil {
      * @throws IOException
      */
     public static File download(String url, String filePath) throws IOException {
-        return download(url, filePath);
+        return download(url, filePath, null);
     }
 }
