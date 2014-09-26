@@ -251,7 +251,6 @@ public class ABHttpUtil {
 
     // 获取HttpPostRequest
     private static HttpUriRequest getHttpPostRequest(HttpAccessParameter accessParameter, String url) {
-        HttpUriRequest httpRequest;
         Logger.d(TAG, "Initial Http Post connection");
         // 构造访问字符串
         HttpPost httpPost = new HttpPost(url);
@@ -270,8 +269,7 @@ public class ABHttpUtil {
             Logger.e(TAG, e.getMessage(), e);
             throw new RuntimeException(e);
         }
-        httpRequest = httpPost;
-        return httpRequest;
+        return httpPost;
     }
 
     /**

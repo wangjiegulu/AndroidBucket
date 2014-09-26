@@ -10,6 +10,8 @@ import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
 import android.webkit.MimeTypeMap;
 import com.wangjie.androidbucket.log.Logger;
+import com.wangjie.androidbucket.services.network.exception.HippoException;
+import com.wangjie.androidbucket.services.network.toolbox.PoolingByteArrayOutputStream;
 
 import java.io.*;
 
@@ -375,6 +377,7 @@ public class ABFileUtil {
     /**
      * 从文件中读取Byte数组
      * Add by Hubert
+     *
      * @param file
      * @return byte[]
      * @throws IOException
@@ -410,6 +413,15 @@ public class ABFileUtil {
         is.close();
 
         return bytes;
+    }
+
+    public static byte[] getBytesFromInputStream(InputStream in) throws Exception {
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] data = new byte[4096];
+        int count;
+        while ((count = in.read(data, 0, 4096)) != -1)
+            outStream.write(data, 0, count);
+        return outStream.toByteArray();
     }
 
 }

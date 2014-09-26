@@ -216,6 +216,9 @@ public class HttpNetworkExecutor<T extends HippoHttpRequest<?>> implements Netwo
             } else {
                 networkResponse = new NetworkResponse(new HippoException("No network connection.", e));
             }
+        } catch (IllegalArgumentException e) {
+            Logger.w(TAG, e);
+            networkResponse = new NetworkResponse(new HippoException("Wrong arguments: " + e.getMessage(), e));
         }
         return networkResponse;
     }
