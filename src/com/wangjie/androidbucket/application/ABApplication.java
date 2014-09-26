@@ -6,7 +6,7 @@ import com.wangjie.androidbucket.exception.ABCrashHandler;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.thread.ThreadPool;
 import com.wangjie.androidbucket.utils.ABPrefsUtil;
-import com.wangjie.androidbucket.services.http.ABHttpUtil;
+import com.wangjie.androidbucket.services.network.http.ABHttpUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -88,5 +88,6 @@ public class ABApplication extends Application {
     protected void initHttpConfig() {
         ABHttpUtil.initHttpConfig(null, null);
     }
+
 
 }

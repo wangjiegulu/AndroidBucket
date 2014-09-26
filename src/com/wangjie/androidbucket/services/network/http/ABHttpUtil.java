@@ -1,11 +1,10 @@
-package com.wangjie.androidbucket.services.http;
+package com.wangjie.androidbucket.services.network.http;
 
 import android.util.Log;
 import com.wangjie.androidbucket.log.Logger;
-import com.wangjie.androidbucket.services.http.interceptor.HttpMethodInterceptor;
+import com.wangjie.androidbucket.services.network.http.interceptor.HttpMethodInterceptor;
 import com.wangjie.androidbucket.utils.ABTextUtil;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -28,9 +27,7 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
 import java.util.Arrays;
@@ -68,10 +65,10 @@ public class ABHttpUtil {
     }
 
     private static HttpMethodInterceptor interceptor;
-    public static void registerHttpMethodInterceptor(HttpMethodInterceptor interceptor){
+
+    public static void registerHttpMethodInterceptor(HttpMethodInterceptor interceptor) {
         ABHttpUtil.interceptor = interceptor;
     }
-
 
 
     /**
@@ -190,7 +187,7 @@ public class ABHttpUtil {
 
         // 如果没有参数则为Get请求
         if (ABHttpMethod.GET == method) {
-            if(null != interceptor){
+            if (null != interceptor) {
                 interceptor.interceptGet(accessParameter);
             }
 
@@ -198,13 +195,13 @@ public class ABHttpUtil {
             // 构造访问字符串
             httpRequest = new HttpGet(url);
         } else if (ABHttpMethod.POST == method) {
-            if(null != interceptor){
+            if (null != interceptor) {
                 interceptor.interceptPost(accessParameter);
             }
             Logger.d(TAG, "Initial Http Post connection");
             httpRequest = getHttpPostRequest(accessParameter, url);
         } else if (ABHttpMethod.DELETE == method) {
-            if(null != interceptor){
+            if (null != interceptor) {
                 interceptor.interceptDelete(accessParameter);
             }
             Logger.d(TAG, "Initial Http Delete connection");
@@ -291,6 +288,25 @@ public class ABHttpUtil {
                 null == onHttpSessionConnectListener ? httpConfig.getDomain() : onHttpSessionConnectListener.getDomain()
                         + accessParameter.getWebApi();
         HttpAccessParameter.SessionEnableMethod sessionEnableMethod = accessParameter.getSessionEnableMethod();
+        if (sessionEnableMethod == HttpAccessParameter.SessionEnableMethod.AUTO) {
+            if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.getSessionParameterUrl() != null) {
+                url += (url.contains("?") ? "&" : "?") + onHttpSessionConnectListener.getSessionParameterUrl();
+            }
+        } else if (sessionEnableMethod == HttpAccessParameter.SessionEnableMethod.ENABLE) {
+            if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.getSessionParameterUrl() != null) {
+                url += (url.contains("?") ? "&" : "?") + onHttpSessionConnectListener.getSessionParameterUrl();
+            } else {
+                throw new Exception("None session configuration problem.");
+            }
+        }
+        Logger.d(TAG, "Connect to " + url);
+        return url;
+    }
+
+    public static String getGeneratedUrl(String webApi, HttpAccessParameter.SessionEnableMethod sessionEnableMethod) throws Exception {
+        String url =
+                null == onHttpSessionConnectListener ? httpConfig.getDomain() : onHttpSessionConnectListener.getDomain()
+                        + webApi;
         if (sessionEnableMethod == HttpAccessParameter.SessionEnableMethod.AUTO) {
             if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.getSessionParameterUrl() != null) {
                 url += (url.contains("?") ? "&" : "?") + onHttpSessionConnectListener.getSessionParameterUrl();

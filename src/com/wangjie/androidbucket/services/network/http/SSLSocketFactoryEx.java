@@ -1,4 +1,4 @@
-package com.wangjie.androidbucket.services.http;
+package com.wangjie.androidbucket.services.network.http;
 
 import org.apache.http.conn.ssl.SSLSocketFactory;
 
@@ -15,7 +15,7 @@ import java.security.*;
  * @Description 按照 http://www.eoeandroid.com/thread-161747-1-1.html 给出方案实现SSL访问
  * @Createdate 14-9-4 14:33
  */
-class SSLSocketFactoryEx extends SSLSocketFactory {
+public class SSLSocketFactoryEx extends SSLSocketFactory {
     SSLContext sslContext = SSLContext.getInstance("TLS");
 
     /**

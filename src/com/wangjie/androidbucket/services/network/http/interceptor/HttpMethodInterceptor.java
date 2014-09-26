@@ -1,6 +1,6 @@
-package com.wangjie.androidbucket.services.http.interceptor;
+package com.wangjie.androidbucket.services.network.http.interceptor;
 
-import com.wangjie.androidbucket.services.http.HttpAccessParameter;
+import com.wangjie.androidbucket.services.network.http.HttpAccessParameter;
 
 /**
  * Author: wangjie

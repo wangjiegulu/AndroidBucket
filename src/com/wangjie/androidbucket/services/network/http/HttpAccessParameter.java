@@ -1,4 +1,4 @@
-package com.wangjie.androidbucket.services.http;
+package com.wangjie.androidbucket.services.network.http;
 
 import com.wangjie.androidbucket.services.BaseAccessParameter;
 import org.apache.http.HttpEntity;

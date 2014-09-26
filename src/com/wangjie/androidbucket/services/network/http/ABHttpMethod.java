@@ -1,4 +1,4 @@
-package com.wangjie.androidbucket.services.http;
+package com.wangjie.androidbucket.services.network.http;
 
 /**
  * @author Hubert He
