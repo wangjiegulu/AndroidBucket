@@ -4,6 +4,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.ListView;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -93,7 +96,12 @@ public class ABViewUtil {
         view.measure(width, expandSpec);
     }
 
-
+    public static int getAllListViewSectionCounts(ListView lv, List dataSource){
+        if(null == lv || ABTextUtil.isEmpty(dataSource)){
+            return 0;
+        }
+        return dataSource.size() + lv.getHeaderViewsCount() + lv.getFooterViewsCount();
+    }
 
 
 }

@@ -14,7 +14,7 @@ import java.util.List;
  * 它包含一个View层的引用和一个Model层的引用
  */
 public class ABBasePresenter<V extends ABActivityViewer, I extends ABInteractor> implements ABBaseManager {
-    public static final String TAG = ABBasePresenter.class.getSimpleName();
+    private static final String TAG = ABBasePresenter.class.getSimpleName();
 
     protected V viewer;
     protected I interactor;

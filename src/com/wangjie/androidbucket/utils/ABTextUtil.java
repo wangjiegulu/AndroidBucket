@@ -93,6 +93,9 @@ public class ABTextUtil {
     public static boolean isEmpty(Object[] objs) {
         return null == objs || objs.length <= 0;
     }
+    public static boolean isEmpty(int[] objs) {
+        return null == objs || objs.length <= 0;
+    }
 
     public static boolean isEmpty(CharSequence charSequence) {
         return null == charSequence || charSequence.length() <= 0;
