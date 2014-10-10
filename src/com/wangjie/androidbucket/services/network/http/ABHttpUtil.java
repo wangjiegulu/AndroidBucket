@@ -283,8 +283,9 @@ public class ABHttpUtil {
      */
     private static String generateUrl(HttpAccessParameter accessParameter) throws Exception {
         String url =
-                null == onHttpSessionConnectListener ? httpConfig.getDomain() : onHttpSessionConnectListener.getDomain()
-                        + accessParameter.getWebApi();
+                null == onHttpSessionConnectListener ? httpConfig.getDomain() : onHttpSessionConnectListener.getDomain();
+        url += accessParameter.getWebApi();
+
         HttpAccessParameter.SessionEnableMethod sessionEnableMethod = accessParameter.getSessionEnableMethod();
         if (sessionEnableMethod == HttpAccessParameter.SessionEnableMethod.AUTO) {
             if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.getSessionParameterUrl() != null) {

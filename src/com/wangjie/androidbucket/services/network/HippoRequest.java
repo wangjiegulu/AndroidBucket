@@ -13,7 +13,9 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
      */
     protected int seq;
 
-    private boolean isCancel = false;
+    private boolean cancel = false;
+
+    private boolean finish = false;
 
     /**
      * 成功返回监听器
@@ -46,11 +48,23 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
 
     public void cancel(boolean isCancel) {
         synchronized (this) {
-            this.isCancel = isCancel;
+            this.cancel = isCancel;
         }
     }
 
     public boolean isCancel() {
-        return isCancel;
+        return cancel;
+    }
+
+    public boolean isFinish() {
+        return finish;
+    }
+
+    public void setFinish(boolean finish) {
+        this.finish = finish;
+    }
+
+    public int getSeq() {
+        return seq;
     }
 }

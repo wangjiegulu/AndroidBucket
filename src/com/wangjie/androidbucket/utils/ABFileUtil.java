@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
 import android.webkit.MimeTypeMap;
+import com.wangjie.androidbucket.application.ABApplication;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.network.exception.HippoException;
 import com.wangjie.androidbucket.services.network.toolbox.PoolingByteArrayOutputStream;
@@ -424,4 +425,15 @@ public class ABFileUtil {
         return outStream.toByteArray();
     }
 
+    public static File getFileFromInputStream(File file, InputStream ins) throws IOException {
+        OutputStream os = new FileOutputStream(file);
+        int bytesRead = 0;
+        byte[] buffer = new byte[8192];
+        while ((bytesRead = ins.read(buffer, 0, 8192)) != -1) {
+            os.write(buffer, 0, bytesRead);
+        }
+        os.close();
+        ins.close();
+        return file;
+    }
 }

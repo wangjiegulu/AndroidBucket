@@ -6,6 +6,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.protocol.HTTP;
 
 import java.io.*;
@@ -62,10 +63,10 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
     /**
      * 完全构造函数
      *
-     * @param method
-     * @param url
-     * @param headers
-     * @param body
+     * @param method HTTP Method
+     * @param url 网址
+     * @param headers HTTP header information
+     * @param body HTTP body bytes array
      */
     public HippoHttpRequest(int method,
                             String url,
@@ -120,4 +121,11 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
         return "application/x-www-form-urlencoded; charset=" + getParamsEncoding();
     }
 
+    public HttpEntity getEntity() {
+        HttpEntity entity = null;
+        if (body != null) {
+            entity = new ByteArrayEntity(body);
+        }
+        return entity;
+    }
 }

@@ -58,4 +58,5 @@ public class HippoResponse<T> {
     public HippoException getError() {
         return error;
     }
+
 }

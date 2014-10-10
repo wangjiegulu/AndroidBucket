@@ -40,11 +40,6 @@ public class HttpNetworkExecutor<T extends HippoHttpRequest<?>> implements Netwo
      */
     private HttpClient httpClient;
 
-    /**
-     * 是否取消
-     */
-    private boolean quit = false;
-
 
     public HttpNetworkExecutor(HttpClient httpClient) {
         this(new ByteArrayPool(DEFAULT_POOL_SIZE));
@@ -128,16 +123,6 @@ public class HttpNetworkExecutor<T extends HippoHttpRequest<?>> implements Netwo
         return interceptors.remove(interceptor);
     }
 
-    public void interrupt(T request) throws HippoException {
-        if (interceptors != null) {
-            for (Interceptor interceptor : interceptors) {
-                if (interceptor.getInterruptRule(request)) {
-                    interceptor.dispatch(request);
-                }
-            }
-        }
-    }
-
     /**
      * Creates the appropriate subclass of HttpUriRequest for passed in request.
      */
@@ -150,13 +135,11 @@ public class HttpNetworkExecutor<T extends HippoHttpRequest<?>> implements Netwo
                 return new HttpDelete(request.getUrl());
             case HippoHttpRequest.Method.POST: {
                 HttpPost postRequest = new HttpPost(request.getUrl());
-                postRequest.addHeader(HEADER_CONTENT_TYPE, request.getBodyContentType());
                 setEntityIfNonEmptyBody(postRequest, request);
                 return postRequest;
             }
             case HippoHttpRequest.Method.PUT: {
                 HttpPut putRequest = new HttpPut(request.getUrl());
-                putRequest.addHeader(HEADER_CONTENT_TYPE, request.getBodyContentType());
                 setEntityIfNonEmptyBody(putRequest, request);
                 return putRequest;
             }
@@ -173,10 +156,9 @@ public class HttpNetworkExecutor<T extends HippoHttpRequest<?>> implements Netwo
 
     private static void setEntityIfNonEmptyBody(HttpEntityEnclosingRequestBase httpRequest,
                                                 HippoHttpRequest<?> request) {
-        byte[] body = request.getBody();
-        if (body != null) {
-            HttpEntity entity = new ByteArrayEntity(body);
-            httpRequest.setEntity(entity);
+        HttpEntity httpEntity = request.getEntity();
+        if (httpEntity != null) {
+            httpRequest.setEntity(httpEntity);
         }
     }
 

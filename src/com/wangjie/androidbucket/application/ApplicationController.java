@@ -6,7 +6,9 @@ import com.wangjie.androidbucket.services.network.HippoHttpRequest;
 import com.wangjie.androidbucket.services.network.HippoRequest;
 import com.wangjie.androidbucket.services.network.HippoRequestQueue;
 import com.wangjie.androidbucket.services.network.NetworkExecutor;
+import com.wangjie.androidbucket.services.network.exception.HippoException;
 import com.wangjie.androidbucket.services.network.http.SSLSocketFactoryEx;
+import com.wangjie.androidbucket.services.network.interceptor.Interceptor;
 import com.wangjie.androidbucket.services.network.toolbox.HttpNetworkExecutor;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
@@ -58,7 +60,8 @@ public class ApplicationController extends ABApplication {
 
     public HippoRequestQueue getHttpRequestQueue() {
         if (httpRequestQueue == null) {
-            httpRequestQueue = HippoRequestQueue.newHippoRequestQueue(new HttpNetworkExecutor(getSSLHttpClient(80, 9094, 20000, 20000)));
+            HttpNetworkExecutor networkExecutor = new HttpNetworkExecutor(getSSLHttpClient(80, 9094, 20000, 20000));
+            httpRequestQueue = HippoRequestQueue.newHippoRequestQueue(networkExecutor);
         }
         return httpRequestQueue;
     }

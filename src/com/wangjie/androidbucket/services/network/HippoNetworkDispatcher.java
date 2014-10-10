@@ -47,6 +47,8 @@ public class HippoNetworkDispatcher extends Thread {
                     continue;
                 }
             }
+            Logger.d(TAG, String.format("Request: %d get ticket to run.", request.getSeq()));
+
             // 访问拦截
             try {
                 intercept(request);
@@ -55,7 +57,9 @@ public class HippoNetworkDispatcher extends Thread {
                 continue;
             }
             NetworkResponse networkResponse = networkExecutor.performRequest(request);
+            request.setFinish(true);
             request.parseResponse(networkResponse);
+            Logger.d(TAG, String.format("Request: %d finish at %d.", request.getSeq(), System.currentTimeMillis()));
         }
     }
 
