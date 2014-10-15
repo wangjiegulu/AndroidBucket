@@ -63,10 +63,10 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
     /**
      * 完全构造函数
      *
-     * @param method HTTP Method
-     * @param url 网址
+     * @param method  HTTP Method
+     * @param url     网址
      * @param headers HTTP header information
-     * @param body HTTP body bytes array
+     * @param body    HTTP body bytes array
      */
     public HippoHttpRequest(int method,
                             String url,
@@ -79,6 +79,7 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
         this.url = url;
         this.headers = headers;
         this.body = body;
+
     }
 
     public int getMethod() {

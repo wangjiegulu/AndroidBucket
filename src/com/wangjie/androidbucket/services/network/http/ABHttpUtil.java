@@ -225,7 +225,7 @@ public class ABHttpUtil {
                     httpRequest,
                     url);
             String strResult = ABTextUtil.inputStream2String(httpResponse.getEntity().getContent());
-            Logger.d(TAG, String.format("Get response from server value(\"%s\")", strResult));
+            Logger.d(TAG, String.format("Response from server value(\"%s\")", strResult));
             return strResult;
         } catch (ClientProtocolException e) {
             Log.e(TAG, e.getMessage(), e);

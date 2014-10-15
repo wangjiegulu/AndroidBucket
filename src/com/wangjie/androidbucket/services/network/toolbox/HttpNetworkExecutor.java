@@ -10,12 +10,14 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketTimeoutException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,8 +30,6 @@ import java.util.Set;
 public class HttpNetworkExecutor<T extends HippoHttpRequest<?>> implements NetworkExecutor<HippoHttpRequest<?>> {
 
     public static final String TAG = HttpNetworkExecutor.class.getSimpleName();
-
-    private final static String HEADER_CONTENT_TYPE = "Content-Type";
 
     private static int DEFAULT_POOL_SIZE = 4096;
 
@@ -163,45 +163,60 @@ public class HttpNetworkExecutor<T extends HippoHttpRequest<?>> implements Netwo
     }
 
     @Override
-    public NetworkResponse performRequest(HippoHttpRequest<?> request) {
+    public NetworkResponse performRequest(HippoHttpRequest<?> request) throws HippoException {
         if (httpClient == null) {
             Logger.d(TAG, "Use default http client.");
             httpClient = new DefaultHttpClient();
         }
-        NetworkResponse networkResponse = null;
-        HttpUriRequest httpUriRequest = createHttpRequest(request);
-        addHeaders(httpUriRequest, request);
-        // 用户自定义参数
-        prepareRequest(httpUriRequest);
-        HttpResponse httpResponse = null;
-        byte[] responseContents = null;
-        try {
-            Logger.d(TAG, "Url: " + request.getUrl());
-            httpResponse = httpClient.execute(httpUriRequest);
-            responseContents = entityToBytes(httpResponse.getEntity());
-            // 如果接收到的回复为空，默认赋值为长度为0的byte数组
-            if (responseContents == null) {
-                responseContents = new byte[0];
-            }
-            // 解析返回值
-            networkResponse = new NetworkResponse(responseContents);
-        } catch (HippoException e) {
-            networkResponse = new NetworkResponse(e);
-        } catch (IOException e) {
-            Logger.w(TAG, "Http access exception: " + e.getMessage());
-            if (httpResponse != null) {
-                int statusCode = httpResponse.getStatusLine().getStatusCode();
-                Logger.w(TAG, "Http response status code: " + statusCode);
-                if (responseContents != null) {
-                    networkResponse = new NetworkResponse(new HippoException("Error status code: " + statusCode), responseContents);
+        while (true) {
+            NetworkResponse networkResponse = null;
+            HttpUriRequest httpUriRequest = createHttpRequest(request);
+            addHeaders(httpUriRequest, request);
+            // 用户自定义参数
+            prepareRequest(httpUriRequest);
+            HttpResponse httpResponse = null;
+            byte[] responseContents = null;
+            try {
+                Logger.d(TAG, "Url: " + request.getUrl());
+                httpResponse = httpClient.execute(httpUriRequest);
+                responseContents = entityToBytes(httpResponse.getEntity());
+                // 如果接收到的回复为空，默认赋值为长度为0的byte数组
+                if (responseContents == null) {
+                    responseContents = new byte[0];
                 }
-            } else {
-                networkResponse = new NetworkResponse(new HippoException("No network connection.", e));
+                // 解析返回值
+                networkResponse = new NetworkResponse(responseContents);
+                return networkResponse;
+            } catch (SocketTimeoutException e) {
+                attemptRetryOnException(request, new HippoException("Socket Timeout"));
+            } catch (ConnectTimeoutException e) {
+                attemptRetryOnException(request, new HippoException("Connect Timeout"));
+            } catch (HippoException e) {
+                networkResponse = new NetworkResponse(e);
+                return networkResponse;
+            } catch (IOException e) {
+                Logger.w(TAG, "Http access exception: " + e.getMessage());
+                if (httpResponse != null) {
+                    int statusCode = httpResponse.getStatusLine().getStatusCode();
+                    Logger.w(TAG, "Http response status code: " + statusCode);
+                    if (responseContents != null) {
+                        networkResponse = new NetworkResponse(new HippoException("Error status code: " + statusCode), responseContents);
+                    }
+                } else {
+                    networkResponse = new NetworkResponse(new HippoException("No network connection.", e));
+                }
+                return networkResponse;
+            } catch (IllegalArgumentException e) {
+                Logger.w(TAG, e);
+                networkResponse = new NetworkResponse(new HippoException("Wrong arguments: " + e.getMessage(), e));
+                return networkResponse;
             }
-        } catch (IllegalArgumentException e) {
-            Logger.w(TAG, e);
-            networkResponse = new NetworkResponse(new HippoException("Wrong arguments: " + e.getMessage(), e));
         }
-        return networkResponse;
+    }
+
+    private static void attemptRetryOnException(HippoHttpRequest<?> request,
+                                                HippoException exception) throws HippoException {
+        Logger.w(TAG, String.format("Attempt to retry http connect due to error: %s happen.", exception.getMessage()));
+        request.retry(exception);
     }
 }
