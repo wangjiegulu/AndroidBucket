@@ -13,7 +13,7 @@ import com.wangjie.androidbucket.mvp.ABActivityViewer;
 public class ABSupportFragmentActivity extends FragmentActivity implements ABActivityViewer {
     private BaseActivityManager baseActivityManager;
 
-    private boolean isActivityLifeCycleAutoCallBack;
+    private boolean isActivityLifeCycleAutoCallBack = true;
     public boolean isActivityLifeCycleAutoCallBack() {
         return isActivityLifeCycleAutoCallBack;
     }
