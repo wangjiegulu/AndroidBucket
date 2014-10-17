@@ -1,5 +1,7 @@
 package com.wangjie.androidbucket.services.network;
 
+import com.wangjie.androidbucket.services.network.exception.HippoException;
+
 /**
  * @author Hubert He
  * @version V1.0
@@ -17,6 +19,10 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
 
     private boolean finish = false;
 
+
+    protected RetryPolicy retryPolicy;
+
+
     /**
      * 成功返回监听器
      */
@@ -31,6 +37,7 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
     public HippoRequest(HippoResponse.Listener<T> listener, HippoResponse.ErrorListener errorListener) {
         this.listener = listener;
         this.errorListener = errorListener;
+        this.retryPolicy = new RetryPolicy();
     }
 
     /**
@@ -39,6 +46,10 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
      * @return
      */
     public abstract void parseResponse(NetworkResponse response);
+
+    public void retry(HippoException e) throws HippoException {
+        retryPolicy.retry(e);
+    }
 
 
     @Override
@@ -67,4 +78,31 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
     public int getSeq() {
         return seq;
     }
+
+    private class RetryPolicy {
+
+        private static final int DEFAULT_RETRY_COUNT = 3;
+
+        private RetryPolicy() {
+            this(DEFAULT_RETRY_COUNT);
+        }
+
+        private RetryPolicy(int currentCount) {
+            this.currentCount = currentCount;
+        }
+
+        private int currentCount;
+
+        public int getCurrentCount() {
+            return currentCount;
+        }
+
+        public void retry(HippoException e) throws HippoException {
+            if (currentCount <= 0) {
+                throw e;
+            }
+            currentCount--;
+        }
+    }
+
 }

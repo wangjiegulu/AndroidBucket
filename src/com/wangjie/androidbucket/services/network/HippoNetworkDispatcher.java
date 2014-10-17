@@ -56,10 +56,17 @@ public class HippoNetworkDispatcher extends Thread {
                 request.parseResponse(new NetworkResponse(e));
                 continue;
             }
-            NetworkResponse networkResponse = networkExecutor.performRequest(request);
-            request.setFinish(true);
-            request.parseResponse(networkResponse);
-            Logger.d(TAG, String.format("Request: %d finish at %d.", request.getSeq(), System.currentTimeMillis()));
+            NetworkResponse networkResponse = null;
+            try {
+                networkResponse = networkExecutor.performRequest(request);
+            } catch (HippoException e) {
+                networkResponse = new NetworkResponse(e);
+                Logger.e(TAG, e);
+            } finally {
+                request.setFinish(true);
+                request.parseResponse(networkResponse);
+                Logger.d(TAG, String.format("Request: %d finish at %d.", request.getSeq(), System.currentTimeMillis()));
+            }
         }
     }
 
