@@ -33,10 +33,6 @@ public class FileDownloadUtil {
      */
     public static File download(String url, String filePath, NameValuePair... headers) throws IOException {
         File file = new File(filePath);
-        if(file.exists()){
-            file.delete();
-        }
-        file.createNewFile();
         HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(url);
         if (!ABTextUtil.isEmpty(headers)) {
@@ -65,6 +61,40 @@ public class FileDownloadUtil {
         }
 
         return file;
+    }
+
+    /**
+     * 通过URL下载文件到指定路径
+     *
+     * @param url      URL
+     * @param filePath 指定路径
+     * @param headers  HTTP头
+     * @return
+     * @throws IOException
+     */
+    public static File downloadAnyWay(String url, String filePath, NameValuePair... headers) throws IOException {
+        File file = new File(filePath);
+        if(file.exists()){
+            file.delete();
+        }
+        file.createNewFile();
+        return download(url, filePath, headers);
+    }
+
+    /**
+     * 如果不存在，则下载；如果存在则不下载，直接返回
+     * @param url
+     * @param filePath
+     * @param headers
+     * @return
+     * @throws Exception
+     */
+    public static File downloadIfNotExist(String url, String filePath, NameValuePair... headers) throws Exception{
+        File file = new File(filePath);
+        if(file.exists()){
+            return file;
+        }
+        return download(url, filePath, headers);
     }
 
     /**

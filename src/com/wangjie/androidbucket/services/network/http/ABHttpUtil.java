@@ -3,7 +3,9 @@ package com.wangjie.androidbucket.services.network.http;
 import android.util.Log;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.network.http.interceptor.HttpMethodInterceptor;
+import com.wangjie.androidbucket.utils.ABIOUtil;
 import com.wangjie.androidbucket.utils.ABTextUtil;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
@@ -27,11 +29,11 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.security.KeyStore;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 /**
  * @author Hubert He
@@ -224,12 +226,11 @@ public class ABHttpUtil {
                     connectionTimeout,
                     httpRequest,
                     url);
-            String strResult = ABTextUtil.inputStream2String(httpResponse.getEntity().getContent());
+
+
+            String strResult = ABTextUtil.inputStream2StringFromGZIP(httpResponse.getEntity().getContent());
             Logger.d(TAG, String.format("Response from server value(\"%s\")", strResult));
             return strResult;
-        } catch (ClientProtocolException e) {
-            Log.e(TAG, e.getMessage(), e);
-            throw new RuntimeException(e);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
             throw new RuntimeException(e);
@@ -352,5 +353,8 @@ public class ABHttpUtil {
         }
         return nvps;
     }
+
+
+
 
 }

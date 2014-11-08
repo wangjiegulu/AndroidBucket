@@ -93,6 +93,7 @@ public class ABTextUtil {
     public static boolean isEmpty(Object[] objs) {
         return null == objs || objs.length <= 0;
     }
+
     public static boolean isEmpty(int[] objs) {
         return null == objs || objs.length <= 0;
     }
@@ -202,4 +203,51 @@ public class ABTextUtil {
         }
         return out.toString();
     }
+
+
+    /**
+     * 解压Gzip获取
+     *
+     * @param is
+     * @return
+     */
+    public static String inputStream2StringFromGZIP(InputStream is) {
+        StringBuilder resultSb = new StringBuilder();
+        BufferedInputStream bis = null;
+        InputStreamReader reader = null;
+        try {
+            bis = new BufferedInputStream(is);
+            bis.mark(2);
+            // 取前两个字节
+            byte[] header = new byte[2];
+            int result = bis.read(header);
+            // reset输入流到开始位置
+            bis.reset();
+            // 判断是否是GZIP格式
+            int headerData = getShort(header);
+            // Gzip流的前两个字节是0x1f8b
+            if (result != -1 && headerData == 0x1f8b) {
+                is = new GZIPInputStream(bis);
+            } else {
+                is = bis;
+            }
+            reader = new InputStreamReader(is, "utf-8");
+            char[] data = new char[100];
+            int readSize;
+            while ((readSize = reader.read(data)) > 0) {
+                resultSb.append(data, 0, readSize);
+            }
+        } catch (Exception e) {
+            Logger.e(TAG, e);
+        } finally {
+            ABIOUtil.closeIO(is, bis, reader);
+        }
+        return resultSb.toString();
+    }
+
+    private static int getShort(byte[] data) {
+        return (int) ((data[0] << 8) | data[1] & 0xFF);
+    }
+
+
 }
