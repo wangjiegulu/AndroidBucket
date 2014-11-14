@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ACTIVITY_ENTRY_NAME</string>
+
+
+    <string name="tag_fragment_tab_click_only">TAG_FRAGMENT_TAB_CLICK_ONLY</string>
+
 </resources>
