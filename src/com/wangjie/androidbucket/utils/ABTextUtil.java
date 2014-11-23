@@ -105,6 +105,12 @@ public class ABTextUtil {
     public static boolean isBlank(CharSequence charSequence) {
         return null == charSequence || charSequence.toString().trim().length() <= 0;
     }
+    public static boolean isLeast(Object[] objs, int count){
+        return null != objs && objs.length >= count;
+    }
+    public static boolean isLeast(int[] objs, int count){
+        return null != objs && objs.length >= count;
+    }
 
 
     /**
@@ -248,6 +254,10 @@ public class ABTextUtil {
     private static int getShort(byte[] data) {
         return (int) ((data[0] << 8) | data[1] & 0xFF);
     }
+
+
+
+
 
 
 }
