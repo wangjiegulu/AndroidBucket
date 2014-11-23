@@ -28,5 +28,20 @@ public abstract class ReflectionUtils {
         }
     }
 
+    public static void doWithFieldsWithSuper(Class<?> clazz, FieldCallback fieldCallback) {
+        while(clazz != Object.class){
+            Field[] fields = clazz.getDeclaredFields();
+            for (Field f : fields) {
+                try {
+                    fieldCallback.doWith(f);
+                } catch (Exception ex) {
+                    Log.e(TAG, "ReflectionUtils.doWithFieldsWithSuper error", ex);
+                }
+            }
+            clazz = clazz.getSuperclass();
+        }
+
+    }
+
 
 }

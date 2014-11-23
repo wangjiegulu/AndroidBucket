@@ -429,4 +429,14 @@ public class ABFileUtil {
         ins.close();
         return file;
     }
+
+    /**
+     * 获取拍照的图片路径
+     * @return
+     */
+    public static File getDCIMFile(){
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+    }
+
+
 }

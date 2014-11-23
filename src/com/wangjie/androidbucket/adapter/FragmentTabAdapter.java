@@ -3,6 +3,7 @@ package com.wangjie.androidbucket.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import com.wangjie.androidbucket.R;
 
@@ -23,6 +24,7 @@ public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnChec
     private int currentTab; // 当前Tab页面索引
 
     private OnRgsExtraCheckedChangedListener onRgsExtraCheckedChangedListener; // 用于让调用者在切换tab时候增加新的功能
+    private OnTabClickedListener onTabClickedListener; // 点击tab时回调
 
     public FragmentTabAdapter(FragmentActivity fragmentActivity, List<T> fragments, int fragmentContentId, RadioGroup rgs) {
         this.fragments = fragments;
@@ -44,6 +46,13 @@ public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnChec
     public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
         for(int i = 0; i < rgs.getChildCount(); i++){
             if(rgs.getChildAt(i).getId() == checkedId){
+                if(fragmentActivity.getString(R.string.tag_fragment_tab_click_only).equals(rgs.getChildAt(i).getTag())){
+                    ((RadioButton)rgs.getChildAt(currentTab)).setChecked(true);
+                    if(null != onTabClickedListener){
+                        onTabClickedListener.onTabClickedListener(rgs, checkedId, i);
+                    }
+                    return;
+                }
                 Fragment fragment = fragments.get(i);
                 FragmentTransaction ft = obtainFragmentTransaction(i);
 
@@ -65,7 +74,7 @@ public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnChec
                 if(null != onRgsExtraCheckedChangedListener){
                     onRgsExtraCheckedChangedListener.OnRgsExtraCheckedChanged(radioGroup, checkedId, i);
                 }
-
+                break;
             }
         }
 
@@ -122,12 +131,23 @@ public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnChec
         this.onRgsExtraCheckedChangedListener = onRgsExtraCheckedChangedListener;
     }
 
+    public void setOnTabClickedListener(OnTabClickedListener onTabClickedListener) {
+        this.onTabClickedListener = onTabClickedListener;
+    }
+
     /**
      *  切换tab额外功能功能接口
      */
     public static class OnRgsExtraCheckedChangedListener{
         public void OnRgsExtraCheckedChanged(RadioGroup radioGroup, int checkedId, int index){
+        }
+    }
 
+    /**
+     * tab点击回调（只有加了TAG[R.string.tag_fragment_tab_click_only]的RadioButton才会回调）
+     */
+    public static class OnTabClickedListener{
+        public void onTabClickedListener(RadioGroup radioGroup, int radiobuttonId, int index){
         }
     }
 

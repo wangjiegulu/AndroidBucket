@@ -1,8 +1,10 @@
 package com.wangjie.androidbucket.utils;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.KeyguardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -54,12 +56,13 @@ public class ABAppUtil {
 
     /**
      *判断当前应用程序是否后台运行
+     * 在android5.0以上失效！请使用isApplicationBackground()方法代替！
      * @param context
      * @return
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
+    @Deprecated
     public static boolean isBackground(Context context) {
-
-
         ActivityManager activityManager = (ActivityManager) context
                 .getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
@@ -75,6 +78,24 @@ public class ABAppUtil {
                 }
             }
         }
+        return false;
+    }
+
+    /**
+     * 判断当前应用程序处于前台还是后台
+     * 需要添加权限: <uses-permission android:name="android.permission.GET_TASKS" />
+     */
+    public static boolean isApplicationBackground(final Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+        if (!tasks.isEmpty()) {
+            ComponentName topActivity = tasks.get(0).topActivity;
+            if (!topActivity.getPackageName().equals(context.getPackageName())) {
+                Logger.d(TAG, "isBackground: " + true);
+                return true;
+            }
+        }
+        Logger.d(TAG, "isBackground: " + false);
         return false;
     }
 
@@ -222,6 +243,7 @@ public class ABAppUtil {
      * @param context
      * @return
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public static String getDeviceIMEI(Context context) {
         String deviceId;
         if (isPhone(context)) {
@@ -353,6 +375,7 @@ public class ABAppUtil {
     /**
      * 隐藏软键盘
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public static void hideSoftInput(Context context) {
         View view = ((Activity)context).getWindow().peekDecorView();
         if (view != null) {
@@ -363,6 +386,7 @@ public class ABAppUtil {
     /**
      * 隐藏软键盘
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public static void hideSoftInput(Context context, EditText edit) {
         edit.clearFocus();
         InputMethodManager inputmanger = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -371,6 +395,7 @@ public class ABAppUtil {
     /**
      * 显示软键盘
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public static void showSoftInput(Context context, EditText edit) {
         edit.setFocusable(true);
         edit.setFocusableInTouchMode(true);
@@ -399,6 +424,7 @@ public class ABAppUtil {
      * @param activity
      * @return
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public static int getStatusBarHeight(Activity activity){
         Rect frame = new Rect();
         activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
