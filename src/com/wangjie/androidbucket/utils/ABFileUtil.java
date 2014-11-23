@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
@@ -289,24 +290,16 @@ public class ABFileUtil {
      * @return
      */
     public static File uri2File(Context context, Uri uri) {
-
-        // 在api level 11前可以用以下代码
-//        String[] proj = { MediaStore.Images.Media.DATA };
-//        Cursor actualimagecursor = context.managedQuery(uri,proj,null,null,null);
-//        int actual_image_column_index = actualimagecursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//        actualimagecursor.moveToFirst();
-//        String img_path = actualimagecursor.getString(actual_image_column_index);
-//        File file = new File(img_path);
-
-        // 而managedquery在api 11 被弃用，所以要转为使用CursorLoader,并使用loadInBackground来返回
+        // 而managedquery在api 11 被移除，所以要转为使用CursorLoader,并使用loadInBackground来返回
         String[] projection = {MediaStore.Images.Media.DATA};
         CursorLoader loader = new CursorLoader(context, uri, projection, null, null, null);
         Cursor cursor = loader.loadInBackground();
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return new File(cursor.getString(column_index));
-
-
+        if (cursor != null) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return new File(cursor.getString(column_index));
+        }
+        return null;
     }
 
 
