@@ -230,7 +230,8 @@ public class PinnedExpandableListView extends ExpandableListView implements OnSc
             return;
         }
 
-        int state = mAdapter.getPinnedExpandableHeaderState(groupPosition, childPosition);
+//        int state = mAdapter.getPinnedExpandableHeaderState(groupPosition, childPosition);
+        int state = groupPosition < 0 || childPosition < 0 ? PinnedExpandableHeaderAdapter.PINNED_HEADER_VISIBLE : mAdapter.getPinnedExpandableHeaderState(groupPosition, childPosition);
 
         switch (state) {
             case PinnedExpandableHeaderAdapter.PINNED_HEADER_GONE: {

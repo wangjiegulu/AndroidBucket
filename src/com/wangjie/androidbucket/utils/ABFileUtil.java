@@ -299,14 +299,27 @@ public class ABFileUtil {
 //        File file = new File(img_path);
 
         // 而managedquery在api 11 被弃用，所以要转为使用CursorLoader,并使用loadInBackground来返回
-        String[] projection = {MediaStore.Images.Media.DATA};
-        CursorLoader loader = new CursorLoader(context, uri, projection, null, null, null);
-        Cursor cursor = loader.loadInBackground();
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return new File(cursor.getString(column_index));
-
-
+        try {
+            String[] projection = {MediaStore.Images.Media.DATA};
+            CursorLoader loader = new CursorLoader(context, uri, projection, null, null, null);
+            Cursor cursor = loader.loadInBackground();
+            if (null == cursor) {
+                return null;
+            }
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return new File(cursor.getString(column_index));
+        } catch (Exception ex) {
+            Logger.e(TAG, ex);
+        }
+        return null;
+    }
+    public static File uri2FileInteral(Context context, Uri uri){
+        if(null == uri){
+            return null;
+        }
+        File file = uri2File(context, uri);
+        return null == file ? new File(uri.getPath()) : file;
     }
 
 
@@ -439,9 +452,10 @@ public class ABFileUtil {
 
     /**
      * 获取拍照的图片路径
+     *
      * @return
      */
-    public static File getDCIMFile(){
+    public static File getDCIMFile() {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
     }
 
