@@ -23,7 +23,7 @@ public abstract class ABaseAdapter extends BaseAdapter implements AbsListView.On
         this.onAdapterScrollListener = onAdapterScrollListener;
     }
 
-    protected ABaseAdapter(ListView listView) {
+    protected ABaseAdapter(AbsListView listView) {
         listView.setOnScrollListener(this);
     }
 
