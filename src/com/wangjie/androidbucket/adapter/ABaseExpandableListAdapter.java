@@ -1,6 +1,8 @@
 package com.wangjie.androidbucket.adapter;
 
-import android.widget.*;
+import android.widget.AbsListView;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import com.wangjie.androidbucket.adapter.listener.OnAdapterScrollListener;
 
 /**
@@ -8,11 +10,8 @@ import com.wangjie.androidbucket.adapter.listener.OnAdapterScrollListener;
  * Email: tiantian.china.2@gmail.com
  * Date: 12/3/14.
  */
-public abstract class ABaseAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
+public abstract class ABaseExpandableListAdapter extends BaseExpandableListAdapter implements AbsListView.OnScrollListener {
     private OnAdapterScrollListener onAdapterScrollListener;
-    /**
-     * 当前listview是否属于滚动状态
-     */
     private boolean isScrolling;
 
     public boolean isScrolling() {
@@ -23,7 +22,7 @@ public abstract class ABaseAdapter extends BaseAdapter implements AbsListView.On
         this.onAdapterScrollListener = onAdapterScrollListener;
     }
 
-    protected ABaseAdapter(ListView listView) {
+    protected ABaseExpandableListAdapter(ExpandableListView listView) {
         listView.setOnScrollListener(this);
     }
 
@@ -41,14 +40,16 @@ public abstract class ABaseAdapter extends BaseAdapter implements AbsListView.On
         }
 
         // 设置是否滚动的状态
-        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) { // 不滚动状态
+        if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE){ // 不滚动状态
             isScrolling = false;
             this.notifyDataSetChanged();
-        } else {
+        }else{
             isScrolling = true;
         }
 
     }
+
+
 
 
 }
