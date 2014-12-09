@@ -33,6 +33,8 @@ public class FileDownloadUtil {
      */
     public static File download(String url, String filePath, NameValuePair... headers) throws IOException {
         File file = new File(filePath);
+        file.setReadable(true, false);
+        file.setWritable(true, false);
         HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(url);
         if (!ABTextUtil.isEmpty(headers)) {

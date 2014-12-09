@@ -14,7 +14,7 @@ public class ABJsonUtil {
     public static String getString(JSONObject jo, String key){
         try {
             return jo.has(key) ? jo.getString(key) : "";
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return "";
         }
     }
@@ -22,7 +22,7 @@ public class ABJsonUtil {
     public static String getString(JSONObject jo, String key, String defaultValue){
         try {
             return jo.has(key) ? jo.getString(key) : defaultValue;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return defaultValue;
         }
     }
@@ -32,7 +32,7 @@ public class ABJsonUtil {
     public static int getInt(JSONObject jo, String key){
         try {
             return jo.has(key) ? jo.getInt(key) : 0;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return 0;
         }
     }
@@ -40,7 +40,7 @@ public class ABJsonUtil {
     public static int getInt(JSONObject jo, String key, int defaultValue){
         try {
             return jo.has(key) ? jo.getInt(key) : defaultValue;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return defaultValue;
         }
     }
@@ -50,14 +50,14 @@ public class ABJsonUtil {
     public static long getLong(JSONObject jo, String key){
         try {
             return jo.has(key) ? jo.getLong(key) : 0l;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return 0l;
         }
     }
     public static long getLong(JSONObject jo, String key, long defaultValue){
         try {
             return jo.has(key) ? jo.getLong(key) : defaultValue;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return defaultValue;
         }
     }
@@ -66,7 +66,7 @@ public class ABJsonUtil {
     public static boolean getBoolean(JSONObject jo, String key){
         try {
             return jo.has(key) && jo.getBoolean(key);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -74,7 +74,7 @@ public class ABJsonUtil {
     public static boolean getBoolean(JSONObject jo, String key, boolean defaultValue){
         try {
             return jo.has(key) ? jo.getBoolean(key) : defaultValue;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return defaultValue;
         }
     }
@@ -84,7 +84,7 @@ public class ABJsonUtil {
     public static double getDouble(JSONObject jo, String key){
         try {
             return jo.has(key) ? jo.getDouble(key) : 0d;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return 0d;
         }
     }
@@ -92,7 +92,7 @@ public class ABJsonUtil {
     public static double getDouble(JSONObject jo, String key, double defaultValue){
         try {
             return jo.has(key) ? jo.getDouble(key) : defaultValue;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return defaultValue;
         }
     }
@@ -102,14 +102,14 @@ public class ABJsonUtil {
     public static JSONObject getJSONObject(JSONObject jo, String key){
         try {
             return jo.has(key) ? jo.getJSONObject(key) : null;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return null;
         }
     }
     public static JSONObject getJSONArray(JSONObject jo, String key, JSONObject defaultValue){
         try {
             return jo.has(key) ? jo.getJSONObject(key) : defaultValue;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return defaultValue;
         }
     }
@@ -118,14 +118,14 @@ public class ABJsonUtil {
     public static JSONArray getJSONArray(JSONObject jo, String key){
         try {
             return jo.has(key) ? jo.getJSONArray(key) : null;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return null;
         }
     }
     public static JSONArray getJSONArray(JSONObject jo, String key, JSONArray defaultValue){
         try {
             return jo.has(key) ? jo.getJSONArray(key) : defaultValue;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return defaultValue;
         }
     }
