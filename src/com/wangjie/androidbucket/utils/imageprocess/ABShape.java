@@ -28,7 +28,18 @@ public class ABShape {
         return sd;
     }
 
-
+    public static ShapeDrawable generateCornerStrokeDrawable(int color, float width, int corner){
+        return generateCornerStrokeDrawable(color, width, corner, corner, corner, corner);
+    }
+    public static ShapeDrawable generateCornerStrokeDrawable(int color, float width, int topLeftCorner, int topRightCorner, int bottomRightCorner, int bottomLeftCorner){
+        Shape shape = new RoundRectShape(new float[]{topLeftCorner, topLeftCorner, topRightCorner, topRightCorner, bottomRightCorner, bottomRightCorner, bottomLeftCorner, bottomLeftCorner}, null, null);
+        ShapeDrawable sd = new ShapeDrawable(shape);
+        sd.getPaint().setColor(color);
+        sd.getPaint().setStyle(Paint.Style.STROKE);
+        sd.getPaint().setAntiAlias(true);
+        sd.getPaint().setStrokeWidth(width);
+        return sd;
+    }
 
 
 }
