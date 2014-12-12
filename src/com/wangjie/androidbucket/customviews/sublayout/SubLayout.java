@@ -86,4 +86,13 @@ public class SubLayout implements ISubLayout, ABActivityViewer{
     public void cancelLoadingDialog() {
 
     }
+
+    @Override
+    public void showInfoDialog(String title, String message, String okButtonText) {
+        new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(okButtonText, null)
+                .show();
+    }
 }

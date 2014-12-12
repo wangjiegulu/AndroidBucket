@@ -40,4 +40,13 @@ public class ABSupportFragment extends Fragment implements ABActivityViewer{
     public void cancelLoadingDialog() {
 
     }
+
+    @Override
+    public void showInfoDialog(String title, String message, String okButtonText) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(okButtonText, null)
+                .show();
+    }
 }
