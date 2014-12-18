@@ -1,10 +1,13 @@
 package com.wangjie.androidbucket.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
@@ -455,9 +458,19 @@ public class ABFileUtil {
      *
      * @return
      */
+    @TargetApi(Build.VERSION_CODES.FROYO)
     public static File getDCIMFile() {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
     }
 
+    /**
+     * 扫描目录（扫描后可以及时在图库中看到）
+     * @param context
+     * @param path
+     */
+    @TargetApi(Build.VERSION_CODES.FROYO)
+    public static void scanFile(Context context, String path){
+        MediaScannerConnection.scanFile(context, new String[]{path}, null, null);
+    }
 
 }
