@@ -16,7 +16,7 @@ public abstract class PinnedBaseExpandableAdapter extends BaseExpandableListAdap
     protected Context context;
     protected PinnedExpandableListView pinnedElv;
 
-    protected PinnedBaseExpandableAdapter(Context context, PinnedExpandableListView pinnedElv) {
+    public PinnedBaseExpandableAdapter(Context context, PinnedExpandableListView pinnedElv) {
         this.context = context;
         this.pinnedElv = pinnedElv;
         View headView = getHeaderView();

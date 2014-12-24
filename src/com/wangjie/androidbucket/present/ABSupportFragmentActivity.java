@@ -125,4 +125,13 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     public void cancelLoadingDialog() {
 
     }
+
+    @Override
+    public void showInfoDialog(String title, String message, String okButtonText) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(okButtonText, null)
+                .show();
+    }
 }

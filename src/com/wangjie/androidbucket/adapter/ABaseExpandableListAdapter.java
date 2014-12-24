@@ -1,6 +1,8 @@
 package com.wangjie.androidbucket.adapter;
 
-import android.widget.*;
+import android.widget.AbsListView;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import com.wangjie.androidbucket.adapter.listener.OnAdapterScrollListener;
 import com.wangjie.androidbucket.log.Logger;
 
@@ -9,12 +11,9 @@ import com.wangjie.androidbucket.log.Logger;
  * Email: tiantian.china.2@gmail.com
  * Date: 12/3/14.
  */
-public abstract class ABaseAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
-    private static final String TAG = ABaseAdapter.class.getSimpleName();
+public abstract class ABaseExpandableListAdapter extends BaseExpandableListAdapter implements AbsListView.OnScrollListener {
+    private static final String TAG = ABaseExpandableListAdapter.class.getSimpleName();
     private OnAdapterScrollListener onAdapterScrollListener;
-    /**
-     * 当前listview是否属于滚动状态
-     */
     private boolean isScrolling;
 
     public boolean isScrolling() {
@@ -25,7 +24,7 @@ public abstract class ABaseAdapter extends BaseAdapter implements AbsListView.On
         this.onAdapterScrollListener = onAdapterScrollListener;
     }
 
-    protected ABaseAdapter(AbsListView listView) {
+    protected ABaseExpandableListAdapter(ExpandableListView listView) {
         listView.setOnScrollListener(this);
     }
 

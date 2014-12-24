@@ -129,5 +129,14 @@ public class ABActivity extends Activity implements ABActivityViewer {
 
     }
 
+    @Override
+    public void showInfoDialog(String title, String message, String okButtonText) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(okButtonText, null)
+                .show();
+    }
+
 
 }

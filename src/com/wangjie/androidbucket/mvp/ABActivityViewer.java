@@ -42,4 +42,9 @@ public interface ABActivityViewer {
      */
     void cancelLoadingDialog();
 
+    /**
+     * 显示信息对话框
+     */
+    void showInfoDialog(String title, String message, String okButtonText);
+
 }
