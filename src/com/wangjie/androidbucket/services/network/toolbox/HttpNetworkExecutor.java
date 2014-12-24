@@ -27,7 +27,7 @@ import java.util.Set;
  * @Description
  * @Createdate 14-9-24 14:47
  */
-public class HttpNetworkExecutor<T extends HippoHttpRequest<?>> implements NetworkExecutor<HippoHttpRequest<?>> {
+public class HttpNetworkExecutor implements NetworkExecutor<HippoHttpRequest<?>> {
 
     public static final String TAG = HttpNetworkExecutor.class.getSimpleName();
 
