@@ -20,6 +20,7 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -439,6 +440,14 @@ public class ABAppUtil {
         return frame.top;
     }
 
+    /**
+     * 获取状态栏高度＋标题栏高度
+     * @param activity
+     * @return
+     */
+    public static int getTopBarHeight(Activity activity){
+        return activity.getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
+    }
 
 
 }

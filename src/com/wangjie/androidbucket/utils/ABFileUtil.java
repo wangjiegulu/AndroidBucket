@@ -292,7 +292,6 @@ public class ABFileUtil {
      * @return
      */
     public static File uri2File(Context context, Uri uri) {
-
         // 而managedquery在api 11 被弃用，所以要转为使用CursorLoader,并使用loadInBackground来返回
         try {
             String[] projection = {MediaStore.Images.Media.DATA};
