@@ -1,10 +1,12 @@
 package com.wangjie.androidbucket.utils.imageprocess;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
+import android.os.Build;
 import android.util.Base64;
 import android.view.View;
 import com.wangjie.androidbucket.log.Logger;
@@ -104,6 +106,7 @@ public class ABImageProcess {
      * @param filePath
      * @return
      */
+    @TargetApi(Build.VERSION_CODES.FROYO)
     public static String bitmapToString(String filePath, int w, int h) {
 
         Bitmap bm = getSmallBitmap(filePath, w, h);

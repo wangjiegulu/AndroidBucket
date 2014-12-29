@@ -1,9 +1,12 @@
 package com.wangjie.androidbucket.utils;
 
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.List;
@@ -18,6 +21,7 @@ public class ABViewUtil {
 
     /**
      * 适用于Adapter中简化ViewHolder相关代码
+     *
      * @param convertView
      * @param id
      * @param <T>
@@ -41,25 +45,26 @@ public class ABViewUtil {
 
     /**
      * view设置background drawable
+     *
      * @param view
      * @param drawable
      */
-    public static void setBackgroundDrawable(View view, Drawable drawable){
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN){
+    public static void setBackgroundDrawable(View view, Drawable drawable) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             view.setBackgroundDrawable(drawable);
-        }else{
+        } else {
             view.setBackground(drawable);
         }
     }
 
 
-
     /**
      * 获取控件的高度，如果获取的高度为0，则重新计算尺寸后再返回高度
+     *
      * @param view
      * @return
      */
-    public static int getViewMeasuredHeight(View view){
+    public static int getViewMeasuredHeight(View view) {
 //        int height = view.getMeasuredHeight();
 //        if(0 < height){
 //            return height;
@@ -70,10 +75,11 @@ public class ABViewUtil {
 
     /**
      * 获取控件的宽度，如果获取的宽度为0，则重新计算尺寸后再返回宽度
+     *
      * @param view
      * @return
      */
-    public static int getViewMeasuredWidth(View view){
+    public static int getViewMeasuredWidth(View view) {
 //        int width = view.getMeasuredWidth();
 //        if(0 < width){
 //            return width;
@@ -84,24 +90,37 @@ public class ABViewUtil {
 
     /**
      * 测量控件的尺寸
+     *
      * @param view
      */
-    public static void calcViewMeasure(View view){
+    public static void calcViewMeasure(View view) {
 //        int width = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
 //        int height = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
 //        view.measure(width,height);
 
-        int width = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+        int width = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         int expandSpec = View.MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, View.MeasureSpec.AT_MOST);
         view.measure(width, expandSpec);
     }
 
-    public static int getAllListViewSectionCounts(ListView lv, List dataSource){
-        if(null == lv || ABTextUtil.isEmpty(dataSource)){
+    public static int getAllListViewSectionCounts(ListView lv, List dataSource) {
+        if (null == lv || ABTextUtil.isEmpty(dataSource)) {
             return 0;
         }
         return dataSource.size() + lv.getHeaderViewsCount() + lv.getFooterViewsCount();
     }
 
+    /**
+     * 使用ColorFilter来改变ImageView的亮度
+     *
+     * @param imageview
+     * @param brightness
+     */
+    public static void changeBrightness(ImageView imageview, int brightness) {
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.set(new float[]{1, 0, 0, 0, brightness, 0, 1, 0, 0,
+                brightness, 0, 0, 1, 0, brightness, 0, 0, 0, 1, 0});
+        imageview.setColorFilter(new ColorMatrixColorFilter(matrix));
+    }
 
 }
