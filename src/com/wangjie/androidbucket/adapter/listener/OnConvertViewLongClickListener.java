@@ -27,6 +27,7 @@ public abstract class OnConvertViewLongClickListener implements View.OnLongClick
         }
         onLongClickCallBack(v, positions);
         return true;
+
     }
 
     public abstract void onLongClickCallBack(View registedView, int... positionIds);
