@@ -9,9 +9,10 @@ import android.view.View;
  * Email: tiantian.china.2@gmail.com
  * Date: 9/2/14.
  */
-public abstract class OnConvertViewLongClickListener implements View.OnLongClickListener{
+public abstract class OnConvertViewLongClickListener implements View.OnLongClickListener {
     private View convertView;
     private int[] positionIds;
+
     public OnConvertViewLongClickListener(View convertView, int... positionIds) {
         this.convertView = convertView;
         this.positionIds = positionIds;
@@ -22,13 +23,12 @@ public abstract class OnConvertViewLongClickListener implements View.OnLongClick
     public boolean onLongClick(View v) {
         int len = positionIds.length;
         int[] positions = new int[len];
-        for(int i = 0; i < len; i++){
+        for (int i = 0; i < len; i++) {
             positions[i] = (int) convertView.getTag(positionIds[i]);
         }
-        onLongClickCallBack(v, positions);
-        return true;
+        return onLongClickCallBack(v, positions);
     }
 
-    public abstract void onLongClickCallBack(View registedView, int... positionIds);
+    public abstract boolean onLongClickCallBack(View registedView, int... positionIds);
 
 }
