@@ -12,7 +12,33 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
 
-public class PinnedExpandableListView extends ExpandableListView implements OnScrollListener,OnGroupClickListener {
+public class PinnedExpandableListView extends ExpandableListView implements OnScrollListener, OnGroupClickListener {
+
+
+    private int mOldState = -1;
+
+    private static final int MAX_ALPHA = 255;
+
+    private PinnedExpandableHeaderAdapter mAdapter;
+
+    /**
+     * 用于在列表头显示的 View,mHeaderViewVisible 为 true 才可见
+     */
+    private View mHeaderView;
+
+    /**
+     * 列表头是否可见
+     */
+    private boolean mHeaderViewVisible;
+
+    private int mHeaderViewWidth;
+
+    private int mHeaderViewHeight;
+
+    private float mDownX;
+
+    private float mDownY;
+
     public PinnedExpandableListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         registerListener();
@@ -38,14 +64,16 @@ public class PinnedExpandableListView extends ExpandableListView implements OnSc
 
         /**
          * 获取 Header 的状态
+         *
          * @param groupPosition
          * @param childPosition
-         * @return PINNED_HEADER_GONE,PINNED_HEADER_VISIBLE,PINNED_HEADER_PUSHED_UP 其中之一
+         * @return PINNED_HEADER_GONE, PINNED_HEADER_VISIBLE, PINNED_HEADER_PUSHED_UP 其中之一
          */
         int getPinnedExpandableHeaderState(int groupPosition, int childPosition);
 
         /**
          * 配置 QQHeader, 让 QQHeader 知道显示的内容
+         *
          * @param header
          * @param groupPosition
          * @param childPosition
@@ -55,6 +83,7 @@ public class PinnedExpandableListView extends ExpandableListView implements OnSc
 
         /**
          * 设置组按下的状态
+         *
          * @param groupPosition
          * @param status
          */
@@ -62,30 +91,13 @@ public class PinnedExpandableListView extends ExpandableListView implements OnSc
 
         /**
          * 获取组按下的状态
+         *
          * @param groupPosition
          * @return
          */
         int getGroupClickStatus(int groupPosition);
 
     }
-
-    private static final int MAX_ALPHA = 255;
-
-    private PinnedExpandableHeaderAdapter mAdapter;
-
-    /**
-     * 用于在列表头显示的 View,mHeaderViewVisible 为 true 才可见
-     */
-    private View mHeaderView;
-
-    /**
-     * 列表头是否可见
-     */
-    private boolean mHeaderViewVisible;
-
-    private int mHeaderViewWidth;
-
-    private int mHeaderViewHeight;
 
     public void setHeaderView(View view) {
         mHeaderView = view;
@@ -117,8 +129,7 @@ public class PinnedExpandableListView extends ExpandableListView implements OnSc
 //            this.collapseGroup(groupPosition);
             this.collapseGroup(groupPosition);
             mAdapter.setGroupClickStatus(groupPosition, 0);
-        }
-        else{
+        } else {
             this.expandGroup(groupPosition);
 //            this.expandGroup(groupPosition, true);
 
@@ -127,9 +138,6 @@ public class PinnedExpandableListView extends ExpandableListView implements OnSc
 
         this.setSelectedGroup(groupPosition);
     }
-
-    private float mDownX;
-    private float mDownY;
 
     /**
      * 如果 HeaderView 是可见的 , 此函数用于判断是否点击了 HeaderView, 并对做相应的处理 ,
@@ -177,11 +185,10 @@ public class PinnedExpandableListView extends ExpandableListView implements OnSc
     }
 
     /**
-     *
      * 点击了 Group 触发的事件 , 要根据根据当前点击 Group 的状态来
      */
     @Override
-    public boolean onGroupClick(ExpandableListView parent,View v,int groupPosition,long id) {
+    public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
         if (mAdapter.getGroupClickStatus(groupPosition) == 0) {
             mAdapter.setGroupClickStatus(groupPosition, 1);
             parent.expandGroup(groupPosition);
@@ -207,14 +214,13 @@ public class PinnedExpandableListView extends ExpandableListView implements OnSc
         }
     }
 
-    private int mOldState = -1;
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right,int bottom) {
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        final long flatPostion = getExpandableListPosition(getFirstVisiblePosition());
-        final int groupPos = ExpandableListView.getPackedPositionGroup(flatPostion);
-        final int childPos = ExpandableListView.getPackedPositionChild(flatPostion);
+        final long flatPosition = getExpandableListPosition(getFirstVisiblePosition());
+        final int groupPos = ExpandableListView.getPackedPositionGroup(flatPosition);
+        final int childPos = ExpandableListView.getPackedPositionChild(flatPosition);
         int state = groupPos < 0 || childPos < 0 ? PinnedExpandableHeaderAdapter.PINNED_HEADER_VISIBLE : mAdapter.getPinnedExpandableHeaderState(groupPos, childPos);
         if (mHeaderView != null && mAdapter != null && state != mOldState) {
             mOldState = state;
@@ -240,9 +246,9 @@ public class PinnedExpandableListView extends ExpandableListView implements OnSc
             }
 
             case PinnedExpandableHeaderAdapter.PINNED_HEADER_VISIBLE: {
-                mAdapter.configurePinnedExpandableHeader(mHeaderView, groupPosition,childPosition, MAX_ALPHA);
+                mAdapter.configurePinnedExpandableHeader(mHeaderView, groupPosition, childPosition, MAX_ALPHA);
 
-                if (mHeaderView.getTop() != 0){
+                if (mHeaderView.getTop() != 0) {
                     mHeaderView.layout(0, 0, mHeaderViewWidth, mHeaderViewHeight);
                 }
 
@@ -270,7 +276,7 @@ public class PinnedExpandableListView extends ExpandableListView implements OnSc
                     alpha = MAX_ALPHA;
                 }
 
-                mAdapter.configurePinnedExpandableHeader(mHeaderView, groupPosition,childPosition, alpha);
+                mAdapter.configurePinnedExpandableHeader(mHeaderView, groupPosition, childPosition, alpha);
 
                 if (mHeaderView.getTop() != y) {
                     mHeaderView.layout(0, y, mHeaderViewWidth, mHeaderViewHeight + y);
@@ -295,7 +301,7 @@ public class PinnedExpandableListView extends ExpandableListView implements OnSc
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem,int visibleItemCount, int totalItemCount) {
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         final long flatPos = getExpandableListPosition(firstVisibleItem);
         int groupPosition = ExpandableListView.getPackedPositionGroup(flatPos);
         int childPosition = ExpandableListView.getPackedPositionChild(flatPos);
@@ -305,8 +311,5 @@ public class PinnedExpandableListView extends ExpandableListView implements OnSc
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-    }
-    public View getmHeaderView(){
-        return mHeaderView;
     }
 }

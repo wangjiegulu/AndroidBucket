@@ -292,14 +292,6 @@ public class ABFileUtil {
      * @return
      */
     public static File uri2File(Context context, Uri uri) {
-        // 在api level 11前可以用以下代码
-//        String[] proj = { MediaStore.Images.Media.DATA };
-//        Cursor actualimagecursor = context.managedQuery(uri,proj,null,null,null);
-//        int actual_image_column_index = actualimagecursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//        actualimagecursor.moveToFirst();
-//        String img_path = actualimagecursor.getString(actual_image_column_index);
-//        File file = new File(img_path);
-
         // 而managedquery在api 11 被弃用，所以要转为使用CursorLoader,并使用loadInBackground来返回
         try {
             String[] projection = {MediaStore.Images.Media.DATA};
@@ -316,8 +308,9 @@ public class ABFileUtil {
         }
         return null;
     }
-    public static File uri2FileInteral(Context context, Uri uri){
-        if(null == uri){
+
+    public static File uri2FileInteral(Context context, Uri uri) {
+        if (null == uri) {
             return null;
         }
         File file = uri2File(context, uri);
@@ -464,11 +457,12 @@ public class ABFileUtil {
 
     /**
      * 扫描目录（扫描后可以及时在图库中看到）
+     *
      * @param context
      * @param path
      */
     @TargetApi(Build.VERSION_CODES.FROYO)
-    public static void scanFile(Context context, String path){
+    public static void scanFile(Context context, String path) {
         MediaScannerConnection.scanFile(context, new String[]{path}, null, null);
     }
 
