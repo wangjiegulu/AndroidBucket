@@ -116,10 +116,15 @@ public class ABViewUtil {
      * @param imageview
      * @param brightness
      */
-    public static void changeBrightness(ImageView imageview, int brightness) {
+    public static void changeBrightness(ImageView imageview, float brightness) {
         ColorMatrix matrix = new ColorMatrix();
-        matrix.set(new float[]{1, 0, 0, 0, brightness, 0, 1, 0, 0,
-                brightness, 0, 0, 1, 0, brightness, 0, 0, 0, 1, 0});
+        matrix.set(
+                new float[]{
+                        1, 0, 0, 0, brightness,
+                        0, 1, 0, 0, brightness,
+                        0, 0, 1, 0, brightness,
+                        0, 0, 0, 1, 0
+                });
         imageview.setColorFilter(new ColorMatrixColorFilter(matrix));
     }
 
