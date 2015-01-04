@@ -40,7 +40,7 @@ public class ApplicationController extends ABApplication {
     /**
      * 请求队列
      */
-    private HippoRequestQueue httpRequestQueue;
+    protected HippoRequestQueue httpRequestQueue;
 
     /**
      * 实例
@@ -58,7 +58,7 @@ public class ApplicationController extends ABApplication {
         return instance;
     }
 
-    public HippoRequestQueue getHttpRequestQueue() {
+    protected HippoRequestQueue getHttpRequestQueue() {
         if (httpRequestQueue == null) {
             HttpNetworkExecutor networkExecutor = new HttpNetworkExecutor(getSSLHttpClient(80, 9094, 20000, 20000));
             httpRequestQueue = HippoRequestQueue.newHippoRequestQueue(networkExecutor);
@@ -78,13 +78,12 @@ public class ApplicationController extends ABApplication {
         getHttpRequestQueue().add(req);
     }
 
-
     /**
      * 获取SSL连接
      *
      * @return
      */
-    private HttpClient getSSLHttpClient(int httpPort, int httpsPort, int soTimeout, int connectionTimeout) {
+    protected HttpClient getSSLHttpClient(int httpPort, int httpsPort, int soTimeout, int connectionTimeout) {
         try {
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
             trustStore.load(null, null);
@@ -112,5 +111,4 @@ public class ApplicationController extends ABApplication {
             return new DefaultHttpClient();
         }
     }
-
 }
