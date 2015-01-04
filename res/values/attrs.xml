@@ -30,4 +30,19 @@
         <attr name="shadowEndColor" format="color"/>
         <attr name="shadowSize" format="dimension"/>
     </declare-styleable>
+
+
+    <!-- ColorFilterImageButton -->
+    <declare-styleable name="ColorFilterImageButton">
+        <!-- -5 ~ 5 -->
+        <attr name="filterRedVector" format="float"/>
+        <attr name="filterGreenVector" format="float"/>
+        <attr name="filterBlueVector" format="float"/>
+        <!-- 0 ~ 1 -->
+        <attr name="filterAlphaVector" format="float"/>
+        <!-- -300 ~ 300 -->
+        <attr name="filterBrightnessVector" format="float"/>
+    </declare-styleable>
+
+
 </resources>
