@@ -30,7 +30,7 @@ public class HippoRequestQueue {
     /**
      * 默认最大线程数量
      */
-    private static final int MAX_THREAD_POOL_SIZE = 4;
+    private static final int MAX_THREAD_POOL_SIZE = 10;
 
     /**
      * 线程池大小
