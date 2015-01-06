@@ -14,9 +14,11 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     private BaseActivityManager baseActivityManager;
 
     private boolean isActivityLifeCycleAutoCallBack = true;
+
     public boolean isActivityLifeCycleAutoCallBack() {
         return isActivityLifeCycleAutoCallBack;
     }
+
     public void setActivityLifeCycleAutoCallBack(boolean isActivityLifeCycleAutoCallBack) {
         this.isActivityLifeCycleAutoCallBack = isActivityLifeCycleAutoCallBack;
     }
@@ -26,35 +28,37 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(shouldCallBack()){
+        if (shouldCallBack()) {
             baseActivityManager.dispatchActivityCreate(savedInstanceState);
         }
 
     }
 
     private boolean isFirstFocused = true;
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        synchronized (((Object)this).getClass()){
-            if(isFirstFocused && hasFocus){
+        synchronized (((Object) this).getClass()) {
+            if (isFirstFocused && hasFocus) {
                 isFirstFocused = false;
                 onWindowInitialized();
             }
         }
 
     }
+
     /**
      * 界面渲染完毕，可在这里进行初始化工作，建议在这里启动线程进行初始化工作
      */
-    public void onWindowInitialized(){}
-
+    public void onWindowInitialized() {
+    }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(shouldCallBack()){
+        if (shouldCallBack()) {
             baseActivityManager.dispatchActivityDestory();
         }
     }
@@ -62,7 +66,7 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     @Override
     protected void onResume() {
         super.onResume();
-        if(shouldCallBack()){
+        if (shouldCallBack()) {
             baseActivityManager.dispatchActivityResume();
         }
     }
@@ -70,7 +74,7 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     @Override
     protected void onPause() {
         super.onPause();
-        if(shouldCallBack()){
+        if (shouldCallBack()) {
             baseActivityManager.dispatchActivityPause();
         }
     }
@@ -79,23 +83,25 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     public BaseActivityManager getBaseActivityManager() {
         return baseActivityManager;
     }
+
     public void setBaseActivityManager(BaseActivityManager baseActivityManager) {
         this.baseActivityManager = baseActivityManager;
     }
+
     public void setBaseActivityMananger() {
-        if(null == baseActivityManager){
+        if (null == baseActivityManager) {
             this.baseActivityManager = new BaseActivityManager(this);
         }
     }
 
-    private boolean shouldCallBack(){
+    private boolean shouldCallBack() {
         return null != baseActivityManager && isActivityLifeCycleAutoCallBack;
     }
 
 
-
-
-    /********************** ABActivityViewer impl *********************/
+    /**
+     * ******************* ABActivityViewer impl ********************
+     */
 
     @Override
     public void showToastMessage(String msg) {

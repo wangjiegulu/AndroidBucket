@@ -20,6 +20,14 @@ import java.util.Properties;
  * UncaughtException处理类,当程序发生Uncaught异常的时候,由该类来接管程序,并记录发送错误报告.
  */
 public class ABCrashHandler implements UncaughtExceptionHandler {
+
+
+    public static interface OnCrashHandler {
+        boolean onCrash(Throwable e);
+    }
+
+    private OnCrashHandler onCrashHandler;
+
     /**
      * Debug Log Tag
      */
@@ -75,10 +83,15 @@ public class ABCrashHandler implements UncaughtExceptionHandler {
     }
 
     public static void init(Context ctx, String toastMsg) {
+        init(ctx, toastMsg, null);
+    }
+
+    public static void init(Context ctx, String toastMsg, OnCrashHandler onCrashHandler) {
         ABCrashHandler crashHandler = getInstance();
         if (null != toastMsg) {
             crashHandler.toastMsg = toastMsg;
         }
+        crashHandler.onCrashHandler = onCrashHandler;
         crashHandler.mContext = ctx;
         crashHandler.mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(crashHandler);
@@ -111,11 +124,13 @@ public class ABCrashHandler implements UncaughtExceptionHandler {
      * @param ex
      * @return true:如果处理了该异常信息;否则返回false
      */
-    private boolean handleException(Throwable ex) {
+    protected boolean handleException(Throwable ex) {
         if (ex == null) {
             return true;
         }
-//        final String msg = ex.getLocalizedMessage();
+        if (onCrashHandler != null && onCrashHandler.onCrash(ex)) {
+            return true;
+        }
         // 使用Toast来显示异常信息
         new Thread() {
             @Override
@@ -131,95 +146,4 @@ public class ABCrashHandler implements UncaughtExceptionHandler {
         return true;
     }
 
-
-//    /**
-//     * 保存错误信息到文件中
-//     *
-//     * @param ex
-//     * @return
-//     */
-//    private String saveCrashInfoToFile(Throwable ex) {
-//        Writer info = new StringWriter();
-//        PrintWriter printWriter = new PrintWriter(info);
-//        // printStackTrace(PrintWriter s)
-//        // 将此 throwable 及其追踪输出到指定的 PrintWriter
-//        ex.printStackTrace(printWriter);
-//
-//        // getCause() 返回此 throwable 的 cause；如果 cause 不存在或未知，则返回 null。
-//        Throwable cause = ex.getCause();
-//        while (cause != null) {
-//            cause.printStackTrace(printWriter);
-//            cause = cause.getCause();
-//        }
-//
-//        // toString() 以字符串的形式返回该缓冲区的当前值。
-//        String result = info.toString();
-//        printWriter.close();
-//        mDeviceCrashInfo.put(STACK_TRACE, result);
-//
-//        try {
-//            long timestamp = System.currentTimeMillis();
-//            String fileName = "crash-" + timestamp + CRASH_REPORTER_EXTENSION;
-//            // 保存文件
-//            FileOutputStream trace = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
-//            mDeviceCrashInfo.store(trace, "");
-//            trace.flush();
-//            trace.close();
-//            return fileName;
-//        } catch (Exception e) {
-//            Log.e(TAG, "an error occured while writing report file...", e);
-//        }
-//        return null;
-//    }
-
-//    /**
-//     * 把错误报告发送给服务器,包含新产生的和以前没发送的.
-//     *
-//     * @param ctx
-//     */
-//    private void sendCrashReportsToServer(Context ctx) {
-//        String[] crFiles = getCrashReportFiles(ctx);
-//        if (crFiles != null && crFiles.length > 0) {
-//            TreeSet<String> sortedFiles = new TreeSet<String>();
-//            sortedFiles.addAll(Arrays.asList(crFiles));
-//
-//            for (String fileName : sortedFiles) {
-//                File cr = new File(ctx.getFilesDir(), fileName);
-//                postReport(cr);
-//                cr.delete();// 删除已发送的报告
-//            }
-//        }
-//    }
-
-//    /**
-//     * 获取错误报告文件名
-//     *
-//     * @param ctx
-//     * @return
-//     */
-//    private String[] getCrashReportFiles(Context ctx) {
-//        File filesDir = ctx.getFilesDir();
-//        // 实现FilenameFilter接口的类实例可用于过滤器文件名
-//        FilenameFilter filter = new FilenameFilter() {
-//            // accept(File dir, String name)
-//            // 测试指定文件是否应该包含在某一文件列表中。
-//            public boolean accept(File dir, String name) {
-//                return name.endsWith(CRASH_REPORTER_EXTENSION);
-//            }
-//        };
-//        // list(FilenameFilter filter)
-//        // 返回一个字符串数组，这些字符串指定此抽象路径名表示的目录中满足指定过滤器的文件和目录
-//        return filesDir.list(filter);
-//    }
-
-    private void postReport(File file) {
-        // 使用HTTP Post 发送错误报告到服务器
-    }
-
-//    /**
-//     * 在程序启动时候, 可以调用该函数来发送以前没有发送的报告
-//     */
-//    public void sendPreviousReportsToServer() {
-//        sendCrashReportsToServer(mContext);
-//    }
 }

@@ -15,10 +15,7 @@ public class BaseActivityManager {
 
     private List<OnActivityLifeCycleListener> onActivityLifeCycleListeners;
 
-    private Activity activity;
-
     public BaseActivityManager(Activity activity) {
-        this.activity = activity;
     }
 
     public void registerOnActivityLifeCycleListeners(OnActivityLifeCycleListener listener) {
@@ -47,7 +44,7 @@ public class BaseActivityManager {
             if (onActivityLifeCycleListeners == null) {
                 return;
             }
-            list = new ArrayList<OnActivityLifeCycleListener>(onActivityLifeCycleListeners);
+            list = new ArrayList<>(onActivityLifeCycleListeners);
         }
 
         final int N = list.size();

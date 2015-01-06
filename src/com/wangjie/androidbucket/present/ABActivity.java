@@ -16,7 +16,7 @@ public class ABActivity extends Activity implements ABActivityViewer {
 
     private boolean isFirstFocused = true;
 
-    private boolean isActivityLifeCycleAutoCallBack = true;
+    protected boolean isActivityLifeCycleAutoCallBack = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
