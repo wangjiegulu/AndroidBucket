@@ -8,5 +8,4 @@ package com.wangjie.androidbucket.services;
  */
 public class BaseAccessResponse {
 
-
 }
