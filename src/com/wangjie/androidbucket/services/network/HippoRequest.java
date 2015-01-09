@@ -1,6 +1,7 @@
 package com.wangjie.androidbucket.services.network;
 
 import com.wangjie.androidbucket.services.network.exception.HippoException;
+import com.wangjie.androidbucket.services.network.exception.RetryFailedException;
 
 /**
  * @author Hubert He
@@ -19,6 +20,7 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
 
     private boolean finish = false;
 
+    protected static final String DEFAULT_RESPONSE_ENCODING = "UTF-8";
 
     protected RetryPolicy retryPolicy;
 
@@ -97,12 +99,23 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
             return currentCount;
         }
 
-        public void retry(HippoException e) throws HippoException {
+        public void retry(HippoException e) throws RetryFailedException {
             if (currentCount <= 0) {
-                throw e;
+                throw new RetryFailedException("Retry request failed.", e);
             }
             currentCount--;
         }
     }
 
+    @Override
+    public String toString() {
+        return "HippoRequest{" +
+                "seq=" + seq +
+                ", cancel=" + cancel +
+                ", finish=" + finish +
+                ", retryPolicy=" + retryPolicy +
+                ", listener=" + listener +
+                ", errorListener=" + errorListener +
+                '}';
+    }
 }
