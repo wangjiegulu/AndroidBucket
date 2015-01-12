@@ -46,7 +46,7 @@ import java.util.*;
  * 获取当前应用的版本号
  * 收集设备信息并以Properties返回
  * 收集设备信息并以String返回
- *
+ * <p/>
  * Created with IntelliJ IDEA.
  * Author: wangjie  email:tiantian.china.2@gmail.com
  * Date: 13-6-5
@@ -56,8 +56,9 @@ public class ABAppUtil {
     private static final String TAG = ABAppUtil.class.getSimpleName();
 
     /**
-     *判断当前应用程序是否后台运行
+     * 判断当前应用程序是否后台运行
      * 在android5.0以上失效！请使用isApplicationBackground()方法代替！
+     *
      * @param context
      * @return
      */
@@ -73,7 +74,7 @@ public class ABAppUtil {
                 if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND) {
                     Logger.d(TAG, "后台程序: " + appProcess.processName);
                     return true;
-                }else{
+                } else {
                     Logger.d(TAG, "前台程序: " + appProcess.processName);
                     return false;
                 }
@@ -102,10 +103,11 @@ public class ABAppUtil {
 
     /**
      * 判断手机是否处理睡眠
+     *
      * @param context
      * @return
      */
-    public static boolean isSleeping(Context context){
+    public static boolean isSleeping(Context context) {
         KeyguardManager kgMgr = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         boolean isSleeping = kgMgr.inKeyguardRestrictedInputMode();
         Logger.d(TAG, isSleeping ? "手机睡眠中.." : "手机未睡眠...");
@@ -114,9 +116,10 @@ public class ABAppUtil {
 
     /**
      * 检查网络是否已连接
-     * @author com.tiantian
+     *
      * @param context
      * @return
+     * @author com.tiantian
      */
     public static boolean isOnline(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context
@@ -130,22 +133,22 @@ public class ABAppUtil {
 
     /**
      * 判断当前是否是wifi状态
+     *
      * @param context
      * @return
      */
-    public static boolean isWifiConnected(Context context)
-    {
-        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public static boolean isWifiConnected(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifiNetworkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if(wifiNetworkInfo.isConnected())
-        {
-            return true ;
+        if (wifiNetworkInfo.isConnected()) {
+            return true;
         }
-        return false ;
+        return false;
     }
 
     /**
      * 安装apk
+     *
      * @param context
      * @param file
      */
@@ -163,10 +166,11 @@ public class ABAppUtil {
 
     /**
      * 初始化View的高宽
+     *
      * @param view
      */
     @Deprecated
-    public static void initViewWH(final View view){
+    public static void initViewWH(final View view) {
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -176,12 +180,14 @@ public class ABAppUtil {
         });
 
     }
+
     /**
      * 初始化View的高宽并显示不可见
+     *
      * @param view
      */
     @Deprecated
-    public static void initViewWHAndGone(final View view){
+    public static void initViewWHAndGone(final View view) {
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -193,16 +199,19 @@ public class ABAppUtil {
     }
 
 
-    /** 使用Properties来保存设备的信息和错误堆栈信息 */
+    /**
+     * 使用Properties来保存设备的信息和错误堆栈信息
+     */
     private static final String VERSION_NAME = "versionName";
     private static final String VERSION_CODE = "versionCode";
     private static final String STACK_TRACE = "STACK_TRACE";
 
     /**
      * 判断是否为手机
-     * @author wangjie
+     *
      * @param context
      * @return
+     * @author wangjie
      */
     public static boolean isPhone(Context context) {
         TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -218,10 +227,11 @@ public class ABAppUtil {
 
     /**
      * 获得设备的屏幕宽度
+     *
      * @param context
      * @return
      */
-    public static int getDeviceWidth(Context context){
+    public static int getDeviceWidth(Context context) {
         WindowManager manager = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
         return manager.getDefaultDisplay().getWidth();
@@ -229,10 +239,11 @@ public class ABAppUtil {
 
     /**
      * 获得设备的屏幕高度
+     *
      * @param context
      * @return
      */
-    public static int getDeviceHeight(Context context){
+    public static int getDeviceHeight(Context context) {
         WindowManager manager = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
         return manager.getDefaultDisplay().getHeight();
@@ -240,9 +251,10 @@ public class ABAppUtil {
 
     /**
      * 获取设备id（IMEI）
-     * @author wangjie
+     *
      * @param context
      * @return
+     * @author wangjie
      */
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public static String getDeviceIMEI(Context context) {
@@ -259,11 +271,13 @@ public class ABAppUtil {
         Logger.d(TAG, "当前设备IMEI码: " + deviceId);
         return deviceId;
     }
+
     /**
      * 获取设备mac地址
-     * @author wangjie
+     *
      * @param context
      * @return
+     * @author wangjie
      */
     public static String getMacAddress(Context context) {
         String macAddress;
@@ -272,7 +286,7 @@ public class ABAppUtil {
         WifiInfo info = wifi.getConnectionInfo();
         macAddress = info.getMacAddress();
         Logger.d(TAG, "当前mac地址: " + (null == macAddress ? "null" : macAddress));
-        if(null == macAddress){
+        if (null == macAddress) {
             return "";
         }
         macAddress = macAddress.replace(":", "");
@@ -281,9 +295,10 @@ public class ABAppUtil {
 
     /**
      * 获取当前应用程序的版本号
-     * @author wangjie
+     *
      * @param context
      * @return
+     * @author wangjie
      */
     public static String getAppVersion(Context context) {
         String version = "0";
@@ -349,14 +364,15 @@ public class ABAppUtil {
 
     /**
      * 收集设备信息
+     *
      * @param context
      * @return
      */
-    public static String collectDeviceInfoStr(Context context){
+    public static String collectDeviceInfoStr(Context context) {
         Properties prop = collectDeviceInfo(context);
         Set deviceInfos = prop.keySet();
         StringBuilder deviceInfoStr = new StringBuilder("{\n");
-        for(Iterator iter = deviceInfos.iterator(); iter.hasNext();){
+        for (Iterator iter = deviceInfos.iterator(); iter.hasNext(); ) {
             Object item = iter.next();
             deviceInfoStr.append("\t\t\t" + item + ":" + prop.get(item) + ", \n");
         }
@@ -366,9 +382,10 @@ public class ABAppUtil {
 
     /**
      * 是否有SDCard
+     *
      * @return
      */
-    public static boolean haveSDCard(){
+    public static boolean haveSDCard() {
         return android.os.Environment.getExternalStorageState().equals(
                 android.os.Environment.MEDIA_MOUNTED);
     }
@@ -378,12 +395,13 @@ public class ABAppUtil {
      */
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public static void hideSoftInput(Context context) {
-        View view = ((Activity)context).getWindow().peekDecorView();
+        View view = ((Activity) context).getWindow().peekDecorView();
         if (view != null) {
             InputMethodManager inputmanger = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
     /**
      * 隐藏软键盘
      */
@@ -393,6 +411,7 @@ public class ABAppUtil {
         InputMethodManager inputmanger = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputmanger.hideSoftInputFromWindow(edit.getWindowToken(), 0);
     }
+
     /**
      * 显示软键盘
      */
@@ -401,24 +420,26 @@ public class ABAppUtil {
         edit.setFocusable(true);
         edit.setFocusableInTouchMode(true);
         edit.requestFocus();
-        InputMethodManager inputManager = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.showSoftInput(edit, 0);
     }
+
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public static void toggleSoftInput(Context context, EditText edit) {
         edit.setFocusable(true);
         edit.setFocusableInTouchMode(true);
         edit.requestFocus();
-        InputMethodManager inputManager = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
 
     /**
      * 回到home，后台运行
+     *
      * @param context
      */
-    public static void goHome(Context context){
+    public static void goHome(Context context) {
         Logger.d(TAG, "返回键回到HOME，程序后台运行...");
         Intent mHomeIntent = new Intent(Intent.ACTION_MAIN);
 
@@ -430,11 +451,12 @@ public class ABAppUtil {
 
     /**
      * 获取状态栏高度
+     *
      * @param activity
      * @return
      */
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
-    public static int getStatusBarHeight(Activity activity){
+    public static int getStatusBarHeight(Activity activity) {
         Rect frame = new Rect();
         activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
         return frame.top;
@@ -442,10 +464,11 @@ public class ABAppUtil {
 
     /**
      * 获取状态栏高度＋标题栏高度
+     *
      * @param activity
      * @return
      */
-    public static int getTopBarHeight(Activity activity){
+    public static int getTopBarHeight(Activity activity) {
         return activity.getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
     }
 
