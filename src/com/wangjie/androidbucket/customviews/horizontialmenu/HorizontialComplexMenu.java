@@ -20,22 +20,24 @@ import java.util.List;
  * Created by wangjie on 14-5-5.
  */
 public class HorizontialComplexMenu implements View.OnClickListener {
+    public static interface OnHorizontialComplexMenuListener {
+        public abstract void onItemClick(View view, int position, HorizontialMenuItem item);
+    }
 
     private Context context;
     private PopupWindow popMenu; // 菜单控件
     private Drawable background;
     private List<HorizontialMenuItem> items;
     private int itemSize;
-    private OnHoriMenuItemListener listener;
+    private OnHorizontialComplexMenuListener listener;
 
-
-    public static PopupWindow createHoriMenu(Context context, Drawable background, List<HorizontialMenuItem> items, OnHoriMenuItemListener listener) {
+    public static PopupWindow createHoriMenu(Context context, Drawable background, List<HorizontialMenuItem> items, OnHorizontialComplexMenuListener listener) {
         HorizontialComplexMenu menu = new HorizontialComplexMenu(context, background, items, listener);
         return menu.popMenu;
     }
 
 
-    public HorizontialComplexMenu(Context context, Drawable background, List<HorizontialMenuItem> items, OnHoriMenuItemListener listener) {
+    public HorizontialComplexMenu(Context context, Drawable background, List<HorizontialMenuItem> items, OnHorizontialComplexMenuListener listener) {
         this.context = context;
         this.items = items;
         this.listener = listener;
@@ -77,7 +79,8 @@ public class HorizontialComplexMenu implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        listener.onItemClick(v, (Integer) v.getTag());
+        int index = (Integer) v.getTag();
+        listener.onItemClick(v, index, items.get(index));
         popMenu.dismiss();
     }
 

@@ -1,6 +1,5 @@
 package com.wangjie.androidbucket.utils.imageprocess;
 
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
@@ -53,6 +52,7 @@ public class ABShape {
         drawable.addState(new int[]{}, normal);
         return drawable;
     }
+
     public static StateListDrawable selectorClickColorCornerSimple(int normalColor, int pressedColor, int corner) {
         return selectorClickSimple(
                 generateCornerShapeDrawable(normalColor, corner),

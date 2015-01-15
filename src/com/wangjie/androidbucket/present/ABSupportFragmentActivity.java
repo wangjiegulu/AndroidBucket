@@ -88,7 +88,7 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
         this.baseActivityManager = baseActivityManager;
     }
 
-    public void setBaseActivityMananger() {
+    public void ensureBaseActivityMananger() {
         if (null == baseActivityManager) {
             this.baseActivityManager = new BaseActivityManager(this);
         }

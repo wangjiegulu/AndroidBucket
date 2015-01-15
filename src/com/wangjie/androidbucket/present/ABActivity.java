@@ -72,6 +72,7 @@ public class ABActivity extends Activity implements ABActivityViewer {
     }
 
     public BaseActivityManager getBaseActivityManager() {
+        ensureBaseActivityMananger();
         return baseActivityManager;
     }
 
@@ -79,7 +80,7 @@ public class ABActivity extends Activity implements ABActivityViewer {
         this.baseActivityManager = baseActivityManager;
     }
 
-    public void setBaseActivityMananger() {
+    public void ensureBaseActivityMananger() {
         if (null == baseActivityManager) {
             this.baseActivityManager = new BaseActivityManager(this);
         }
