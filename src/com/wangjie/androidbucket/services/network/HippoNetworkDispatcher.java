@@ -1,5 +1,7 @@
 package com.wangjie.androidbucket.services.network;
 
+import android.os.Handler;
+import android.os.Looper;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.network.exception.HippoException;
 import com.wangjie.androidbucket.services.network.interceptor.Interceptor;
@@ -23,6 +25,8 @@ public class HippoNetworkDispatcher extends Thread {
     private boolean quit;
 
     private NetworkExecutor networkExecutor;
+
+    private Handler mHandler;
 
     public HippoNetworkDispatcher(PriorityBlockingQueue<HippoRequest> queue,
                                   NetworkExecutor networkExecutor) {
@@ -64,7 +68,8 @@ public class HippoNetworkDispatcher extends Thread {
                 Logger.e(TAG, e);
             } finally {
                 request.setFinish(true);
-                request.parseResponse(networkResponse);
+                mHandler = new Handler(Looper.getMainLooper());
+                mHandler.post(new ResponseDispatcherRunnable(request, networkResponse));
                 Logger.d(TAG, String.format("Request: %d finish at %d.", request.getSeq(), System.currentTimeMillis()));
             }
         }
@@ -98,4 +103,18 @@ public class HippoNetworkDispatcher extends Thread {
         quit = true;
     }
 
+    private static class ResponseDispatcherRunnable implements Runnable {
+        private final NetworkResponse response;
+        private final HippoRequest request;
+
+        public ResponseDispatcherRunnable(HippoRequest request, NetworkResponse response) {
+            this.request = request;
+            this.response = response;
+        }
+
+        @Override
+        public void run() {
+            request.parseResponse(response);
+        }
+    }
 }

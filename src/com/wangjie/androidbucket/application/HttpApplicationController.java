@@ -1,14 +1,9 @@
 package com.wangjie.androidbucket.application;
 
-import android.text.TextUtils;
 import android.util.Log;
-import com.wangjie.androidbucket.services.network.HippoHttpRequest;
 import com.wangjie.androidbucket.services.network.HippoRequest;
 import com.wangjie.androidbucket.services.network.HippoRequestQueue;
-import com.wangjie.androidbucket.services.network.NetworkExecutor;
-import com.wangjie.androidbucket.services.network.exception.HippoException;
 import com.wangjie.androidbucket.services.network.http.SSLSocketFactoryEx;
-import com.wangjie.androidbucket.services.network.interceptor.Interceptor;
 import com.wangjie.androidbucket.services.network.toolbox.HttpNetworkExecutor;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
@@ -23,7 +18,6 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
-import org.apache.http.protocol.HttpRequestExecutor;
 
 import java.security.KeyStore;
 
@@ -33,9 +27,9 @@ import java.security.KeyStore;
  * @Description
  * @Createdate 14-9-21 11:04
  */
-public class ApplicationController extends ABApplication {
+public class HttpApplicationController extends ABApplication {
 
-    public static final String TAG = ApplicationController.class.getSimpleName();
+    public static final String TAG = HttpApplicationController.class.getSimpleName();
 
     /**
      * 请求队列
@@ -45,7 +39,7 @@ public class ApplicationController extends ABApplication {
     /**
      * 实例
      */
-    private static ApplicationController instance;
+    private static HttpApplicationController instance;
 
     @Override
     public void onCreate() {
@@ -54,7 +48,7 @@ public class ApplicationController extends ABApplication {
         Log.d(TAG, "On application create");
     }
 
-    public static synchronized ApplicationController getInstance() {
+    public static synchronized HttpApplicationController getInstance() {
         return instance;
     }
 
