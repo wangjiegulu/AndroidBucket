@@ -14,17 +14,21 @@ public class NetworkResponse {
 
     private byte[] data;
 
+    public NetworkResponse() {
+        this(null, null);
+    }
+
     public NetworkResponse(HippoException error, byte[] data) {
         this.error = error;
         this.data = data;
     }
 
     public NetworkResponse(HippoException error) {
-        this.error = error;
+        this(error, null);
     }
 
     public NetworkResponse(byte[] data) {
-        this.data = data;
+        this(null, data);
     }
 
     public byte[] getData() {

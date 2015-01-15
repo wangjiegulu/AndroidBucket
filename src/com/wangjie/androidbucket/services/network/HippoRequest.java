@@ -107,6 +107,10 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
         }
     }
 
+    public boolean isRequestOnly() {
+        return listener == null;
+    }
+
     @Override
     public String toString() {
         return "HippoRequest{" +
