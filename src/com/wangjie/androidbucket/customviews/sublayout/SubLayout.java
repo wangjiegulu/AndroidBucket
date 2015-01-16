@@ -47,14 +47,6 @@ public class SubLayout implements ISubLayout, ABActivityViewer{
         return layout.findViewById(resId);
     }
 
-    public void onResume(){
-
-    }
-
-    public void onPause(){
-
-    }
-
 
     /********************** ABActivityViewer impl *********************/
 
