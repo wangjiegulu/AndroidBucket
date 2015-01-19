@@ -88,6 +88,7 @@ public class ABImageProcess {
      * @param downScale
      * @param scaleFactor
      */
+    @TargetApi(Build.VERSION_CODES.DONUT)
     public static void fastBlurSetBg(Context context, Bitmap bm, View view, boolean downScale, float scaleFactor){
         Bitmap overlay = fastBlur(bm, view, downScale, scaleFactor);
         if(null == overlay){

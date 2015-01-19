@@ -81,6 +81,7 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
 
 
     public BaseActivityManager getBaseActivityManager() {
+        ensureBaseActivityMananger();
         return baseActivityManager;
     }
 
