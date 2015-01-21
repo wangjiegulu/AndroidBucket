@@ -117,9 +117,6 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
                 "seq=" + seq +
                 ", cancel=" + cancel +
                 ", finish=" + finish +
-                ", retryPolicy=" + retryPolicy +
-                ", listener=" + listener +
-                ", errorListener=" + errorListener +
                 '}';
     }
 }

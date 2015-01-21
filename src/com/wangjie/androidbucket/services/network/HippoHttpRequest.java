@@ -6,11 +6,15 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.protocol.HTTP;
 
 import java.io.*;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Hubert He
@@ -56,6 +60,11 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
     private NameValuePair[] headers;
 
     /**
+     * URL Params
+     */
+    private List<NameValuePair> urlParams;
+
+    /**
      * HTTP Body
      */
     private byte[] body;
@@ -79,7 +88,7 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
         this.url = url;
         this.headers = headers;
         this.body = body;
-
+        urlParams = new ArrayList<>();
     }
 
     public int getMethod() {
@@ -91,6 +100,20 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
     }
 
     public String getUrl() {
+        if (url != null) {
+            try {
+                if (url.contains("?")) {
+                    if (!url.endsWith("?")) {
+                        url += "&";
+                    }
+                } else {
+                    url += "?";
+                }
+                url += generateUrlParam(urlParams);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
         return url;
     }
 
@@ -128,5 +151,23 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
             entity = new ByteArrayEntity(body);
         }
         return entity;
+    }
+
+    public void addUrlParam(NameValuePair... nameValuePairs) {
+        if (nameValuePairs != null) {
+            urlParams.addAll(Arrays.asList(nameValuePairs));
+        }
+    }
+
+    public static String generateUrlParam(NameValuePair... nameValuePairs) throws UnsupportedEncodingException {
+        if (nameValuePairs != null)
+            return URLEncodedUtils.format(Arrays.asList(nameValuePairs), DEFAULT_PARAMS_ENCODING);
+        return "";
+    }
+
+    public static String generateUrlParam(List<NameValuePair> nameValuePairList) throws UnsupportedEncodingException {
+        if (nameValuePairList != null)
+            return URLEncodedUtils.format(nameValuePairList, DEFAULT_PARAMS_ENCODING);
+        return "";
     }
 }
