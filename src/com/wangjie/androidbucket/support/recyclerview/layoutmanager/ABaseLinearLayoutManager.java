@@ -3,7 +3,7 @@ package com.wangjie.androidbucket.support.recyclerview.layoutmanager;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import com.wangjie.androidbucket.support.recyclerview.listener.OnRecyclerViewScrollListener;
+import com.wangjie.androidbucket.support.recyclerview.listener.OnRecyclerViewScrollLocationListener;
 
 /**
  * Author: wangjie
@@ -15,11 +15,11 @@ public class ABaseLinearLayoutManager extends LinearLayoutManager implements Rec
 
     private RecyclerViewScrollManager recyclerViewScrollManager;
 
-    public void setOnRecyclerViewScrollListener(RecyclerView recyclerView, OnRecyclerViewScrollListener onRecyclerViewScrollListener) {
+    public void setOnRecyclerViewScrollLocationListener(RecyclerView recyclerView, OnRecyclerViewScrollLocationListener onRecyclerViewScrollLocationListener) {
         if (null == recyclerViewScrollManager) {
             recyclerViewScrollManager = new RecyclerViewScrollManager();
         }
-        recyclerViewScrollManager.setOnRecyclerViewScrollListener(onRecyclerViewScrollListener);
+        recyclerViewScrollManager.setOnRecyclerViewScrollLocationListener(onRecyclerViewScrollLocationListener);
         recyclerViewScrollManager.setOnScrollManagerLocation(this);
         recyclerViewScrollManager.registerScrollListener(recyclerView);
     }
@@ -37,6 +37,10 @@ public class ABaseLinearLayoutManager extends LinearLayoutManager implements Rec
             return recyclerViewScrollManager.isScrolling();
         }
         return false;
+    }
+
+    public RecyclerViewScrollManager getRecyclerViewScrollManager() {
+        return recyclerViewScrollManager;
     }
 
     @Override

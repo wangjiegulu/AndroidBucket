@@ -3,7 +3,7 @@ package com.wangjie.androidbucket.support.recyclerview.layoutmanager;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import com.wangjie.androidbucket.support.recyclerview.listener.OnRecyclerViewScrollListener;
+import com.wangjie.androidbucket.support.recyclerview.listener.OnRecyclerViewScrollLocationListener;
 
 /**
  * Author: wangjie
@@ -15,11 +15,11 @@ public class ABaseGridLayoutManager extends GridLayoutManager implements Recycle
 
     private RecyclerViewScrollManager recyclerViewScrollManager;
 
-    public void setOnRecyclerViewScrollListener(RecyclerView recyclerView, OnRecyclerViewScrollListener onRecyclerViewScrollListener) {
+    public void setOnRecyclerViewScrollListener(RecyclerView recyclerView, OnRecyclerViewScrollLocationListener onRecyclerViewScrollLocationListener) {
         if (null == recyclerViewScrollManager) {
             recyclerViewScrollManager = new RecyclerViewScrollManager();
         }
-        recyclerViewScrollManager.setOnRecyclerViewScrollListener(onRecyclerViewScrollListener);
+        recyclerViewScrollManager.setOnRecyclerViewScrollLocationListener(onRecyclerViewScrollLocationListener);
         recyclerViewScrollManager.setOnScrollManagerLocation(this);
         recyclerViewScrollManager.registerScrollListener(recyclerView);
     }
@@ -37,6 +37,10 @@ public class ABaseGridLayoutManager extends GridLayoutManager implements Recycle
             return recyclerViewScrollManager.isScrolling();
         }
         return false;
+    }
+
+    public RecyclerViewScrollManager getRecyclerViewScrollManager() {
+        return recyclerViewScrollManager;
     }
 
     @Override

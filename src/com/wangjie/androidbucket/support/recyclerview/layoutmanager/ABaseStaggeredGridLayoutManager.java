@@ -3,7 +3,7 @@ package com.wangjie.androidbucket.support.recyclerview.layoutmanager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import com.wangjie.androidbucket.log.Logger;
-import com.wangjie.androidbucket.support.recyclerview.listener.OnRecyclerViewScrollListener;
+import com.wangjie.androidbucket.support.recyclerview.listener.OnRecyclerViewScrollLocationListener;
 import com.wangjie.androidbucket.utils.ABTextUtil;
 
 import java.util.Arrays;
@@ -18,11 +18,11 @@ public class ABaseStaggeredGridLayoutManager extends StaggeredGridLayoutManager 
 
     private RecyclerViewScrollManager recyclerViewScrollManager;
 
-    public void setOnRecyclerViewScrollListener(RecyclerView recyclerView, OnRecyclerViewScrollListener onRecyclerViewScrollListener) {
+    public void setOnRecyclerViewScrollListener(RecyclerView recyclerView, OnRecyclerViewScrollLocationListener onRecyclerViewScrollLocationListener) {
         if (null == recyclerViewScrollManager) {
             recyclerViewScrollManager = new RecyclerViewScrollManager();
         }
-        recyclerViewScrollManager.setOnRecyclerViewScrollListener(onRecyclerViewScrollListener);
+        recyclerViewScrollManager.setOnRecyclerViewScrollLocationListener(onRecyclerViewScrollLocationListener);
         recyclerViewScrollManager.setOnScrollManagerLocation(this);
         recyclerViewScrollManager.registerScrollListener(recyclerView);
     }
@@ -36,6 +36,10 @@ public class ABaseStaggeredGridLayoutManager extends StaggeredGridLayoutManager 
             return recyclerViewScrollManager.isScrolling();
         }
         return false;
+    }
+
+    public RecyclerViewScrollManager getRecyclerViewScrollManager() {
+        return recyclerViewScrollManager;
     }
 
     @Override
