@@ -2,10 +2,13 @@ package com.wangjie.androidbucket.customviews.sublayout;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
+import com.wangjie.androidbucket.manager.OnActivityLifeCycleFullListener;
 import com.wangjie.androidbucket.mvp.ABActivityViewer;
+import com.wangjie.androidbucket.present.ABActivityCommon;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,41 +17,51 @@ import com.wangjie.androidbucket.mvp.ABActivityViewer;
  * Time: 下午6:12
  * To change this template use File | Settings | File Templates.
  */
-public class SubLayout implements ISubLayout, ABActivityViewer{
+public class SubLayout implements ISubLayout, ABActivityViewer, OnActivityLifeCycleFullListener {
     public Context context;
     public View layout;
     private boolean inited;
 
     public SubLayout(Context context) {
-        this.context = context;
+        this(context, false);
     }
 
-    public void initLayout(){
+    public SubLayout(Context context, boolean autoBindActivityLifeCycle) {
+        this.context = context;
+        if (autoBindActivityLifeCycle && context instanceof ABActivityCommon) {
+            ((ABActivityCommon) context).getBaseActivityManager().registerOnActivityLifeCycleListeners(this);
+        }
+    }
+
+    public void initLayout() {
         inited = true;
     }
-    public void setInited(boolean isInited){
+
+    public void setInited(boolean isInited) {
         inited = isInited;
     }
 
-    public void setContentView(int resLayout){
+    public void setContentView(int resLayout) {
         layout = LayoutInflater.from(context).inflate(resLayout, null);
     }
 
-    public View getLayout(){
+    public View getLayout() {
         return layout;
     }
 
-    public boolean isInited(){
+    public boolean isInited() {
         return inited;
     }
 
 
-    public View findViewById(int resId){
+    public View findViewById(int resId) {
         return layout.findViewById(resId);
     }
 
 
-    /********************** ABActivityViewer impl *********************/
+    /**
+     * ******************* ABActivityViewer impl ********************
+     */
 
     @Override
     public void showToastMessage(String msg) {
@@ -87,4 +100,50 @@ public class SubLayout implements ISubLayout, ABActivityViewer{
                 .setPositiveButton(okButtonText, null)
                 .show();
     }
+
+
+    /**
+     * 绑定Activity的生命周期（需要调用ctivity.getBaseActivityManager().registerOnActivityLifeCycleListeners(this);）
+     */
+    @Override
+    public void onActivityStartCallBack() {
+    }
+
+    @Override
+    public void onActivityRestartCallBack() {
+    }
+
+    @Override
+    public void onActivityStopCallBack() {
+    }
+
+    @Override
+    public void onActivitySaveInstanceStateCallBack(Bundle outState) {
+    }
+
+    @Override
+    public void onActivityRestoreInstanceStateCallBack(Bundle savedInstanceState) {
+    }
+
+    @Override
+    public void onActivityCreateCallback(Bundle savedInstanceState) {
+    }
+
+    @Override
+    public void onActivityResumeCallback() {
+    }
+
+    @Override
+    public void onActivityPauseCallback() {
+    }
+
+    @Override
+    public void onActivityDestroyCallback() {
+        if (context instanceof ABActivityCommon) {
+            ((ABActivityCommon) context).getBaseActivityManager().unregisterOnActivityStopListener(this);
+        }
+
+    }
+
+
 }

@@ -8,6 +8,7 @@ import android.os.Bundle;
  * Date: 8/11/14.
  */
 public interface OnActivityLifeCycleListener {
+    @Deprecated
     public void onActivityCreateCallback(Bundle savedInstanceState);
 
     public void onActivityResumeCallback();

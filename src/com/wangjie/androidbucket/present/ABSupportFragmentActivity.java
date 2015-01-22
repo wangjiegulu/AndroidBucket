@@ -10,7 +10,7 @@ import com.wangjie.androidbucket.mvp.ABActivityViewer;
 /**
  * Created by wangjie on 6/15/14.
  */
-public class ABSupportFragmentActivity extends FragmentActivity implements ABActivityViewer {
+public class ABSupportFragmentActivity extends FragmentActivity implements ABActivityViewer, ABActivityCommon {
     private BaseActivityManager baseActivityManager;
 
     private boolean isActivityLifeCycleAutoCallBack = true;
@@ -79,17 +79,18 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
         }
     }
 
-
+    @Override
     public BaseActivityManager getBaseActivityManager() {
         ensureBaseActivityMananger();
         return baseActivityManager;
     }
 
+    @Override
     public void setBaseActivityManager(BaseActivityManager baseActivityManager) {
         this.baseActivityManager = baseActivityManager;
     }
 
-    public void ensureBaseActivityMananger() {
+    private void ensureBaseActivityMananger() {
         if (null == baseActivityManager) {
             this.baseActivityManager = new BaseActivityManager(this);
         }

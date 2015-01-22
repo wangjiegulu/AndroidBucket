@@ -10,7 +10,7 @@ import com.wangjie.androidbucket.mvp.ABActivityViewer;
 /**
  * Created by wangjie on 6/15/14.
  */
-public class ABActivity extends Activity implements ABActivityViewer {
+public class ABActivity extends Activity implements ABActivityViewer, ABActivityCommon {
 
     private BaseActivityManager baseActivityManager;
 
@@ -31,7 +31,7 @@ public class ABActivity extends Activity implements ABActivityViewer {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        synchronized (((Object)this).getClass()) {
+        synchronized (((Object) this).getClass()) {
             if (isFirstFocused && hasFocus) {
                 isFirstFocused = false;
                 onWindowInitialized();
@@ -71,16 +71,18 @@ public class ABActivity extends Activity implements ABActivityViewer {
 
     }
 
+    @Override
     public BaseActivityManager getBaseActivityManager() {
         ensureBaseActivityMananger();
         return baseActivityManager;
     }
 
+    @Override
     public void setBaseActivityManager(BaseActivityManager baseActivityManager) {
         this.baseActivityManager = baseActivityManager;
     }
 
-    public void ensureBaseActivityMananger() {
+    private void ensureBaseActivityMananger() {
         if (null == baseActivityManager) {
             this.baseActivityManager = new BaseActivityManager(this);
         }
@@ -99,7 +101,9 @@ public class ABActivity extends Activity implements ABActivityViewer {
     }
 
 
-    /********************** ABActivityViewer impl *********************/
+    /**
+     * ******************* ABActivityViewer impl ********************
+     */
 
     @Override
     public void showToastMessage(String msg) {
