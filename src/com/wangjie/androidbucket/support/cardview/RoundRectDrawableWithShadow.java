@@ -1,4 +1,4 @@
-package com.wangjie.androidbucket.customviews.support.cardview;
+package com.wangjie.androidbucket.support.cardview;
 
 /**
  * Author: wangjie
@@ -9,7 +9,6 @@ package com.wangjie.androidbucket.customviews.support.cardview;
 import android.content.res.Resources;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
-import com.wangjie.androidbucket.R;
 
 /**
  * A rounded rectangle drawable which also includes a shadow around.

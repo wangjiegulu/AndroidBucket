@@ -1,4 +1,4 @@
-package com.wangjie.androidbucket.customviews.support.cardview;
+package com.wangjie.androidbucket.support.cardview;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
