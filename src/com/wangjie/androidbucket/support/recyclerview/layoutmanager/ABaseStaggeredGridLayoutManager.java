@@ -1,17 +1,20 @@
 package com.wangjie.androidbucket.support.recyclerview.layoutmanager;
 
-import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.support.recyclerview.listener.OnRecyclerViewScrollListener;
+import com.wangjie.androidbucket.utils.ABTextUtil;
+
+import java.util.Arrays;
 
 /**
  * Author: wangjie
  * Email: tiantian.china.2@gmail.com
  * Date: 1/19/15.
  */
-public class ABaseLinearLayoutManager extends LinearLayoutManager implements RecyclerViewScrollManager.OnScrollManagerLocation {
-    private static final String TAG = ABaseLinearLayoutManager.class.getSimpleName();
+public class ABaseStaggeredGridLayoutManager extends StaggeredGridLayoutManager implements RecyclerViewScrollManager.OnScrollManagerLocation {
+    private static final String TAG = ABaseStaggeredGridLayoutManager.class.getSimpleName();
 
     private RecyclerViewScrollManager recyclerViewScrollManager;
 
@@ -24,12 +27,8 @@ public class ABaseLinearLayoutManager extends LinearLayoutManager implements Rec
         recyclerViewScrollManager.registerScrollListener(recyclerView);
     }
 
-    public ABaseLinearLayoutManager(Context context) {
-        super(context);
-    }
-
-    public ABaseLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
-        super(context, orientation, reverseLayout);
+    public ABaseStaggeredGridLayoutManager(int spanCount, int orientation) {
+        super(spanCount, orientation);
     }
 
     public boolean isScrolling() {
@@ -41,13 +40,15 @@ public class ABaseLinearLayoutManager extends LinearLayoutManager implements Rec
 
     @Override
     public boolean isTop(RecyclerView recyclerView) {
-        return 0 == findFirstCompletelyVisibleItemPosition();
+        int[] into = findFirstCompletelyVisibleItemPositions(null);
+        return !ABTextUtil.isEmpty(into) && 0 == into[0];
     }
 
     @Override
     public boolean isBottom(RecyclerView recyclerView) {
-        int lastVisiblePosition = findLastCompletelyVisibleItemPosition();
+        int into[] = findLastCompletelyVisibleItemPositions(null);
         int lastPosition = recyclerView.getAdapter().getItemCount() - 1;
-        return lastVisiblePosition == lastPosition;
+        Arrays.sort(into);
+        return !ABTextUtil.isEmpty(into) && lastPosition == into[into.length - 1];
     }
 }

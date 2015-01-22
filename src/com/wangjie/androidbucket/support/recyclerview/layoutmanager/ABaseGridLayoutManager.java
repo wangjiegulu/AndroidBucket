@@ -1,7 +1,7 @@
 package com.wangjie.androidbucket.support.recyclerview.layoutmanager;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import com.wangjie.androidbucket.support.recyclerview.listener.OnRecyclerViewScrollListener;
 
@@ -10,8 +10,8 @@ import com.wangjie.androidbucket.support.recyclerview.listener.OnRecyclerViewScr
  * Email: tiantian.china.2@gmail.com
  * Date: 1/19/15.
  */
-public class ABaseLinearLayoutManager extends LinearLayoutManager implements RecyclerViewScrollManager.OnScrollManagerLocation {
-    private static final String TAG = ABaseLinearLayoutManager.class.getSimpleName();
+public class ABaseGridLayoutManager extends GridLayoutManager implements RecyclerViewScrollManager.OnScrollManagerLocation {
+    private static final String TAG = ABaseGridLayoutManager.class.getSimpleName();
 
     private RecyclerViewScrollManager recyclerViewScrollManager;
 
@@ -24,12 +24,12 @@ public class ABaseLinearLayoutManager extends LinearLayoutManager implements Rec
         recyclerViewScrollManager.registerScrollListener(recyclerView);
     }
 
-    public ABaseLinearLayoutManager(Context context) {
-        super(context);
+    public ABaseGridLayoutManager(Context context, int spanCount) {
+        super(context, spanCount);
     }
 
-    public ABaseLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
-        super(context, orientation, reverseLayout);
+    public ABaseGridLayoutManager(Context context, int spanCount, int orientation, boolean reverseLayout) {
+        super(context, spanCount, orientation, reverseLayout);
     }
 
     public boolean isScrolling() {

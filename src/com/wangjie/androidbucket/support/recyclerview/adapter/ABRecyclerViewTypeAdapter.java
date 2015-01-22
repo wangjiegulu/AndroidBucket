@@ -5,6 +5,7 @@ import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import com.wangjie.androidbucket.R;
+import com.wangjie.androidbucket.adapter.typeadapter.ABAdapterTypeRender;
 
 /**
  * Author: wangjie
@@ -15,7 +16,7 @@ public abstract class ABRecyclerViewTypeAdapter extends RecyclerView.Adapter<ABR
     @TargetApi(Build.VERSION_CODES.DONUT)
     @Override
     public ABRecyclerViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        AdapterTypeRender<ABRecyclerViewHolder> render = getAdapterTypeRender(viewType);
+        ABAdapterTypeRender<ABRecyclerViewHolder> render = getAdapterTypeRender(viewType);
         ABRecyclerViewHolder holder = render.getReusableComponent();
         holder.itemView.setTag(R.id.ab__id_adapter_item_type_render, render);
         render.fitEvents();
@@ -25,7 +26,7 @@ public abstract class ABRecyclerViewTypeAdapter extends RecyclerView.Adapter<ABR
     @TargetApi(Build.VERSION_CODES.DONUT)
     @Override
     public void onBindViewHolder(ABRecyclerViewHolder holder, int position) {
-        AdapterTypeRender<ABRecyclerViewHolder> render = (AdapterTypeRender<ABRecyclerViewHolder>) holder.itemView.getTag(R.id.ab__id_adapter_item_type_render);
+        ABAdapterTypeRender<ABRecyclerViewHolder> render = (ABAdapterTypeRender<ABRecyclerViewHolder>) holder.itemView.getTag(R.id.ab__id_adapter_item_type_render);
         render.fitDatas(position);
     }
 
@@ -34,5 +35,5 @@ public abstract class ABRecyclerViewTypeAdapter extends RecyclerView.Adapter<ABR
      *
      * @return
      */
-    public abstract AdapterTypeRender<ABRecyclerViewHolder> getAdapterTypeRender(int type);
+    public abstract ABAdapterTypeRender<ABRecyclerViewHolder> getAdapterTypeRender(int type);
 }

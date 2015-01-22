@@ -1,4 +1,4 @@
-package com.wangjie.androidbucket.support.recyclerview.adapter;
+package com.wangjie.androidbucket.adapter.typeadapter;
 
 /**
  * 用于对不同类型item数据到UI的渲染
@@ -6,7 +6,7 @@ package com.wangjie.androidbucket.support.recyclerview.adapter;
  * Email: tiantian.china.2@gmail.com
  * Date: 9/14/14.
  */
-public interface AdapterTypeRender<T> {
+public interface ABAdapterTypeRender<T> {
 
     /**
      * 返回一个item的可复用de组件，可以是BaseAdapter中getView方法中返回的convertView，也可以是RecyclerView的ViewHolder
