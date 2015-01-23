@@ -303,25 +303,6 @@ public class ABHttpUtil {
         return url;
     }
 
-    public static String getGeneratedUrl(String webApi, HttpAccessParameter.SessionEnableMethod sessionEnableMethod) throws Exception {
-        String url =
-                null == onHttpSessionConnectListener ? httpConfig.getDomain() : onHttpSessionConnectListener.getDomain()
-                        + webApi;
-        if (sessionEnableMethod == HttpAccessParameter.SessionEnableMethod.AUTO) {
-            if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.getSessionParameterUrl() != null) {
-                url += (url.contains("?") ? "&" : "?") + onHttpSessionConnectListener.getSessionParameterUrl();
-            }
-        } else if (sessionEnableMethod == HttpAccessParameter.SessionEnableMethod.ENABLE) {
-            if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.getSessionParameterUrl() != null) {
-                url += (url.contains("?") ? "&" : "?") + onHttpSessionConnectListener.getSessionParameterUrl();
-            } else {
-                throw new Exception("None session configuration problem.");
-            }
-        }
-        Logger.d(TAG, "Connect to " + url);
-        return url;
-    }
-
     // 获取一个可用的Http配置，如果没有配置则返回一个默认值
     private static HttpConfig getDefaultHttpConfig(HttpConfig httpConfig) {
         if (null == httpConfig) {

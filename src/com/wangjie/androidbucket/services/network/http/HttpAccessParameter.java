@@ -1,8 +1,11 @@
 package com.wangjie.androidbucket.services.network.http;
 
 import com.wangjie.androidbucket.services.BaseAccessParameter;
+import com.wangjie.androidbucket.utils.ABTextUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+
+import java.util.List;
 
 /**
  * @author Hubert He
@@ -80,6 +83,18 @@ public class HttpAccessParameter extends BaseAccessParameter {
 
     public HttpAccessParameter setParamNameValuePairs(NameValuePair... paramNameValuePairs) {
         this.paramNameValuePairs = paramNameValuePairs;
+        return this;
+    }
+
+    public HttpAccessParameter setParamNameValuePairs(List<NameValuePair> paramNameValuePairList) {
+        if (ABTextUtil.isEmpty(paramNameValuePairList)) {
+            return this;
+        }
+        int size = paramNameValuePairList.size();
+        this.paramNameValuePairs = new NameValuePair[size];
+        for (int i = 0; i < size; i++) {
+            this.paramNameValuePairs[i] = paramNameValuePairList.get(i);
+        }
         return this;
     }
 
