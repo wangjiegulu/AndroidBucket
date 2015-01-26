@@ -23,8 +23,8 @@ public abstract class ABRecyclerViewTypeExtraViewAdapter extends RecyclerView.Ad
     protected ABRecyclerViewTypeExtraViewAdapter(View headerView, View footerView) {
         this.headerView = headerView;
         this.footerView = footerView;
-        extraCount += hasHeaderView() ? 0 : 1;
-        extraCount += hasFooterView() ? 0 : 1;
+        extraCount += hasHeaderView() ? 1 : 0;
+        extraCount += hasFooterView() ? 1 : 0;
     }
 
     public boolean hasHeaderView() {

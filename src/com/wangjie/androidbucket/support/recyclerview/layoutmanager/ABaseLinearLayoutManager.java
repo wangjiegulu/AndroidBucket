@@ -16,9 +16,7 @@ public class ABaseLinearLayoutManager extends LinearLayoutManager implements Rec
     private RecyclerViewScrollManager recyclerViewScrollManager;
 
     public void setOnRecyclerViewScrollLocationListener(RecyclerView recyclerView, OnRecyclerViewScrollLocationListener onRecyclerViewScrollLocationListener) {
-        if (null == recyclerViewScrollManager) {
-            recyclerViewScrollManager = new RecyclerViewScrollManager();
-        }
+        ensureRecyclerViewScrollManager();
         recyclerViewScrollManager.setOnRecyclerViewScrollLocationListener(onRecyclerViewScrollLocationListener);
         recyclerViewScrollManager.setOnScrollManagerLocation(this);
         recyclerViewScrollManager.registerScrollListener(recyclerView);
@@ -40,12 +38,18 @@ public class ABaseLinearLayoutManager extends LinearLayoutManager implements Rec
     }
 
     public RecyclerViewScrollManager getRecyclerViewScrollManager() {
+        ensureRecyclerViewScrollManager();
         return recyclerViewScrollManager;
+    }
+    private void ensureRecyclerViewScrollManager(){
+        if (null == recyclerViewScrollManager) {
+            recyclerViewScrollManager = new RecyclerViewScrollManager();
+        }
     }
 
     @Override
     public boolean isTop(RecyclerView recyclerView) {
-        return 0 == findFirstCompletelyVisibleItemPosition();
+        return 0 == findFirstVisibleItemPosition();
     }
 
     @Override

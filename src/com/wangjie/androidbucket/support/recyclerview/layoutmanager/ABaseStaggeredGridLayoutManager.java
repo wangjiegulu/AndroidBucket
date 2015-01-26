@@ -2,7 +2,6 @@ package com.wangjie.androidbucket.support.recyclerview.layoutmanager;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.support.recyclerview.listener.OnRecyclerViewScrollLocationListener;
 import com.wangjie.androidbucket.utils.ABTextUtil;
 
@@ -19,9 +18,7 @@ public class ABaseStaggeredGridLayoutManager extends StaggeredGridLayoutManager 
     private RecyclerViewScrollManager recyclerViewScrollManager;
 
     public void setOnRecyclerViewScrollListener(RecyclerView recyclerView, OnRecyclerViewScrollLocationListener onRecyclerViewScrollLocationListener) {
-        if (null == recyclerViewScrollManager) {
-            recyclerViewScrollManager = new RecyclerViewScrollManager();
-        }
+        ensureRecyclerViewScrollManager();
         recyclerViewScrollManager.setOnRecyclerViewScrollLocationListener(onRecyclerViewScrollLocationListener);
         recyclerViewScrollManager.setOnScrollManagerLocation(this);
         recyclerViewScrollManager.registerScrollListener(recyclerView);
@@ -39,12 +36,19 @@ public class ABaseStaggeredGridLayoutManager extends StaggeredGridLayoutManager 
     }
 
     public RecyclerViewScrollManager getRecyclerViewScrollManager() {
+        ensureRecyclerViewScrollManager();
         return recyclerViewScrollManager;
     }
+    private void ensureRecyclerViewScrollManager(){
+        if (null == recyclerViewScrollManager) {
+            recyclerViewScrollManager = new RecyclerViewScrollManager();
+        }
+    }
+
 
     @Override
     public boolean isTop(RecyclerView recyclerView) {
-        int[] into = findFirstCompletelyVisibleItemPositions(null);
+        int[] into = findFirstVisibleItemPositions(null);
         return !ABTextUtil.isEmpty(into) && 0 == into[0];
     }
 
