@@ -79,6 +79,25 @@ public class ABImageProcess {
         return overlay;
 
     }
+    public static Bitmap fastBlur(Bitmap bm, float scaleFactor, float radius, int width, int height){
+        long startMs = System.currentTimeMillis();
+        scaleFactor = scaleFactor > 0 ? scaleFactor : 1;
+        radius = radius > 0 ? radius : 20;
+
+        Bitmap overlay = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(overlay);
+//        canvas.translate(-view.getLeft()/scaleFactor, -view.getTop()/scaleFactor);
+        canvas.scale(1 / scaleFactor, 1 / scaleFactor);
+        Paint paint = new Paint();
+        // 处理bitmap缩放的时候，就可以达到双缓冲的效果，模糊处理的过程就更加顺畅了。
+        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
+        canvas.drawBitmap(bm, 0, 0, paint);
+
+        overlay = FastBlur.doBlur(overlay, (int) radius, true);
+        Logger.d(TAG, "fast blur takes: " + (System.currentTimeMillis() - startMs + "ms"));
+        return overlay;
+
+    }
 
     /**
      * 模糊处理后，为view设置为background

@@ -7,6 +7,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
+import com.wangjie.androidbucket.application.ABApplication;
 import com.wangjie.androidbucket.log.Logger;
 import org.apache.http.HttpResponse;
 
