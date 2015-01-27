@@ -1,5 +1,6 @@
 package com.wangjie.androidbucket.services.network;
 
+import com.wangjie.androidbucket.services.CancelableTask;
 import com.wangjie.androidbucket.services.network.exception.HippoException;
 import com.wangjie.androidbucket.services.network.exception.RetryFailedException;
 
@@ -9,21 +10,25 @@ import com.wangjie.androidbucket.services.network.exception.RetryFailedException
  * @Description
  * @Createdate 14-9-24 16:35
  */
-public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
+public abstract class HippoRequest<T> implements Comparable<HippoRequest>, CancelableTask {
 
     /**
      * Sequence
      */
     protected int seq;
 
-    private boolean cancel = false;
-
-    private boolean finish = false;
-
     protected static final String DEFAULT_RESPONSE_ENCODING = "UTF-8";
 
     protected RetryPolicy retryPolicy;
 
+    /**
+     * Running state
+     */
+    protected State state;
+
+    public static enum State {
+        READY, EXECUTING, CANCELING, CANCELED, FINISHED;
+    }
 
     /**
      * 成功返回监听器
@@ -40,6 +45,7 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
         this.listener = listener;
         this.errorListener = errorListener;
         this.retryPolicy = new RetryPolicy();
+        setState(State.READY);
     }
 
     /**
@@ -59,22 +65,16 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
         return this.seq - hippoRequest.seq;
     }
 
-    public void cancel(boolean isCancel) {
-        synchronized (this) {
-            this.cancel = isCancel;
-        }
+    public void cancel() {
+        setState(State.CANCELING);
     }
 
     public boolean isCancel() {
-        return cancel;
+        return State.CANCELING == state;
     }
 
     public boolean isFinish() {
-        return finish;
-    }
-
-    public void setFinish(boolean finish) {
-        this.finish = finish;
+        return state == State.FINISHED;
     }
 
     public int getSeq() {
@@ -105,6 +105,13 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
             }
             currentCount--;
         }
+
+        @Override
+        public String toString() {
+            return "RetryPolicy{" +
+                    "currentCount=" + currentCount +
+                    '}';
+        }
     }
 
     public boolean isRequestOnly() {
@@ -115,8 +122,34 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest> {
     public String toString() {
         return "HippoRequest{" +
                 "seq=" + seq +
-                ", cancel=" + cancel +
-                ", finish=" + finish +
+                ", retryPolicy=" + retryPolicy +
+                ", state=" + state +
+                ", listener=" + listener +
+                ", errorListener=" + errorListener +
                 '}';
     }
+
+    public void abort() {
+        setState(State.CANCELING);
+        Thread.interrupted();
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    @Override
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        if (mayInterruptIfRunning) {
+            abort();
+        } else {
+            cancel();
+        }
+        return true;
+    }
+
 }

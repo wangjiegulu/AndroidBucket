@@ -12,10 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
 import android.webkit.MimeTypeMap;
-import com.wangjie.androidbucket.application.ABApplication;
 import com.wangjie.androidbucket.log.Logger;
-import com.wangjie.androidbucket.services.network.exception.HippoException;
-import com.wangjie.androidbucket.services.network.toolbox.PoolingByteArrayOutputStream;
 
 import java.io.*;
 

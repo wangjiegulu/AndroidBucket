@@ -14,6 +14,7 @@ import java.util.List;
  * 它包含一个View层的引用和一个Model层的引用
  */
 public class ABBasePresenter<V extends ABActivityViewer, I extends ABInteractor> implements ABBaseManager {
+
     private static final String TAG = ABBasePresenter.class.getSimpleName();
 
     protected V viewer;
@@ -34,7 +35,7 @@ public class ABBasePresenter<V extends ABActivityViewer, I extends ABInteractor>
     public void closeAllTask() {
         for (CancelableTask cancelableTask : cancelableTaskList) {
             if (cancelableTask != null) {
-                cancelableTask.cancel(true);
+                cancelableTask.cancel(false);
             }
         }
     }

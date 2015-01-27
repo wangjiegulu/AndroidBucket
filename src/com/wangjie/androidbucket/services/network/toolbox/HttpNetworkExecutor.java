@@ -169,6 +169,9 @@ public class HttpNetworkExecutor implements NetworkExecutor<HippoHttpRequest<?>>
             httpClient = new DefaultHttpClient();
         }
         while (true) {
+            if (request.isCancel()) {
+                return new NetworkResponse();
+            }
             NetworkResponse networkResponse = null;
             HttpUriRequest httpUriRequest = createHttpRequest(request);
             addHeaders(httpUriRequest, request);

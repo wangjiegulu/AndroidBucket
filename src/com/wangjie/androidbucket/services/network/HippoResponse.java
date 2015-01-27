@@ -27,11 +27,15 @@ public class HippoResponse<T> {
     /**
      * Callback interface for delivering parsed responses.
      */
-    public interface Listener<T> {
+    public abstract static class Listener<T> {
+
+        public void onResponseInBackground(T response) {
+        }
+
         /**
          * Called when a response is received.
          */
-        public void onResponse(T response);
+        public abstract void onResponse(T response);
     }
 
 

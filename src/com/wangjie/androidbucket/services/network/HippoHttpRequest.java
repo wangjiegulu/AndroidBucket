@@ -109,7 +109,7 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
                 } else {
                     url += "?";
                 }
-                url += generateUrlParam(urlParams);
+                return url + generateUrlParam(urlParams);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

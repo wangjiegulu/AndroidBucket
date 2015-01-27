@@ -52,7 +52,7 @@ public class HippoNetworkDispatcher extends Thread {
                 }
             }
             Logger.d(TAG, String.format("Request: %d get ticket to run.", request.getSeq()));
-
+            request.setState(HippoRequest.State.EXECUTING);
             // 访问拦截
             try {
                 intercept(request);
@@ -67,11 +67,14 @@ public class HippoNetworkDispatcher extends Thread {
                 networkResponse = new NetworkResponse(e);
                 Logger.e(TAG, e);
             } finally {
-                request.setFinish(true);
-                mHandler = new Handler(Looper.getMainLooper());
-                mHandler.post(new ResponseDispatcherRunnable(request, networkResponse));
-                Logger.d(TAG, String.format("Request: %d finish at %d.", request.getSeq(), System.currentTimeMillis()));
+                if (!request.isCancel()) {
+                    mHandler = new Handler(Looper.getMainLooper());
+                    mHandler.post(new ResponseDispatcherRunnable(request, networkResponse));
+                    Logger.d(TAG, String.format("Request: %d finish at %d.", request.getSeq(), System.currentTimeMillis()));
+                }
+                request.setState(HippoRequest.State.FINISHED);
             }
+
         }
     }
 
