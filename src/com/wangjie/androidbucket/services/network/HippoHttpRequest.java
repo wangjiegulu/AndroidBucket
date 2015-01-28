@@ -2,6 +2,7 @@ package com.wangjie.androidbucket.services.network;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ByteArrayEntity;
 
@@ -24,6 +25,12 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
     protected static final String DEFAULT_PARAMS_ENCODING = "UTF-8";
 
     protected static final String DEFAULT_RESPONSE_ENCODING = "UTF-8";
+
+    HttpUriRequest request;
+
+    public void setUriRequest(HttpUriRequest httpUriRequest) {
+        request = httpUriRequest;
+    }
 
     /**
      * Supported request methods.
@@ -166,5 +173,16 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
         if (nameValuePairList != null)
             return URLEncodedUtils.format(nameValuePairList, DEFAULT_PARAMS_ENCODING);
         return "";
+    }
+
+    @Override
+    public void abort() {
+        if (getState() == State.FINISHING) {
+            return;
+        }
+        super.abort();
+        if (request != null) {
+            request.abort();
+        }
     }
 }

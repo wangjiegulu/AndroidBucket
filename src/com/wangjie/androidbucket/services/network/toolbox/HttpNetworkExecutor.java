@@ -8,7 +8,9 @@ import com.wangjie.androidbucket.services.network.interceptor.Interceptor;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.*;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.ByteArrayEntity;
@@ -181,6 +183,7 @@ public class HttpNetworkExecutor implements NetworkExecutor<HippoHttpRequest<?>>
             byte[] responseContents = null;
             try {
                 Logger.d(TAG, "Url: " + request.getUrl());
+                request.setUriRequest(httpUriRequest);
                 httpResponse = httpClient.execute(httpUriRequest);
                 responseContents = entityToBytes(httpResponse.getEntity());
                 // 如果接收到的回复为空，默认赋值为长度为0的byte数组
