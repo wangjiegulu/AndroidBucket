@@ -1,8 +1,10 @@
 package com.wangjie.androidbucket.mvp;
 
+import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.CancelableTask;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -13,7 +15,7 @@ import java.util.List;
  * MVP的Presenter层，作为沟通View和Model的桥梁，它从Model层检索数据后，返回给View层，它也可以决定与View层的交互操作。
  * 它包含一个View层的引用和一个Model层的引用
  */
-public class ABBasePresenter<V extends ABActivityViewer, I extends ABInteractor> implements ABBaseManager {
+public class ABBasePresenter<V extends ABActivityViewer, I extends ABInteractor> implements ABBaseTaskManager {
 
     private static final String TAG = ABBasePresenter.class.getSimpleName();
 
@@ -32,11 +34,26 @@ public class ABBasePresenter<V extends ABActivityViewer, I extends ABInteractor>
     }
 
     @Override
+    public void removeCancelableTask(CancelableTask cancelableTask) {
+        Logger.d(TAG, "removeCancelableTask: " + cancelableTask);
+        cancelableTaskList.remove(cancelableTask);
+    }
+
+    @Override
     public void closeAllTask() {
-        for (CancelableTask cancelableTask : cancelableTaskList) {
-            if (cancelableTask != null) {
-                cancelableTask.cancel(false);
-            }
+//        for (CancelableTask cancelableTask : cancelableTaskList) {
+//            if (cancelableTask != null) {
+//                Logger.d(TAG, "closeAllTask: " + cancelableTask);
+//                cancelableTask.cancel(false);
+//            }
+//        }
+        Iterator<CancelableTask> iter = cancelableTaskList.iterator();
+        while (iter.hasNext()) {
+            CancelableTask task = iter.next();
+            Logger.d(TAG, "closeAllTask: " + task);
+            task.cancel(false);
+            iter.remove();
         }
+
     }
 }

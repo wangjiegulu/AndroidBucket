@@ -8,7 +8,7 @@ package com.wangjie.androidbucket.mvp;
  */
 public interface TaskController {
 
-    void registerController(ABBasePresenter presenter);
+    void registerPresenter(ABBasePresenter presenter);
 
     void closeAllTask();
 }

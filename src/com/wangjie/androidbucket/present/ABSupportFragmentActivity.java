@@ -146,12 +146,14 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     }
 
     @Override
-    public void registerController(ABBasePresenter presenter) {
+    public void registerPresenter(ABBasePresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
     public void closeAllTask() {
-        presenter.closeAllTask();
+        if(null != presenter){
+            presenter.closeAllTask();
+        }
     }
 }

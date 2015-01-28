@@ -6,5 +6,5 @@ package com.wangjie.androidbucket.mvp;
  * Email: tiantian.china.2@gmail.com
  * Date: 9/11/14.
  */
-public class ABDefaultInteractorImpl implements ABInteractor{
+public class ABNoneInteractorImpl implements ABInteractor{
 }

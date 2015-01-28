@@ -149,7 +149,7 @@ public class SubLayout implements ISubLayout, ABActivityViewer, OnActivityLifeCy
 
 
     @Override
-    public void registerController(ABBasePresenter presenter) {
+    public void registerPresenter(ABBasePresenter presenter) {
         this.presenter = presenter;
     }
 
