@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 import com.wangjie.androidbucket.manager.OnActivityLifeCycleFullListener;
 import com.wangjie.androidbucket.mvp.ABActivityViewer;
+import com.wangjie.androidbucket.mvp.ABBasePresenter;
 import com.wangjie.androidbucket.present.ABActivityCommon;
 
 /**
@@ -21,6 +22,7 @@ public class SubLayout implements ISubLayout, ABActivityViewer, OnActivityLifeCy
     public Context context;
     public View layout;
     private boolean inited;
+    private ABBasePresenter presenter;
 
     public SubLayout(Context context) {
         this(context, false);
@@ -146,4 +148,13 @@ public class SubLayout implements ISubLayout, ABActivityViewer, OnActivityLifeCy
     }
 
 
+    @Override
+    public void registerController(ABBasePresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void closeAllTask() {
+        presenter.closeAllTask();
+    }
 }

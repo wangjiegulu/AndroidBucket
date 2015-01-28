@@ -4,13 +4,14 @@ import android.app.AlertDialog;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 import com.wangjie.androidbucket.mvp.ABActivityViewer;
+import com.wangjie.androidbucket.mvp.ABBasePresenter;
 
 /**
  * Created by wangjie on 6/15/14.
  */
 public class ABSupportFragment extends Fragment implements ABActivityViewer{
 
-
+    private ABBasePresenter presenter;
 
     @Override
     public void showToastMessage(String msg) {
@@ -48,5 +49,15 @@ public class ABSupportFragment extends Fragment implements ABActivityViewer{
                 .setMessage(message)
                 .setPositiveButton(okButtonText, null)
                 .show();
+    }
+
+    @Override
+    public void registerController(ABBasePresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void closeAllTask() {
+        presenter.closeAllTask();
     }
 }

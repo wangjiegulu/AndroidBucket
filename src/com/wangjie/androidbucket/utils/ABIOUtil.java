@@ -68,10 +68,7 @@ public class ABIOUtil {
             if (null != bm && !bm.isRecycled()) {
                 bm.recycle();
             }
-            bm = null;
         }
-        System.gc();
-
     }
 
 

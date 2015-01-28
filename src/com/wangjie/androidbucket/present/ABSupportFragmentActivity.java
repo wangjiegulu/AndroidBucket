@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 import com.wangjie.androidbucket.manager.BaseActivityManager;
 import com.wangjie.androidbucket.mvp.ABActivityViewer;
+import com.wangjie.androidbucket.mvp.ABBasePresenter;
 
 /**
  * Created by wangjie on 6/15/14.
@@ -14,6 +15,7 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     private BaseActivityManager baseActivityManager;
 
     private boolean isActivityLifeCycleAutoCallBack = true;
+    private ABBasePresenter presenter;
 
     public boolean isActivityLifeCycleAutoCallBack() {
         return isActivityLifeCycleAutoCallBack;
@@ -141,5 +143,15 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
                 .setMessage(message)
                 .setPositiveButton(okButtonText, null)
                 .show();
+    }
+
+    @Override
+    public void registerController(ABBasePresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void closeAllTask() {
+        presenter.closeAllTask();
     }
 }
