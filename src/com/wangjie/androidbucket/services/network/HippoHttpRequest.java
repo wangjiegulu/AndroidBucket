@@ -1,17 +1,11 @@
 package com.wangjie.androidbucket.services.network;
 
-import com.wangjie.androidbucket.services.network.exception.HippoException;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.protocol.HTTP;
 
-import java.io.*;
-import java.net.URLEncoder;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -102,14 +96,17 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
     public String getUrl() {
         if (url != null) {
             try {
-                if (url.contains("?")) {
-                    if (!url.endsWith("?")) {
-                        url += "&";
+                String appendUrl = generateUrlParam(urlParams);
+                if (appendUrl != null || appendUrl.length() > 0) {
+                    if (url.contains("?")) {
+                        if (!url.endsWith("?")) {
+                            url += "&";
+                        }
+                    } else {
+                        url += "?";
                     }
-                } else {
-                    url += "?";
+                    return url + appendUrl;
                 }
-                return url + generateUrlParam(urlParams);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

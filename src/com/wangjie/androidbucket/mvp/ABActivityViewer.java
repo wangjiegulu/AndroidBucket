@@ -8,7 +8,7 @@ package com.wangjie.androidbucket.mvp;
  * MVP的View层，UI相关，Activity需要实现该interface
  * 它会包含一个Presenter的引用，当有事件发生（比如按钮点击后），会调用Presenter层的方法
  */
-public interface ABActivityViewer{
+public interface ABActivityViewer extends TaskController{
 
     /**
      * 显示Toast信息
