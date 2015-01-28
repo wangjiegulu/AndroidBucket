@@ -93,6 +93,9 @@ public abstract class Runtask<U, R> implements Runnable, CancelableTask {
 
     @Override
     public boolean cancel(boolean isCanceled) {
+        if (Thread.State.WAITING == Thread.currentThread().getState()) {
+            Thread.currentThread().interrupt();
+        }
         cancel();
         return isCanceled;
     }
