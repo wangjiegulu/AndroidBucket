@@ -92,9 +92,12 @@ public abstract class Runtask<U, R> implements Runnable, CancelableTask {
     }
 
     @Override
-    public boolean cancel(boolean isCanceled) {
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        if (mayInterruptIfRunning) {
+            Thread.currentThread().interrupt();
+        }
         cancel();
-        return isCanceled;
+        return true;
     }
 
     public boolean isCanceled() {

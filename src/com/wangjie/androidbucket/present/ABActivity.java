@@ -150,13 +150,15 @@ public class ABActivity extends Activity implements ABActivityViewer, ABActivity
 
 
     @Override
-    public void registerController(ABBasePresenter presenter) {
+    public void registerPresenter(ABBasePresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
     public void closeAllTask() {
-        presenter.closeAllTask();
+        if(null != presenter){
+            presenter.closeAllTask();
+        }
     }
 
 
