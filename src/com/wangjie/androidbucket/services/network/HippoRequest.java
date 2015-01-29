@@ -27,7 +27,7 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
     protected State state;
 
     public static enum State {
-        READY, EXECUTING, CANCELING, CANCELED, FINISHED;
+        READY, EXECUTING, CANCELING, CANCELED, FINISHING, FINISHED;
     }
 
     /**
@@ -66,6 +66,9 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
     }
 
     public void cancel() {
+        if (state == State.FINISHING) {
+            return;
+        }
         setState(State.CANCELING);
     }
 
@@ -130,6 +133,9 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
     }
 
     public void abort() {
+        if (state == State.FINISHING) {
+            return;
+        }
         setState(State.CANCELING);
         Thread.interrupted();
     }
