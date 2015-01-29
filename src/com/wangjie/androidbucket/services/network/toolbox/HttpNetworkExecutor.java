@@ -185,6 +185,7 @@ public class HttpNetworkExecutor implements NetworkExecutor<HippoHttpRequest<?>>
                 Logger.d(TAG, "Url: " + request.getUrl());
                 request.setUriRequest(httpUriRequest);
                 httpResponse = httpClient.execute(httpUriRequest);
+                request.setState(HippoRequest.State.FINISHING);
                 responseContents = entityToBytes(httpResponse.getEntity());
                 // 如果接收到的回复为空，默认赋值为长度为0的byte数组
                 if (responseContents == null) {
