@@ -1,5 +1,8 @@
 package com.wangjie.androidbucket.utils.collection;
 
+import com.wangjie.androidbucket.log.Logger;
+import com.wangjie.androidbucket.utils.ABTextUtil;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,6 +13,8 @@ import java.util.List;
  * Date: 12/11/14.
  */
 public class ABCollectionPicker {
+    private static final String TAG = ABCollectionPicker.class.getSimpleName();
+
     /**
      * 指定摘选规则
      *
@@ -28,6 +33,9 @@ public class ABCollectionPicker {
      * @return
      */
     public static <T extends ABICollectionPicker<T>> T pickFirst(T expect, Collection<T> collection) {
+        if (null == expect || ABTextUtil.isEmpty(collection)) {
+            return null;
+        }
         T picked = null;
         for (T t : collection) {
             if (t.isPicked(expect)) {
@@ -47,9 +55,52 @@ public class ABCollectionPicker {
      * @return
      */
     public static <T extends ABICollectionPicker<T>> List<T> pick(T expect, Collection<T> collection) {
+        if (null == expect || ABTextUtil.isEmpty(collection)) {
+            return null;
+        }
         List<T> picked = new ArrayList<>();
         for (T t : collection) {
             if (t.isPicked(expect)) {
+                picked.add(t);
+            }
+        }
+        return picked;
+    }
+
+
+    /**
+     * 指定摘选规则
+     * *** Picker Controller *****
+     */
+    public static interface ABPickerController<T> {
+        boolean isPicked(T expect, T iterTarget);
+    }
+
+    public static <T> T pickFirst(T expect, Collection<T> collection, ABPickerController<T> pickerController) {
+        if (null == expect || ABTextUtil.isEmpty(collection)) {
+            return null;
+        }
+        T picked = null;
+        for (T t : collection) {
+            if (pickerController.isPicked(expect, t)) {
+                picked = t;
+                break;
+            }
+        }
+        return picked;
+    }
+
+    public static <T> List<T> pick(T expect, Collection<T> collection, ABPickerController<T> pickerController) {
+        if (null == expect || ABTextUtil.isEmpty(collection)) {
+            return null;
+        }
+        if (null == pickerController) {
+            Logger.e(TAG, "PickerController can not be null!");
+            return null;
+        }
+        List<T> picked = new ArrayList<>();
+        for (T t : collection) {
+            if (pickerController.isPicked(expect, t)) {
                 picked.add(t);
             }
         }

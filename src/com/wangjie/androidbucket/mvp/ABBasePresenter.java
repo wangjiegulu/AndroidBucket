@@ -35,22 +35,16 @@ public class ABBasePresenter<V extends ABActivityViewer, I extends ABInteractor>
 
     @Override
     public void removeCancelableTask(CancelableTask cancelableTask) {
-        Logger.d(TAG, "removeCancelableTask: " + cancelableTask);
+        Logger.i(TAG, "removeCancelableTask: " + cancelableTask);
         cancelableTaskList.remove(cancelableTask);
     }
 
     @Override
     public void closeAllTask() {
-//        for (CancelableTask cancelableTask : cancelableTaskList) {
-//            if (cancelableTask != null) {
-//                Logger.d(TAG, "closeAllTask: " + cancelableTask);
-//                cancelableTask.cancel(false);
-//            }
-//        }
         Iterator<CancelableTask> iter = cancelableTaskList.iterator();
         while (iter.hasNext()) {
             CancelableTask task = iter.next();
-            Logger.d(TAG, "closeAllTask: " + task);
+            Logger.i(TAG, "closeAllTask: " + task);
             task.cancel(false);
             iter.remove();
         }
