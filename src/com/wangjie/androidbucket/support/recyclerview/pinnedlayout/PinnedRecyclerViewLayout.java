@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.support.recyclerview.layoutmanager.ABaseLinearLayoutManager;
 import com.wangjie.androidbucket.support.recyclerview.listener.OnRecyclerViewScrollListener;
 
@@ -15,6 +16,8 @@ import com.wangjie.androidbucket.support.recyclerview.listener.OnRecyclerViewScr
  * Date: 2/2/15.
  */
 public class PinnedRecyclerViewLayout extends RelativeLayout {
+
+    private static final String TAG = PinnedRecyclerViewLayout.class.getSimpleName();
 
     public static interface OnRecyclerViewPinnedViewListener {
         void onPinnedViewRender(PinnedRecyclerViewLayout pinnedRecyclerViewLayout, View pinnedView, int position);
@@ -67,6 +70,10 @@ public class PinnedRecyclerViewLayout extends RelativeLayout {
     }
 
     public void refreshPinnedView() {
+        if (null == pinnedView || null == layoutManager) {
+            Logger.e(TAG, "Please init pinnedView and layoutManager with initRecyclerPinned method first!");
+            return;
+        }
         if (VISIBLE != pinnedView.getVisibility()) {
             pinnedView.setVisibility(VISIBLE);
         }
