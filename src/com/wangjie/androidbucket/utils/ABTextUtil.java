@@ -4,12 +4,9 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
-import com.wangjie.androidbucket.application.ABApplication;
 import com.wangjie.androidbucket.log.Logger;
-import org.apache.http.HttpResponse;
 
 import java.io.*;
 import java.util.Collection;
@@ -123,6 +120,10 @@ public class ABTextUtil {
             return str2.equals(str1);
         }
         return true;
+    }
+
+    public static String trim(CharSequence charSequence) {
+        return null == charSequence ? null : charSequence.toString().trim();
     }
 
     /**

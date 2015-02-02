@@ -463,4 +463,25 @@ public class ABFileUtil {
         MediaScannerConnection.scanFile(context, new String[]{path}, null, null);
     }
 
+    /**
+     * 获取项目根路径
+     *
+     * @param context
+     * @param applicationDir
+     * @return
+     */
+    public static String getApplicationPath(Context context, String applicationDir) {
+        // check whether the device has external storage
+        if (ABAppUtil.haveSDCard()) {
+            String sdcardPath = Environment.getExternalStorageDirectory().toString()
+                    + File.separator + applicationDir + File.separator;
+            Logger.d(TAG, "have sdcard! sdcard path: " + sdcardPath);
+            return sdcardPath;
+        } else {
+            String dirPath = context.getCacheDir().getAbsoluteFile() + File.separator;
+            Logger.d(TAG, "have no sdcard! dir path: " + dirPath);
+            return dirPath;
+        }
+    }
+
 }

@@ -111,12 +111,19 @@ public class ABViewUtil {
     }
 
     /**
-     * 使用ColorFilter来改变ImageView的亮度
+     * 使用ColorFilter来改变亮度
      *
      * @param imageview
      * @param brightness
      */
     public static void changeBrightness(ImageView imageview, float brightness) {
+        imageview.setColorFilter(getBrightnessMatrixColorFilter(brightness));
+    }
+    public static void changeBrightness(Drawable drawable, float brightness) {
+        drawable.setColorFilter(getBrightnessMatrixColorFilter(brightness));
+    }
+
+    private static ColorMatrixColorFilter getBrightnessMatrixColorFilter(float brightness) {
         ColorMatrix matrix = new ColorMatrix();
         matrix.set(
                 new float[]{
@@ -125,7 +132,7 @@ public class ABViewUtil {
                         0, 0, 1, 0, brightness,
                         0, 0, 0, 1, 0
                 });
-        imageview.setColorFilter(new ColorMatrixColorFilter(matrix));
+        return new ColorMatrixColorFilter(matrix);
     }
 
 }

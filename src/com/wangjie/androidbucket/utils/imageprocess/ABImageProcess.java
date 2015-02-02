@@ -29,33 +29,36 @@ public class ABImageProcess {
     /***************************************BLUR START****************************************/
     /**
      * 模糊处理图片，默认先缩小（默认缩放为原图的1/8），再模糊处理再放大（高效率）
+     *
      * @param bm
      * @param view
      * @return
      */
-    public static Bitmap fastBlur(Bitmap bm, View view){
+    public static Bitmap fastBlur(Bitmap bm, View view) {
         return fastBlur(bm, view, true, 8);
     }
 
     /**
      * 模糊处理后，为view设置为background，默认先缩小（默认缩放为原图的1/8），再模糊处理再放大（高效率）
+     *
      * @param context
      * @param bm
      * @param view
      */
-    public static void fastBlurSetBg(Context context, Bitmap bm, View view){
+    public static void fastBlurSetBg(Context context, Bitmap bm, View view) {
         fastBlurSetBg(context, bm, view, true, 8);
     }
 
     /**
      * 模糊处理图片
+     *
      * @param bm
      * @param view
      * @param downScale
      * @param scaleF
      * @return
      */
-    public static Bitmap fastBlur(Bitmap bm, View view, boolean downScale, float scaleF){
+    public static Bitmap fastBlur(Bitmap bm, View view, boolean downScale, float scaleF) {
         long startMs = System.currentTimeMillis();
         float scaleFactor = 1;
         float radius = 20;
@@ -64,10 +67,10 @@ public class ABImageProcess {
             radius = 2;
         }
 
-        Bitmap overlay = Bitmap.createBitmap((int) (view.getMeasuredWidth()/scaleFactor),
-                (int) (view.getMeasuredHeight()/scaleFactor), Bitmap.Config.ARGB_8888);
+        Bitmap overlay = Bitmap.createBitmap((int) (view.getMeasuredWidth() / scaleFactor),
+                (int) (view.getMeasuredHeight() / scaleFactor), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(overlay);
-        canvas.translate(-view.getLeft()/scaleFactor, -view.getTop()/scaleFactor);
+        canvas.translate(-view.getLeft() / scaleFactor, -view.getTop() / scaleFactor);
         canvas.scale(1 / scaleFactor, 1 / scaleFactor);
         Paint paint = new Paint();
         // 处理bitmap缩放的时候，就可以达到双缓冲的效果，模糊处理的过程就更加顺畅了。
@@ -79,12 +82,13 @@ public class ABImageProcess {
         return overlay;
 
     }
-    public static Bitmap fastBlur(Bitmap bm, float scaleFactor, float radius, int width, int height){
+
+    public static Bitmap fastBlur(Bitmap bm, float scaleFactor, float radius, int width, int height) {
         long startMs = System.currentTimeMillis();
         scaleFactor = scaleFactor > 0 ? scaleFactor : 1;
         radius = radius > 0 ? radius : 20;
 
-        Bitmap overlay = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Bitmap overlay = Bitmap.createBitmap((int) (width / scaleFactor), (int) (height / scaleFactor), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(overlay);
 //        canvas.translate(-view.getLeft()/scaleFactor, -view.getTop()/scaleFactor);
         canvas.scale(1 / scaleFactor, 1 / scaleFactor);
@@ -96,11 +100,14 @@ public class ABImageProcess {
         overlay = FastBlur.doBlur(overlay, (int) radius, true);
         Logger.d(TAG, "fast blur takes: " + (System.currentTimeMillis() - startMs + "ms"));
         return overlay;
-
+    }
+    public static Bitmap fastBlur(Bitmap bm, float scaleFactor, float radius) {
+        return fastBlur(bm, scaleFactor, radius, bm.getWidth(), bm.getHeight());
     }
 
     /**
      * 模糊处理后，为view设置为background
+     *
      * @param context
      * @param bm
      * @param view
@@ -108,9 +115,9 @@ public class ABImageProcess {
      * @param scaleFactor
      */
     @TargetApi(Build.VERSION_CODES.DONUT)
-    public static void fastBlurSetBg(Context context, Bitmap bm, View view, boolean downScale, float scaleFactor){
+    public static void fastBlurSetBg(Context context, Bitmap bm, View view, boolean downScale, float scaleFactor) {
         Bitmap overlay = fastBlur(bm, view, downScale, scaleFactor);
-        if(null == overlay){
+        if (null == overlay) {
             Logger.e(TAG, "fast blur error(result[overlay] is null)");
             return;
         }
@@ -181,7 +188,7 @@ public class ABImageProcess {
 //                        width_tmp /= 2;
 //                        height_tmp /= 2;
 //                        scale *= 2;
-            if(width_tmp <= reqWidth || height_tmp <= reqHeight){
+            if (width_tmp <= reqWidth || height_tmp <= reqHeight) {
                 break;
             }
             width_tmp /= 2;
@@ -192,8 +199,6 @@ public class ABImageProcess {
 
         return scale;
     }
-
-
 
 
     /**
@@ -241,7 +246,7 @@ public class ABImageProcess {
     public static Bitmap getSmallBitmapQuality(String filePath, int w, int h, int quality) {
         Bitmap bm = getSmallBitmap(filePath, w, h);
 
-        if(quality >= 100 || quality <= 0){
+        if (quality >= 100 || quality <= 0) {
             return bm;
         }
 
@@ -258,6 +263,7 @@ public class ABImageProcess {
 
     /**
      * 压缩到指定大小容量
+     *
      * @param image
      * @param size
      * @return
@@ -267,7 +273,7 @@ public class ABImageProcess {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
         int options = 100;
-        while (baos.toByteArray().length / 1024 > size) {	//循环判断如果压缩后图片是否大于100kb,大于继续压缩
+        while (baos.toByteArray().length / 1024 > size) {    //循环判断如果压缩后图片是否大于100kb,大于继续压缩
             baos.reset();//重置baos即清空baos
             options -= 10;//每次都减少10
             image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
@@ -282,7 +288,7 @@ public class ABImageProcess {
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
         //开始读入图片，此时把options.inJustDecodeBounds 设回true了
         newOpts.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(srcPath,newOpts);//此时返回bm为空
+        BitmapFactory.decodeFile(srcPath, newOpts);//此时返回bm为空
 
         int w = newOpts.outWidth;
         int h = newOpts.outHeight;
@@ -315,7 +321,7 @@ public class ABImageProcess {
             os.flush();
         } catch (Exception e) {
             Logger.e(TAG, e);
-        }finally{
+        } finally {
             ABIOUtil.closeIO(isBm, os);
             ABIOUtil.recycleBitmap(bitmap);
         }
@@ -327,7 +333,7 @@ public class ABImageProcess {
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
         //开始读入图片，此时把options.inJustDecodeBounds 设回true了
         newOpts.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(srcPath,newOpts);//此时返回bm为空
+        BitmapFactory.decodeFile(srcPath, newOpts);//此时返回bm为空
 
         int w = newOpts.outWidth;
         int h = newOpts.outHeight;
@@ -355,22 +361,14 @@ public class ABImageProcess {
     /***************************************图片压缩计算 END****************************************/
 
 
-
-
-
-
-
-
-
-
-
     /***************************************圆角/投影羽化/倒影 BEGIN****************************************/
     /**
      * 对图片进行圆角处理
-     * @author com.tiantian
-     * @param bitmap 要处理的Bitmap对象
+     *
+     * @param bitmap  要处理的Bitmap对象
      * @param roundPx 圆角半径设置
      * @return Bitmap对象
+     * @author com.tiantian
      */
     public static Bitmap roundedCornerBitmap(Bitmap bitmap, float roundPx) {
         int w = bitmap.getWidth();
@@ -393,6 +391,7 @@ public class ABImageProcess {
 
     /**
      * 图片加投影 羽化效果
+     *
      * @param originalBitmap
      * @return
      */
@@ -403,7 +402,7 @@ public class ABImageProcess {
         shadowPaint.setMaskFilter(blurFilter);
 
 		/*
-		 * int[] offsetXY = new int[2]; Bitmap shadowImage =
+         * int[] offsetXY = new int[2]; Bitmap shadowImage =
 		 * originalBitmap.extractAlpha(shadowPaint, offsetXY);
 		 *
 		 * Bitmap bmp=shadowImage.copy(Config.ARGB_8888, true); Canvas c = new
@@ -421,9 +420,10 @@ public class ABImageProcess {
 
     /**
      * 对图片进行倒影处理
-     * @author com.tiantian
+     *
      * @param bitmap
      * @return
+     * @author com.tiantian
      */
     public static Bitmap reflectionImageWithOrigin(Bitmap bitmap) {
         final int reflectionGap = 4;
@@ -465,11 +465,12 @@ public class ABImageProcess {
 
     /**
      * 放缩图片处理
-     * @author com.tiantian
+     *
      * @param bitmap 要放缩的Bitmap对象
-     * @param width 放缩后的宽度
+     * @param width  放缩后的宽度
      * @param height 放缩后的高度
      * @return 放缩后的Bitmap对象
+     * @author com.tiantian
      */
     public static Bitmap zoomBitmap(Bitmap bitmap, int width, int height) {
         int w = bitmap.getWidth();
@@ -481,13 +482,15 @@ public class ABImageProcess {
         Bitmap newbmp = Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
         return newbmp;
     }
+
     /**
      * 放缩图片处理
-     * @author com.tiantian
-     * @param bitmap 要放缩的Bitmap对象
-     * @param widthScale 放缩率
+     *
+     * @param bitmap      要放缩的Bitmap对象
+     * @param widthScale  放缩率
      * @param heightScale 放缩率
      * @return 放缩后的Bitmap对象
+     * @author com.tiantian
      */
     public static Bitmap zoomBitmapScale(Bitmap bitmap, float widthScale, float heightScale) {
         int w = bitmap.getWidth();
@@ -502,6 +505,7 @@ public class ABImageProcess {
 
     /**
      * Drawable缩放
+     *
      * @param drawable
      * @param w
      * @param h
@@ -527,18 +531,21 @@ public class ABImageProcess {
 
     /**
      * 将Bitmap转化为Drawable
-     * @author com.tiantian
+     *
      * @param bitmap
      * @return
+     * @author com.tiantian
      */
-    public static Drawable bitmap2Drawable(Bitmap bitmap){
-        return new BitmapDrawable(bitmap) ;
+    public static Drawable bitmap2Drawable(Bitmap bitmap) {
+        return new BitmapDrawable(bitmap);
     }
+
     /**
      * 将Drawable转化为Bitmap
-     * @author com.tiantian
+     *
      * @param drawable
      * @return
+     * @author com.tiantian
      */
     public static Bitmap drawable2Bitmap(Drawable drawable) {
         // 取 drawable 的长宽
@@ -561,16 +568,17 @@ public class ABImageProcess {
     /***********************************图片基本处理（缩放/转换）BEGIN*************************************/
 
 
-
     /***********************************图片基本基本信息 BEGIN*************************************/
 
     /**
      * 读取图片属性：旋转的角度
+     *
      * @param path 图片绝对路径
      * @return degree旋转的角度
      */
+    @TargetApi(Build.VERSION_CODES.ECLAIR)
     public static int readPictureDegreeFromExif(String path) {
-        int degree  = 0;
+        int degree = 0;
         try {
             ExifInterface exifInterface = new ExifInterface(path);
             int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
@@ -597,9 +605,10 @@ public class ABImageProcess {
      * @param bitmap
      * @return Bitmap
      */
-    public static Bitmap rotaingImage(int angle , Bitmap bitmap){
+    public static Bitmap rotaingImage(int angle, Bitmap bitmap) {
         //旋转图片 动作
-        Matrix matrix = new Matrix();;
+        Matrix matrix = new Matrix();
+        ;
         matrix.postRotate(angle);
         // 创建新的图片
         Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
@@ -609,15 +618,16 @@ public class ABImageProcess {
 
     /**
      * 处理相机照片旋转角度
+     *
      * @param path 用于获取原图的信息
      * @return 原图的bitmap（可以是被压缩过的）
      */
-    public static Bitmap formatCameraPictureOriginal(String path, Bitmap bitmap){
+    public static Bitmap formatCameraPictureOriginal(String path, Bitmap bitmap) {
         /**
          * 获取图片的旋转角度，有些系统把拍照的图片旋转了，有的没有旋转
          */
         int degree = ABImageProcess.readPictureDegreeFromExif(path);
-        if(0 == degree){
+        if (0 == degree) {
             return bitmap;
         }
         /**
@@ -627,19 +637,21 @@ public class ABImageProcess {
         ABIOUtil.recycleBitmap(bitmap);
         return newbitmap;
     }
+
     /**
      * 处理相机照片旋转角度
+     *
      * @param path
      * @return
      */
-    public static Bitmap formatCameraPicture(String path){
+    public static Bitmap formatCameraPicture(String path) {
         /**
          * 获取图片的旋转角度，有些系统把拍照的图片旋转了，有的没有旋转
          */
         int degree = ABImageProcess.readPictureDegreeFromExif(path);
-        BitmapFactory.Options opts=new BitmapFactory.Options();//获取缩略图显示到屏幕上
+        BitmapFactory.Options opts = new BitmapFactory.Options();//获取缩略图显示到屏幕上
         opts.inSampleSize = 2;
-        Bitmap cbitmap = BitmapFactory.decodeFile(path,opts);
+        Bitmap cbitmap = BitmapFactory.decodeFile(path, opts);
         /**
          * 把图片旋转为正的方向
          */
@@ -653,17 +665,18 @@ public class ABImageProcess {
     /***********************************图片初始化 BEGIN*************************************/
     /**
      * 从Resource中获取Drawable，并初始化bound
+     *
      * @param context
      * @param drawableResId
      * @param bound
      * @return
      */
-    public static Drawable getResourceDrawableBounded(Context context, int drawableResId, int bound){
+    public static Drawable getResourceDrawableBounded(Context context, int drawableResId, int bound) {
         Drawable drawable = null;
-        try{
+        try {
             drawable = context.getResources().getDrawable(drawableResId);
             drawable.setBounds(0, 0, bound, bound);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Logger.e(TAG, ex);
         }
         return drawable;
