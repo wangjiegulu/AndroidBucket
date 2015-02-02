@@ -76,13 +76,13 @@ public abstract class Runtask<U, R> implements Runnable, CancelableTask {
         rHandler.sendMessage(msg);
     }
 
-    public void onBefore() {
+    protected void onBefore() {
     }
 
-    public void onUpdateUiCallBack(U obj) {
+    protected void onUpdateUiCallBack(U obj) {
     }
 
-    public void onResult(R result) {
+    protected void onResult(R result) {
     }
 
     public void cancel() {

@@ -2,6 +2,8 @@ package com.wangjie.androidbucket.mvp;
 
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.CancelableTask;
+import com.wangjie.androidbucket.thread.Runtask;
+import com.wangjie.androidbucket.thread.ThreadPool;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -49,5 +51,10 @@ public class ABBasePresenter<V extends ABActivityViewer, I extends ABInteractor>
             iter.remove();
         }
 
+    }
+
+    public <U, R> void goRuntask(Runtask<U, R> runtask) {
+        addCancelableTask(runtask);
+        ThreadPool.go(runtask);
     }
 }
