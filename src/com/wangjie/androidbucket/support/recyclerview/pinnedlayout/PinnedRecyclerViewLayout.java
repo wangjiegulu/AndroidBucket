@@ -69,6 +69,9 @@ public class PinnedRecyclerViewLayout extends RelativeLayout {
         pinnedView.setVisibility(GONE);
     }
 
+    // 保存上次的position
+    private int lastPosition = RecyclerView.NO_POSITION;
+
     public void refreshPinnedView() {
         if (null == pinnedView || null == layoutManager) {
             Logger.e(TAG, "Please init pinnedView and layoutManager with initRecyclerPinned method first!");
@@ -85,6 +88,13 @@ public class PinnedRecyclerViewLayout extends RelativeLayout {
         if (null == curItemView) {
             return;
         }
+        // 如果当前的curPosition和上次的lastPosition不一样，则说明需要重新刷新数据，避免curPosition一样的情况下重复刷新相同数据
+        if (curPosition != lastPosition) {
+            if (null != onRecyclerViewPinnedViewListener) {
+                onRecyclerViewPinnedViewListener.onPinnedViewRender(this, pinnedView, curPosition);
+            }
+            lastPosition = curPosition;
+        }
 
         int displayTop;
         int itemHeight = curItemView.getHeight();
@@ -94,9 +104,6 @@ public class PinnedRecyclerViewLayout extends RelativeLayout {
             displayTop = itemHeight + curTop - floatHeight;
         } else {
             displayTop = 0;
-            if (null != onRecyclerViewPinnedViewListener) {
-                onRecyclerViewPinnedViewListener.onPinnedViewRender(this, pinnedView, curPosition);
-            }
         }
         RelativeLayout.LayoutParams lp = (LayoutParams) pinnedView.getLayoutParams();
         lp.topMargin = displayTop;
