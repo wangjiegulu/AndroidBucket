@@ -2,7 +2,6 @@ package com.wangjie.androidbucket.services.network;
 
 import com.wangjie.androidbucket.services.CancelableTask;
 import com.wangjie.androidbucket.services.network.exception.HippoException;
-import com.wangjie.androidbucket.services.network.exception.RetryFailedException;
 
 /**
  * @author Hubert He
@@ -82,39 +81,6 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
 
     public int getSeq() {
         return seq;
-    }
-
-    private class RetryPolicy {
-
-        private static final int DEFAULT_RETRY_COUNT = 3;
-
-        private RetryPolicy() {
-            this(DEFAULT_RETRY_COUNT);
-        }
-
-        private RetryPolicy(int currentCount) {
-            this.currentCount = currentCount;
-        }
-
-        private int currentCount;
-
-        public int getCurrentCount() {
-            return currentCount;
-        }
-
-        public void retry(HippoException e) throws RetryFailedException {
-            if (currentCount <= 0) {
-                throw new RetryFailedException("Retry request failed.", e);
-            }
-            currentCount--;
-        }
-
-        @Override
-        public String toString() {
-            return "RetryPolicy{" +
-                    "currentCount=" + currentCount +
-                    '}';
-        }
     }
 
     public boolean isRequestOnly() {
