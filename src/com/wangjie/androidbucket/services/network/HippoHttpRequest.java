@@ -174,15 +174,4 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
             return URLEncodedUtils.format(nameValuePairList, DEFAULT_PARAMS_ENCODING);
         return "";
     }
-
-    @Override
-    public void abort() {
-        if (getState() == State.FINISHING) {
-            return;
-        }
-        super.abort();
-        if (request != null) {
-            request.abort();
-        }
-    }
 }
