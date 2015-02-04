@@ -1,7 +1,9 @@
 package com.wangjie.androidbucket.mvp;
 
+import com.wangjie.androidbucket.application.HttpApplicationController;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.CancelableTask;
+import com.wangjie.androidbucket.services.network.HippoRequest;
 import com.wangjie.androidbucket.thread.Runtask;
 import com.wangjie.androidbucket.thread.ThreadPool;
 
@@ -57,4 +59,10 @@ public class ABBasePresenter<V extends ABActivityViewer, I extends ABInteractor>
         addCancelableTask(runtask);
         ThreadPool.go(runtask);
     }
+
+    public void addHttpRequest(HippoRequest request) {
+        addCancelableTask(request);
+        HttpApplicationController.getInstance().addToRequestQueue(request);
+    }
+
 }

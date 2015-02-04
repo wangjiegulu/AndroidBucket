@@ -101,6 +101,7 @@ public class ABImageProcess {
         Logger.d(TAG, "fast blur takes: " + (System.currentTimeMillis() - startMs + "ms"));
         return overlay;
     }
+
     public static Bitmap fastBlur(Bitmap bm, float scaleFactor, float radius) {
         return fastBlur(bm, scaleFactor, radius, bm.getWidth(), bm.getHeight());
     }
@@ -210,7 +211,7 @@ public class ABImageProcess {
     public static Bitmap getSmallBitmap(String filePath, int w, int h) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, options);
+        decodeFile(filePath, options);
 
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, w, h);
@@ -222,8 +223,17 @@ public class ABImageProcess {
 //        Bitmap b = BitmapFactory.decodeFile(filePath, options);
 
 //        OperatePic.zoomBitmap(b, w, h);
-
-        return formatCameraPictureOriginal(filePath, BitmapFactory.decodeFile(filePath, options));
+        Bitmap resultBm = null;
+        try {
+            Bitmap proBm = decodeFile(filePath, options);
+            if (null == proBm) {
+                return resultBm;
+            }
+            resultBm = formatCameraPictureOriginal(filePath, proBm);
+        } catch (Throwable ex) {
+            Logger.e(TAG, ex);
+        }
+        return resultBm;
     }
 
     public static Bitmap getSmallBitmapZoom(String filePath, int w, int h) {
@@ -246,7 +256,7 @@ public class ABImageProcess {
     public static Bitmap getSmallBitmapQuality(String filePath, int w, int h, int quality) {
         Bitmap bm = getSmallBitmap(filePath, w, h);
 
-        if (quality >= 100 || quality <= 0) {
+        if (null == bm || quality >= 100 || quality <= 0) {
             return bm;
         }
 
@@ -288,7 +298,7 @@ public class ABImageProcess {
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
         //开始读入图片，此时把options.inJustDecodeBounds 设回true了
         newOpts.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(srcPath, newOpts);//此时返回bm为空
+        decodeFile(srcPath, newOpts);//此时返回bm为空
 
         int w = newOpts.outWidth;
         int h = newOpts.outHeight;
@@ -307,7 +317,10 @@ public class ABImageProcess {
         newOpts.inSampleSize = be;//设置缩放比例
         //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
         newOpts.inJustDecodeBounds = false;
-        Bitmap bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
+        Bitmap bitmap = decodeFile(srcPath, newOpts);
+        if(null == bitmap){
+            return;
+        }
 
         bitmap = formatCameraPictureOriginal(srcPath, bitmap); // 保证图片方向正常
 
@@ -333,7 +346,7 @@ public class ABImageProcess {
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
         //开始读入图片，此时把options.inJustDecodeBounds 设回true了
         newOpts.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(srcPath, newOpts);//此时返回bm为空
+        decodeFile(srcPath, newOpts);//此时返回bm为空
 
         int w = newOpts.outWidth;
         int h = newOpts.outHeight;
@@ -352,7 +365,10 @@ public class ABImageProcess {
         newOpts.inSampleSize = be;//设置缩放比例
         //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
         newOpts.inJustDecodeBounds = false;
-        Bitmap bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
+        Bitmap bitmap = decodeFile(srcPath, newOpts);
+        if(null == bitmap){
+            return null;
+        }
         return BitmapFactory.decodeStream(
                 compressImage(bitmap, size), // 缩小到指定容量
                 null, null);//把ByteArrayInputStream数据生成图片
@@ -651,7 +667,10 @@ public class ABImageProcess {
         int degree = ABImageProcess.readPictureDegreeFromExif(path);
         BitmapFactory.Options opts = new BitmapFactory.Options();//获取缩略图显示到屏幕上
         opts.inSampleSize = 2;
-        Bitmap cbitmap = BitmapFactory.decodeFile(path, opts);
+        Bitmap cbitmap = decodeFile(path, opts);
+        if (null == cbitmap) {
+            return null;
+        }
         /**
          * 把图片旋转为正的方向
          */
@@ -682,7 +701,18 @@ public class ABImageProcess {
         return drawable;
     }
 
-    /***********************************图片初始化 END*************************************/
+    /**
+     * ********************************图片初始化 END************************************
+     */
 
+    private static Bitmap decodeFile(String pathName, BitmapFactory.Options options) {
+        Bitmap resultBm = null;
+        try {
+            resultBm = BitmapFactory.decodeFile(pathName, options);
+        } catch (Throwable throwable) {
+            Logger.e(TAG, throwable);
+        }
+        return resultBm;
+    }
 
 }
