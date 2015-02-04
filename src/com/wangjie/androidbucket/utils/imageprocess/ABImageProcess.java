@@ -142,8 +142,9 @@ public class ABImageProcess {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 40, baos);
         byte[] b = baos.toByteArray();
-
-        return Base64.encodeToString(b, Base64.DEFAULT);
+        String str = Base64.encodeToString(b, Base64.DEFAULT);
+        ABIOUtil.recycleBitmap(bm);
+        return str;
 
     }
 
@@ -230,6 +231,7 @@ public class ABImageProcess {
                 return resultBm;
             }
             resultBm = formatCameraPictureOriginal(filePath, proBm);
+            ABIOUtil.recycleBitmap(proBm);
         } catch (Throwable ex) {
             Logger.e(TAG, ex);
         }
@@ -249,8 +251,10 @@ public class ABImageProcess {
 //        options.inJustDecodeBounds = false;
 //
 //        Bitmap b = BitmapFactory.decodeFile(filePath, options);
-
-        return zoomBitmap(getSmallBitmap(filePath, w, h), w, h);
+        Bitmap smallBm = getSmallBitmap(filePath, w, h);
+        Bitmap zoomBm = zoomBitmap(smallBm, w, h);
+        ABIOUtil.recycleBitmap(smallBm);
+        return zoomBm;
     }
 
     public static Bitmap getSmallBitmapQuality(String filePath, int w, int h, int quality) {
@@ -266,7 +270,7 @@ public class ABImageProcess {
 
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
         Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
-
+        ABIOUtil.recycleBitmap(bm);
         return bitmap;
     }
 
@@ -318,7 +322,7 @@ public class ABImageProcess {
         //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
         newOpts.inJustDecodeBounds = false;
         Bitmap bitmap = decodeFile(srcPath, newOpts);
-        if(null == bitmap){
+        if (null == bitmap) {
             return;
         }
 
@@ -365,13 +369,24 @@ public class ABImageProcess {
         newOpts.inSampleSize = be;//设置缩放比例
         //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
         newOpts.inJustDecodeBounds = false;
-        Bitmap bitmap = decodeFile(srcPath, newOpts);
-        if(null == bitmap){
-            return null;
+
+        Bitmap bitmap = null;
+        ByteArrayInputStream commpressedBm = null;
+        Bitmap resultBm = null;
+        try {
+            bitmap = decodeFile(srcPath, newOpts);
+            if (null == bitmap) {
+                return null;
+            }
+            commpressedBm = compressImage(bitmap, size);
+            resultBm = BitmapFactory.decodeStream(
+                    commpressedBm, // 缩小到指定容量
+                    null, null);//把ByteArrayInputStream数据生成图片
+        } finally {
+            ABIOUtil.recycleBitmap(bitmap);
+            ABIOUtil.closeIO(commpressedBm);
         }
-        return BitmapFactory.decodeStream(
-                compressImage(bitmap, size), // 缩小到指定容量
-                null, null);//把ByteArrayInputStream数据生成图片
+        return resultBm;
     }
 
     /***************************************图片压缩计算 END****************************************/
@@ -542,6 +557,7 @@ public class ABImageProcess {
         // 建立新的bitmap，其内容是对原bitmap的缩放后的图
         Bitmap newbmp = Bitmap.createBitmap(oldbmp, 0, 0, width, height,
                 matrix, true);
+        ABIOUtil.recycleBitmap(oldbmp);
         return new BitmapDrawable(newbmp);
     }
 
@@ -675,6 +691,7 @@ public class ABImageProcess {
          * 把图片旋转为正的方向
          */
         Bitmap newbitmap = rotaingImage(degree, cbitmap);
+        ABIOUtil.recycleBitmap(cbitmap);
         return newbitmap;
     }
 
