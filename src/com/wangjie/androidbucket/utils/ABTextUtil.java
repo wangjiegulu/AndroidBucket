@@ -127,6 +127,25 @@ public class ABTextUtil {
     }
 
     /**
+     * 摘取里面第一个不为null的字符串
+     * @param options
+     * @return
+     */
+    public static String pickFirstNotNull(CharSequence... options) {
+        if (isEmpty(options)) {
+            return null;
+        }
+        String result = null;
+        for (CharSequence cs : options) {
+            if (null != cs) {
+                result = cs.toString();
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
      * 替换文本为图片
      *
      * @param charSequence
