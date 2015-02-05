@@ -228,7 +228,7 @@ public class ABImageProcess {
         try {
             Bitmap proBm = decodeFile(filePath, options);
             if (null == proBm) {
-                return resultBm;
+                return null;
             }
             resultBm = formatCameraPictureOriginal(filePath, proBm);
             ABIOUtil.recycleBitmap(proBm);
@@ -640,7 +640,6 @@ public class ABImageProcess {
     public static Bitmap rotaingImage(int angle, Bitmap bitmap) {
         //旋转图片 动作
         Matrix matrix = new Matrix();
-        ;
         matrix.postRotate(angle);
         // 创建新的图片
         Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
