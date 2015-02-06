@@ -231,7 +231,6 @@ public class ABImageProcess {
                 return null;
             }
             resultBm = formatCameraPictureOriginal(filePath, proBm);
-            ABIOUtil.recycleBitmap(proBm);
         } catch (Throwable ex) {
             Logger.e(TAG, ex);
         }
