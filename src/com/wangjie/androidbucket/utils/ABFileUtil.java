@@ -484,4 +484,49 @@ public class ABFileUtil {
         }
     }
 
+    /**
+     * 获取一个文件对象，如果不存在，则自动创建
+     *
+     * @param filePath
+     * @return
+     */
+    public static File getFileAutoCreated(String filePath) {
+        File file = new File(filePath);
+        if (file.isDirectory()) {
+            Logger.e(TAG, "[getFileAutoCreated]file[" + filePath + "] is directory!");
+            return file;
+        }
+        if (file.exists()) {
+            return file;
+        }
+        File parentFile = file.getParentFile();
+        if (!parentFile.exists()) {
+            parentFile.mkdirs();
+        }
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            Logger.e(TAG, e);
+        }
+        return file;
+    }
+
+    /**
+     * 获取一个目录对象，如果不存在，则自动创建
+     *
+     * @param dirPath
+     * @return
+     */
+    public static File getDirAutoCreated(String dirPath) {
+        File dirFile = new File(dirPath);
+        if (dirFile.isFile()) {
+            Logger.e(TAG, "[getDirAutoCreated]file[" + dirPath + "] is file!");
+            return dirFile;
+        }
+        if (!dirFile.exists()) {
+            dirFile.mkdirs();
+        }
+        return dirFile;
+    }
+
 }

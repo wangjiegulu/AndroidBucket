@@ -25,9 +25,17 @@ public class CircleDrawable extends Drawable {
     }
 
     public CircleDrawable(int borderColor, int fillColor, float border) {
+        this(borderColor, fillColor, border, 0);
+    }
+
+    public CircleDrawable(int borderColor, int fillColor, float border, int drawRadius) {
         this.borderColor = borderColor;
         this.fillColor = fillColor;
         this.border = border;
+        this.radius = drawRadius;
+
+        paint.setAntiAlias(true);
+        paint.setTextAlign(Paint.Align.CENTER);
     }
 
     @Override
@@ -35,7 +43,10 @@ public class CircleDrawable extends Drawable {
         super.onBoundsChange(bounds);
         circleX = (bounds.left + bounds.right) / 2;
         circleY = (bounds.top + bounds.bottom) / 2;
-        radius = bounds.right - bounds.left - 2 * border;
+        if (radius <= 0) {
+            int circleSize = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top);
+            radius = (circleSize - 2 * border) / 2;
+        }
     }
 
     @Override
