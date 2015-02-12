@@ -99,7 +99,7 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     }
 
     private boolean shouldCallBack() {
-        return null != baseActivityManager && isActivityLifeCycleAutoCallBack;
+        return null != baseActivityManager && isActivityLifeCycleAutoCallBack && !isFinishing();
     }
 
 

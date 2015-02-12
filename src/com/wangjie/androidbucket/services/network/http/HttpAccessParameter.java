@@ -5,6 +5,8 @@ import com.wangjie.androidbucket.utils.ABTextUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,7 +30,7 @@ public class HttpAccessParameter extends BaseAccessParameter {
     private NameValuePair[] paramNameValuePairs;
 
     // HTTP头参数
-    private NameValuePair[] headNameValuePairs;
+    private List<NameValuePair> headNameValuePairList;
 
     // 是否传递raw
     private boolean isRaw;
@@ -56,6 +58,7 @@ public class HttpAccessParameter extends BaseAccessParameter {
         this.webApi = webApi;
         this.method = method;
         this.paramNameValuePairs = paramNameValuePairs;
+        headNameValuePairList = new ArrayList<>();
         isRaw = false;
     }
 
@@ -99,11 +102,21 @@ public class HttpAccessParameter extends BaseAccessParameter {
     }
 
     public NameValuePair[] getHeadNameValuePairs() {
-        return headNameValuePairs;
+        return headNameValuePairList != null ? headNameValuePairList.toArray(new NameValuePair[headNameValuePairList.size()]) : null;
     }
 
     public HttpAccessParameter setHeadNameValuePairs(NameValuePair... headNameValuePairs) {
-        this.headNameValuePairs = headNameValuePairs;
+        if (headNameValuePairs != null) {
+            headNameValuePairList.clear();
+            headNameValuePairList.addAll(Arrays.asList(headNameValuePairs));
+        }
+        return this;
+    }
+
+    public HttpAccessParameter addHeadNameValuePairs(NameValuePair... headNameValuePairs) {
+        if (headNameValuePairs != null) {
+            headNameValuePairList.addAll(Arrays.asList(headNameValuePairs));
+        }
         return this;
     }
 

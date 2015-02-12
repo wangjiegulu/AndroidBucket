@@ -104,7 +104,7 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
         if (url != null) {
             try {
                 String appendUrl = generateUrlParam(urlParams);
-                if (appendUrl != null || appendUrl.length() > 0) {
+                if (appendUrl != null && appendUrl.length() > 0) {
                     if (url.contains("?")) {
                         if (!url.endsWith("?")) {
                             url += "&";

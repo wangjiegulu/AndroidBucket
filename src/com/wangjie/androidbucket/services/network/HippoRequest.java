@@ -65,7 +65,7 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
     }
 
     public void cancel() {
-        if (state == State.FINISHING) {
+        if (state == State.FINISHING || state == State.FINISHED) {
             return;
         }
         setState(State.CANCELING);
