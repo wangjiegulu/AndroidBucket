@@ -4,6 +4,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
 
@@ -58,6 +59,15 @@ public class ABShape {
                 generateCornerShapeDrawable(normalColor, corner),
                 generateCornerShapeDrawable(pressedColor, corner)
         );
+    }
+
+    public static ShapeDrawable generateBackgroundDrawable(int color) {
+        Shape shape = new OvalShape();
+        ShapeDrawable sd = new ShapeDrawable(shape);
+        Paint paint = sd.getPaint();
+        paint.setColor(color);
+        paint.setStyle(Paint.Style.FILL);
+        return sd;
     }
 
 }
