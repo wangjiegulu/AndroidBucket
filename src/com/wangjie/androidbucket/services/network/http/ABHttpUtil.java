@@ -3,13 +3,8 @@ package com.wangjie.androidbucket.services.network.http;
 import android.util.Log;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.network.http.interceptor.HttpMethodInterceptor;
-import com.wangjie.androidbucket.utils.ABIOUtil;
 import com.wangjie.androidbucket.utils.ABTextUtil;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
+import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -33,7 +28,6 @@ import java.io.*;
 import java.security.KeyStore;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
 /**
  * @author Hubert He
@@ -52,11 +46,11 @@ public class ABHttpUtil {
     }
 
     public static interface OnHttpSessionConnectListener {
-        String getSessionParameterUrl();
-
         String getDomain();
 
         int[] getPorts();
+
+        Map<String, String> getHttpHeaders();
     }
 
     private static OnHttpSessionConnectListener onHttpSessionConnectListener;
@@ -220,14 +214,16 @@ public class ABHttpUtil {
                 httpRequest.addHeader(header.getName(), header.getValue());
             }
         }
+        // If not specific do not add authorization header
+        if (accessParameter.getSessionEnableMethod() != HttpAccessParameter.SessionEnableMethod.DISABLE) {
+            addExtraHeaders(httpRequest);
+        }
         try {
             // 将流转换为字符串
             HttpResponse httpResponse = getHttpResponse(soTimeout,
                     connectionTimeout,
                     httpRequest,
                     url);
-
-
             String strResult = ABTextUtil.inputStream2StringFromGZIP(httpResponse.getEntity().getContent());
             Logger.d(TAG, String.format("Response from server value(\"%s\")", strResult));
             return strResult;
@@ -286,21 +282,17 @@ public class ABHttpUtil {
         String url =
                 null == onHttpSessionConnectListener ? httpConfig.getDomain() : onHttpSessionConnectListener.getDomain();
         url += accessParameter.getWebApi();
-
-        HttpAccessParameter.SessionEnableMethod sessionEnableMethod = accessParameter.getSessionEnableMethod();
-        if (sessionEnableMethod == HttpAccessParameter.SessionEnableMethod.AUTO) {
-            if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.getSessionParameterUrl() != null) {
-                url += (url.contains("?") ? "&" : "?") + onHttpSessionConnectListener.getSessionParameterUrl();
-            }
-        } else if (sessionEnableMethod == HttpAccessParameter.SessionEnableMethod.ENABLE) {
-            if (onHttpSessionConnectListener != null && onHttpSessionConnectListener.getSessionParameterUrl() != null) {
-                url += (url.contains("?") ? "&" : "?") + onHttpSessionConnectListener.getSessionParameterUrl();
-            } else {
-                throw new Exception("None session configuration problem.");
-            }
-        }
         Logger.d(TAG, "Connect to " + url);
         return url;
+    }
+
+    private static void addExtraHeaders(HttpUriRequest request) {
+        Map<String, String> headers = onHttpSessionConnectListener.getHttpHeaders();
+        if (headers != null) {
+            for (String key : headers.keySet()) {
+                request.setHeader(key, headers.get(key));
+            }
+        }
     }
 
     // 获取一个可用的Http配置，如果没有配置则返回一个默认值
@@ -334,8 +326,6 @@ public class ABHttpUtil {
         }
         return nvps;
     }
-
-
 
 
 }

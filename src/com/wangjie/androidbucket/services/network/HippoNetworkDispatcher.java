@@ -6,6 +6,7 @@ import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.network.exception.HippoException;
 import com.wangjie.androidbucket.services.network.interceptor.Interceptor;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -70,7 +71,7 @@ public class HippoNetworkDispatcher extends Thread {
                 if (!request.isCancel()) {
                     mHandler = new Handler(Looper.getMainLooper());
                     mHandler.post(new ResponseDispatcherRunnable(request, networkResponse));
-                    Logger.d(TAG, String.format("Request: %d finish at %d.", request.getSeq(), System.currentTimeMillis()));
+                    Logger.d(TAG, String.format("Request: %d finish at %s.", request.getSeq(), new Date().toString()));
                 }
                 request.setState(HippoRequest.State.FINISHED);
             }
