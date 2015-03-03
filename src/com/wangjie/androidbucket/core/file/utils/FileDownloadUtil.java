@@ -1,5 +1,7 @@
 package com.wangjie.androidbucket.core.file.utils;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import com.wangjie.androidbucket.utils.ABIOUtil;
 import com.wangjie.androidbucket.utils.ABTextUtil;
 import org.apache.http.HttpResponse;
@@ -31,6 +33,7 @@ public class FileDownloadUtil {
      * @return
      * @throws IOException
      */
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public static File download(String url, String filePath, NameValuePair... headers) throws IOException {
         File file = new File(filePath);
         file.setReadable(true, false);
@@ -76,7 +79,7 @@ public class FileDownloadUtil {
      */
     public static File downloadAnyWay(String url, String filePath, NameValuePair... headers) throws IOException {
         File file = new File(filePath);
-        if(file.exists()){
+        if (file.exists()) {
             file.delete();
         }
         file.createNewFile();
@@ -85,29 +88,19 @@ public class FileDownloadUtil {
 
     /**
      * 如果不存在，则下载；如果存在则不下载，直接返回
+     *
      * @param url
      * @param filePath
      * @param headers
      * @return
      * @throws Exception
      */
-    public static File downloadIfNotExist(String url, String filePath, NameValuePair... headers) throws Exception{
+    public static File downloadIfNotExist(String url, String filePath, NameValuePair... headers) throws Exception {
         File file = new File(filePath);
-        if(file.exists()){
+        if (file.exists()) {
             return file;
         }
         return download(url, filePath, headers);
     }
 
-    /**
-     * 通过URL下载文件到指定路径
-     *
-     * @param url      URL
-     * @param filePath 指定路径
-     * @return
-     * @throws IOException
-     */
-    public static File download(String url, String filePath) throws IOException {
-        return download(url, filePath, null);
-    }
 }
