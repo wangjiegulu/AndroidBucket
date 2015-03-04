@@ -31,7 +31,8 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
      * Called when request get turn to run
      */
     public void onGetTicket() {
-        listener.onPreExecute();
+        if (listener != null)
+            listener.onPreExecute();
     }
 
     /**
