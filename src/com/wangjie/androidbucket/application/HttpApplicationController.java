@@ -1,6 +1,7 @@
 package com.wangjie.androidbucket.application;
 
 import android.util.Log;
+import com.wangjie.androidbucket.services.BaseAccessResponse;
 import com.wangjie.androidbucket.services.network.HippoRequest;
 import com.wangjie.androidbucket.services.network.HippoRequestQueue;
 import com.wangjie.androidbucket.services.network.http.SSLSocketFactoryEx;
@@ -67,7 +68,7 @@ public class HttpApplicationController extends ABApplication {
      *
      * @param req
      */
-    public <T> void addToRequestQueue(HippoRequest<T> req) {
+    public <T extends BaseAccessResponse> void addToRequestQueue(HippoRequest<T> req) {
         // set the default tag if tag is empty
         getHttpRequestQueue().add(req);
     }

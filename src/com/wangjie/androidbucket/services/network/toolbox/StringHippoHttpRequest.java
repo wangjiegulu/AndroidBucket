@@ -3,6 +3,7 @@ package com.wangjie.androidbucket.services.network.toolbox;
 import com.wangjie.androidbucket.services.network.HippoHttpRequest;
 import com.wangjie.androidbucket.services.network.NetworkResponse;
 import com.wangjie.androidbucket.services.network.HippoResponse;
+import com.wangjie.androidbucket.services.network.RequestListener;
 import com.wangjie.androidbucket.services.network.exception.HippoException;
 import org.apache.http.NameValuePair;
 
@@ -33,7 +34,7 @@ public class StringHippoHttpRequest extends HippoHttpRequest<String> {
                                   String url,
                                   NameValuePair[] headers,
                                   byte[] body,
-                                  HippoResponse.Listener<String> listener,
+                                  RequestListener<String> listener,
                                   HippoResponse.ErrorListener errorListener) {
         super(method, url, headers, body, listener, errorListener);
         this.encoding = encoding;
@@ -52,7 +53,7 @@ public class StringHippoHttpRequest extends HippoHttpRequest<String> {
     public StringHippoHttpRequest(String url,
                                   NameValuePair[] headers,
                                   byte[] body,
-                                  HippoResponse.Listener<String> listener,
+                                  RequestListener<String> listener,
                                   HippoResponse.ErrorListener errorListener) {
         this(Method.GET, DEFAULT_RESPONSE_ENCODING, url, headers, body, listener, errorListener);
     }
@@ -70,13 +71,13 @@ public class StringHippoHttpRequest extends HippoHttpRequest<String> {
                                   String url,
                                   NameValuePair[] headers,
                                   byte[] body,
-                                  HippoResponse.Listener<String> listener,
+                                  RequestListener<String> listener,
                                   HippoResponse.ErrorListener errorListener) {
         this(method, DEFAULT_RESPONSE_ENCODING, url, headers, body, listener, errorListener);
     }
 
     @Override
-    public void parseResponse(NetworkResponse response) {
+    public HippoResponse<String> parseResponse(NetworkResponse response) {
         HippoResponse<String> hippoResponse;
         if (response.isSuccess()) {
             try {
@@ -87,15 +88,6 @@ public class StringHippoHttpRequest extends HippoHttpRequest<String> {
         } else {
             hippoResponse = new HippoResponse<>(new HippoException("Cannot parse response due to this error happen.", response.getError()));
         }
-        deliverResponse(hippoResponse);
+        return hippoResponse;
     }
-
-    private void deliverResponse(HippoResponse<String> response) {
-        if (response.isSuccess()) {
-            listener.onResponse(response.getResult());
-        } else {
-            errorListener.onErrorResponse(response.getError());
-        }
-    }
-
 }

@@ -29,11 +29,18 @@ public class HippoNetworkDispatcher extends Thread {
 
     private Handler mHandler;
 
+    private ResponseDispatcherRunnable mResponseDispatcherRunnable;
+
+    private PreExecuteRunnable mPreExecuteRunnable;
+
     public HippoNetworkDispatcher(PriorityBlockingQueue<HippoRequest> queue,
                                   NetworkExecutor networkExecutor) {
         this.queue = queue;
         this.networkExecutor = networkExecutor;
         quit = false;
+        mHandler = new Handler(Looper.getMainLooper());
+        mResponseDispatcherRunnable = new ResponseDispatcherRunnable();
+        mPreExecuteRunnable = new PreExecuteRunnable();
     }
 
     @Override
@@ -46,11 +53,9 @@ public class HippoNetworkDispatcher extends Thread {
                 Logger.e(TAG, e);
                 continue;
             }
-            synchronized (request) {
-                // 如果取消则不执行网络访问
-                if (request.isCancel()) {
-                    continue;
-                }
+            // 如果取消则不执行网络访问
+            if (request.isCancel()) {
+                continue;
             }
             Logger.d(TAG, String.format("Request: %d get ticket to run.", request.getSeq()));
             request.setState(HippoRequest.State.EXECUTING);
@@ -61,21 +66,30 @@ public class HippoNetworkDispatcher extends Thread {
                 request.parseResponse(new NetworkResponse(e));
                 continue;
             }
+            // Before perform network request
+            mPreExecuteRunnable.setRequest(request);
+            mHandler.post(mPreExecuteRunnable);
             NetworkResponse networkResponse = null;
             try {
+                // Perform network request
                 networkResponse = networkExecutor.performRequest(request);
             } catch (HippoException e) {
                 networkResponse = new NetworkResponse(e);
                 Logger.e(TAG, e);
             } finally {
                 if (!request.isCancel()) {
-                    mHandler = new Handler(Looper.getMainLooper());
-                    mHandler.post(new ResponseDispatcherRunnable(request, networkResponse));
+                    HippoResponse hippoResponse = request.parseResponse(networkResponse);
+
+                    // Notify when network response in thread
+                    request.notifyRunInBackground(hippoResponse);
+
+                    // Delivery network response in main thread
+                    mResponseDispatcherRunnable.generateResponse(request, hippoResponse);
+                    mHandler.post(mResponseDispatcherRunnable);
                     Logger.d(TAG, String.format("Request: %d finish at %s.", request.getSeq(), new Date().toString()));
                 }
                 request.setState(HippoRequest.State.FINISHED);
             }
-
         }
     }
 
@@ -107,18 +121,35 @@ public class HippoNetworkDispatcher extends Thread {
         quit = true;
     }
 
+    /**
+     * Dispatch response in main thread
+     */
     private static class ResponseDispatcherRunnable implements Runnable {
-        private final NetworkResponse response;
-        private final HippoRequest request;
+        private HippoResponse response;
+        private HippoRequest<?> request;
 
-        public ResponseDispatcherRunnable(HippoRequest request, NetworkResponse response) {
+        public void generateResponse(HippoRequest request, HippoResponse response) {
             this.request = request;
             this.response = response;
         }
 
         @Override
         public void run() {
-            request.parseResponse(response);
+            request.deliverResponse(response);
+        }
+    }
+
+    private static class PreExecuteRunnable implements Runnable {
+
+        private HippoRequest<?> request;
+
+        @Override
+        public void run() {
+            request.onGetTicket();
+        }
+
+        public void setRequest(HippoRequest<?> request) {
+            this.request = request;
         }
     }
 }

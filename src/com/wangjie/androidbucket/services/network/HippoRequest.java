@@ -8,6 +8,8 @@ import com.wangjie.androidbucket.services.network.exception.HippoException;
  * @version V1.0
  * @Description
  * @Createdate 14-9-24 16:35
+ * @Modifydate 15-3-4
+ * @ModifyDescription Add life cycle control for request
  */
 public abstract class HippoRequest<T> implements Comparable<HippoRequest>, CancelableTask {
 
@@ -25,6 +27,37 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
      */
     protected State state;
 
+    /**
+     * Called when request get turn to run
+     */
+    public void onGetTicket() {
+        listener.onPreExecute();
+    }
+
+    /**
+     * Called when right after network response and parse to request type
+     *
+     * @param response HippoResponse user defined
+     */
+    public void notifyRunInBackground(HippoResponse<T> response) {
+        if (response.isSuccess()) {
+            listener.onResponseInBackground(response.getResult());
+        }
+    }
+
+    /**
+     * Delivery response when finish request
+     *
+     * @param response HippoResponse user defined
+     */
+    public void deliverResponse(HippoResponse<T> response) {
+        if (response.isSuccess()) {
+            listener.onResponse(response.getResult());
+        } else {
+            errorListener.onErrorResponse(response.getError());
+        }
+    }
+
     public static enum State {
         READY, EXECUTING, CANCELING, CANCELED, FINISHING, FINISHED;
     }
@@ -32,7 +65,7 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
     /**
      * 成功返回监听器
      */
-    protected HippoResponse.Listener<T> listener;
+    protected RequestListener<T> listener;
 
     /**
      * 失败返回监听器
@@ -40,7 +73,7 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
     protected HippoResponse.ErrorListener errorListener;
 
 
-    public HippoRequest(HippoResponse.Listener<T> listener, HippoResponse.ErrorListener errorListener) {
+    public HippoRequest(RequestListener<T> listener, HippoResponse.ErrorListener errorListener) {
         this.listener = listener;
         this.errorListener = errorListener;
         this.retryPolicy = new RetryPolicy();
@@ -50,9 +83,9 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
     /**
      * 解析HttpResponse
      *
-     * @return
+     * @return NetworkResponse
      */
-    public abstract void parseResponse(NetworkResponse response);
+    public abstract HippoResponse<T> parseResponse(NetworkResponse response);
 
     public void retry(HippoException e) throws HippoException {
         retryPolicy.retry(e);

@@ -82,7 +82,7 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
                             String url,
                             NameValuePair[] headers,
                             byte[] body,
-                            HippoResponse.Listener<T> listener,
+                            RequestListener<T> listener,
                             HippoResponse.ErrorListener errorListener) {
         super(listener, errorListener);
         this.method = method;

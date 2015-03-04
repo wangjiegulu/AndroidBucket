@@ -1,6 +1,7 @@
 package com.wangjie.androidbucket.services.network;
 
 import com.wangjie.androidbucket.log.Logger;
+import com.wangjie.androidbucket.services.BaseAccessResponse;
 
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
