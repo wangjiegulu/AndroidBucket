@@ -42,7 +42,8 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
      */
     public void notifyRunInBackground(HippoResponse<T> response) {
         if (response.isSuccess()) {
-            listener.onResponseInBackground(response.getResult());
+            if (listener != null)
+                listener.onResponseInBackground(response.getResult());
         }
     }
 
@@ -53,9 +54,11 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
      */
     public void deliverResponse(HippoResponse<T> response) {
         if (response.isSuccess()) {
-            listener.onResponse(response.getResult());
+            if (listener != null)
+                listener.onResponse(response.getResult());
         } else {
-            errorListener.onErrorResponse(response.getError());
+            if (errorListener != null)
+                errorListener.onErrorResponse(response.getError());
         }
     }
 

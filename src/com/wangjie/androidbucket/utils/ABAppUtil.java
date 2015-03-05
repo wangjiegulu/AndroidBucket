@@ -24,6 +24,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import com.wangjie.androidbucket.application.ABApplication;
 import com.wangjie.androidbucket.log.Logger;
 
 import java.io.File;
@@ -296,13 +297,13 @@ public class ABAppUtil {
     /**
      * 获取当前应用程序的版本号
      *
-     * @param context
      * @return
      * @author wangjie
      */
-    public static String getAppVersion(Context context) {
+    public static String getAppVersion() {
         String version = "0";
         try {
+            Context context = ABApplication.getInstance();
             version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -474,6 +475,7 @@ public class ABAppUtil {
 
     /**
      * 获取网络类型
+     *
      * @return
      */
     public static int getNetworkType(Context context) {
@@ -520,6 +522,7 @@ public class ABAppUtil {
 
     /**
      * 在中国，联通的3G为UMTS或HSDPA，移动和联通的2G为GPRS或EGDE，电信的2G为CDMA，电信的3G为EVDO
+     *
      * @return 2G、3G、4G、未知四种状态
      */
     public static int getNetWorkClass(Context context) {
