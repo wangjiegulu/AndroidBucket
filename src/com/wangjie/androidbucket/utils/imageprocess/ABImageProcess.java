@@ -381,7 +381,9 @@ public class ABImageProcess {
         if (null == bitmap) {
             return null;
         }
-        return compressImage(bitmap, size);
+        InputStream resultIs = compressImage(bitmap, size);
+        ABIOUtil.recycleBitmap(bitmap);
+        return resultIs;
     }
 
 

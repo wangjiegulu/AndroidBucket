@@ -14,6 +14,8 @@ public class HttpConstants {
 
     public final static String CONTENT_TYPE_FILE = "application/octet-stream";
 
+    public final static String CONTENT_TYPE_MULTIPART_FORM_DATA = "multipart/form-data";
+
     public final static String CONTENT_TYPE_XML = "text/xml";
 
     public final static String CONTENT_TYPE_APK = "application/vnd.android.package-archive";

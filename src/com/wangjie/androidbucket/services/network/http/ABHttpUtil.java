@@ -4,7 +4,9 @@ import android.util.Log;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.network.http.interceptor.HttpMethodInterceptor;
 import com.wangjie.androidbucket.utils.ABTextUtil;
-import org.apache.http.*;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -24,7 +26,8 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
 import java.util.Arrays;
 import java.util.Map;
@@ -281,6 +284,11 @@ public class ABHttpUtil {
     private static String generateUrl(HttpAccessParameter accessParameter) throws Exception {
         String url =
                 null == onHttpSessionConnectListener ? httpConfig.getDomain() : onHttpSessionConnectListener.getDomain();
+        if (isEnableSSL(url)) {
+            url += ":" + (null == onHttpSessionConnectListener ? httpConfig.getHttpsPort() : onHttpSessionConnectListener.getPorts()[1]);
+        } else {
+            url += ":" + (null == onHttpSessionConnectListener ? httpConfig.getHttpPort() : onHttpSessionConnectListener.getPorts()[0]);
+        }
         url += accessParameter.getWebApi();
         Logger.d(TAG, "Connect to " + url);
         return url;
