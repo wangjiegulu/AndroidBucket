@@ -1,5 +1,6 @@
 package com.wangjie.androidbucket.services.network.toolbox;
 
+import com.wangjie.androidbucket.services.CancelableTask;
 import com.wangjie.androidbucket.services.network.HippoHttpRequest;
 import com.wangjie.androidbucket.services.network.NetworkResponse;
 import com.wangjie.androidbucket.services.network.HippoResponse;
@@ -8,6 +9,7 @@ import com.wangjie.androidbucket.services.network.exception.HippoException;
 import org.apache.http.NameValuePair;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
 
 /**
  * @author Hubert He
@@ -18,6 +20,8 @@ import java.io.UnsupportedEncodingException;
 public class StringHippoHttpRequest extends HippoHttpRequest<String> {
 
     private final String encoding;
+
+    private Collection<CancelableTask> cancelableTaskCollection;
 
     /**
      * 完全构造函数
@@ -89,5 +93,17 @@ public class StringHippoHttpRequest extends HippoHttpRequest<String> {
             hippoResponse = new HippoResponse<>(new HippoException("Cannot parse response due to this error happen.", response.getError()));
         }
         return hippoResponse;
+    }
+
+    @Override
+    public void addListener(Collection<CancelableTask> cancelableTaskCollection) {
+        this.cancelableTaskCollection = cancelableTaskCollection;
+    }
+
+    @Override
+    public void remove() {
+        if (cancelableTaskCollection != null) {
+            cancelableTaskCollection.remove(this);
+        }
     }
 }
