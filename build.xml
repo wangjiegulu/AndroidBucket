@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="androidBucket" default="help">
+<project name="androidBucket" default="release">
 
     <!-- The local.properties file is created and updated by the 'android' tool.
          It contains the path to the SDK. It should *NOT* be checked into
@@ -68,6 +68,14 @@
     -->
     <import file="custom_rules.xml" optional="true"/>
 
+    <target name="-pre-compile">
+        <path id="project.all.jars.path">
+            <path path="${toString:project.all.jars.path}"/>
+            <fileset dir="${jar.libs.dir}">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+    </target>
     <!-- Import the actual build file.
 
          To customize existing targets, there are two options:

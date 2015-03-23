@@ -1,0 +1,75 @@
+buildscript {
+    repositories {
+        jcenter() //你所使用的仓库
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.0.0' // Gradle 的Android 插件版本
+    }
+}
+apply plugin: 'com.android.library' // 导入Android Application 插件，将此module 配置成application module
+
+repositories {
+    jcenter() // 仓库
+}
+
+android {
+
+    compileSdkVersion 21 // 使用SDK的版本，请配置你SDK中有的最新版本
+    buildToolsVersion "21.0.2" // buildTools 版本，你SDK中有哪个版本配哪个版本，建议更新到最新的版本
+
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 21
+        versionCode 67
+        versionName "2.9.0"
+    }
+
+    buildTypes { // 配置打包的版本
+        release { // 发行版
+            minifyEnabled false // 是否混淆
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt' // 默认混淆文件
+//            proguardFiles 'proguard-project.txt' // 自定义混淆文件
+        }
+        debug { // debug 版
+
+        }
+    }
+
+    sourceSets { // 如果你的工程是从ANT 中迁移过来，可以使用sourceSets 来配置工程结构，如果你使用的是标准Gradle 结构，可以不需要配置。
+        main {
+            java.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs'] // 配置此处才会打包jni 的.so 文件
+            jni.srcDirs=['jni']
+            manifest.srcFile 'AndroidManifest.xml'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+    }
+
+}
+
+/**
+ * https://gradle.org/docs/current/dsl/org.gradle.api.artifacts.dsl.DependencyHandler.html
+ */
+dependencies {
+    compile fileTree(dir: '../libs', include: ['*.jar'])
+//    compile 'com.android.support:support-v4:21.0.0'
+//    compile 'com.android.support:recyclerview-v7:+'
+//    compile(project(':LibModule')) // 包含module
+
+}

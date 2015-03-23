@@ -1,5 +1,6 @@
 out/
 gen/
+bin/
 *.class
 .idea/
 proguard_logs/*

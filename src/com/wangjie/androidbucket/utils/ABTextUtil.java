@@ -128,6 +128,7 @@ public class ABTextUtil {
 
     /**
      * 摘取里面第一个不为null的字符串
+     *
      * @param options
      * @return
      */
@@ -139,6 +140,27 @@ public class ABTextUtil {
         for (CharSequence cs : options) {
             if (null != cs) {
                 result = cs.toString();
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 摘取里面第一个不为null的字符串
+     *
+     * @param options
+     * @return
+     */
+    @SafeVarargs
+    public static <T> T pickFirstNotNull(Class<T> clazz, T... options) {
+        if (isEmpty(options)) {
+            return null;
+        }
+        T result = null;
+        for (T obj : options) {
+            if (null != obj) {
+                result = obj;
                 break;
             }
         }
