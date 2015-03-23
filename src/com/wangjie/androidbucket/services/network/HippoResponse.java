@@ -1,6 +1,5 @@
 package com.wangjie.androidbucket.services.network;
 
-import com.wangjie.androidbucket.services.BaseAccessResponse;
 import com.wangjie.androidbucket.services.network.exception.HippoException;
 
 /**
@@ -28,12 +27,19 @@ public class HippoResponse<T> {
     /**
      * Callback interface for delivering error responses.
      */
-    public interface ErrorListener {
+    public abstract static class ErrorListener {
         /**
          * Callback method that an error has been occurred with the
          * provided error code and optional user-readable message.
          */
-        public void onErrorResponse(HippoException error);
+        public abstract void onErrorResponse(HippoException error);
+
+        /**
+         * Process error message in background.
+         */
+        public void onErrorProcessInBackground(HippoException error) {
+            // Implement this if necessary
+        }
     }
 
 

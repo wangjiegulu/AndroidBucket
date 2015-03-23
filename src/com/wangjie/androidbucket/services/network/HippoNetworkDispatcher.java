@@ -76,13 +76,16 @@ public class HippoNetworkDispatcher extends Thread {
             } catch (HippoException e) {
                 networkResponse = new NetworkResponse(e);
                 Logger.e(TAG, e);
+            } catch (Exception e) {
+                networkResponse = new NetworkResponse(new HippoException("Unexpected exception happened!", e));
+                Logger.e(TAG, e);
             } finally {
+                HippoResponse hippoResponse = request.parseResponse(networkResponse);
+
+                // Notify when network response in thread
+                request.notifyRunInBackground(hippoResponse);
+
                 if (!request.isCancel()) {
-                    HippoResponse hippoResponse = request.parseResponse(networkResponse);
-
-                    // Notify when network response in thread
-                    request.notifyRunInBackground(hippoResponse);
-
                     // Delivery network response in main thread
                     mResponseDispatcherRunnable.generateResponse(request, hippoResponse);
                     mHandler.post(mResponseDispatcherRunnable);

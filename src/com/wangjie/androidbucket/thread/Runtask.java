@@ -4,6 +4,8 @@ import android.os.Handler;
 import android.os.Message;
 import com.wangjie.androidbucket.services.CancelableTask;
 
+import java.util.Collection;
+
 /**
  * Created with IntelliJ IDEA.
  * Author: wangjie  email:tiantian.china.2@gmail.com
@@ -104,5 +106,13 @@ public abstract class Runtask<U, R> implements Runnable, CancelableTask {
         return isCanceled;
     }
 
+    @Override
+    public void remove() {
+        // ignore
+    }
 
+    @Override
+    public void addListener(Collection<CancelableTask> cancelableTaskList) {
+        // ignore
+    }
 }

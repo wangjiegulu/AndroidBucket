@@ -3,6 +3,8 @@ package com.wangjie.androidbucket.services.network;
 import com.wangjie.androidbucket.services.CancelableTask;
 import com.wangjie.androidbucket.services.network.exception.HippoException;
 
+import java.util.Collection;
+
 /**
  * @author Hubert He
  * @version V1.0
@@ -26,6 +28,7 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
      * Running state
      */
     protected State state;
+    private Collection<CancelableTask> cancelableTaskCollection;
 
     /**
      * Called when request get turn to run
@@ -44,6 +47,9 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
         if (response.isSuccess()) {
             if (listener != null)
                 listener.onResponseInBackground(response.getResult());
+        } else {
+            if (errorListener != null)
+                errorListener.onErrorProcessInBackground(response.getError());
         }
     }
 
@@ -161,4 +167,15 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
         return true;
     }
 
+    @Override
+    public void remove() {
+        if (cancelableTaskCollection != null) {
+            cancelableTaskCollection.remove(this);
+        }
+    }
+
+    @Override
+    public void addListener(Collection<CancelableTask> cancelableTaskCollection) {
+        this.cancelableTaskCollection = cancelableTaskCollection;
+    }
 }

@@ -1,5 +1,7 @@
 package com.wangjie.androidbucket.services;
 
+import java.util.Collection;
+
 /**
  * @author Hubert He
  * @version V1.0
@@ -8,5 +10,9 @@ package com.wangjie.androidbucket.services;
  */
 public interface CancelableTask {
 
+    public void addListener(Collection<CancelableTask> cancelableTaskCollection);
+
     public boolean cancel(boolean mayInterruptIfRunning);
+
+    public void remove();
 }

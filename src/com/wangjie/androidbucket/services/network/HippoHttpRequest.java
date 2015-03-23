@@ -5,6 +5,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -162,6 +163,11 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
             urlParams.addAll(Arrays.asList(nameValuePairs));
         }
     }
+
+    public void addUrlParam(String name, String value) {
+        urlParams.add(new BasicNameValuePair(name, value));
+    }
+
 
     public static String generateUrlParam(NameValuePair... nameValuePairs) throws UnsupportedEncodingException {
         if (nameValuePairs != null)

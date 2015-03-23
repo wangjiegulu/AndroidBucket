@@ -6,7 +6,6 @@ import android.widget.Toast;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.utils.ABAppUtil;
 
-import java.io.File;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Properties;
 
@@ -106,13 +105,6 @@ public class ABCrashHandler implements UncaughtExceptionHandler {
             // 如果用户没有处理则让系统默认的异常处理器来处理
             mDefaultHandler.uncaughtException(thread, ex);
         } else {
-            // Sleep一会后结束程序
-            // 来让线程停止一会是为了显示Toast信息给用户，然后Kill程序
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                Logger.e(TAG, "uncaughtException: ", e);
-            }
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(10);
         }

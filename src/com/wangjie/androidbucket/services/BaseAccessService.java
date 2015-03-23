@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.os.AsyncTask;
 import android.os.Build;
 
+import java.util.Collection;
+
 /**
  * @author Hubert He
  * @version V1.0
@@ -14,4 +16,17 @@ import android.os.Build;
 public abstract class BaseAccessService<Params, Progress, Result>
         extends AsyncTask<Params, Progress, Result> implements CancelableTask {
 
+    Collection<CancelableTask> cancelableTaskCollection;
+
+    @Override
+    public void remove() {
+        if (cancelableTaskCollection != null) {
+            cancelableTaskCollection.remove(this);
+        }
+    }
+
+    @Override
+    public void addListener(Collection<CancelableTask> cancelableTaskCollection) {
+        this.cancelableTaskCollection = cancelableTaskCollection;
+    }
 }
