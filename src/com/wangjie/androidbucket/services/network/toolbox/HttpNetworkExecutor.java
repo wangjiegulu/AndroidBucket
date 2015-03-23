@@ -1,19 +1,18 @@
 package com.wangjie.androidbucket.services.network.toolbox;
 
-import android.util.Log;
 import com.wangjie.androidbucket.log.Logger;
-import com.wangjie.androidbucket.services.network.*;
+import com.wangjie.androidbucket.services.network.HippoHttpRequest;
+import com.wangjie.androidbucket.services.network.HippoRequest;
+import com.wangjie.androidbucket.services.network.NetworkExecutor;
+import com.wangjie.androidbucket.services.network.NetworkResponse;
 import com.wangjie.androidbucket.services.network.exception.HippoException;
 import com.wangjie.androidbucket.services.network.interceptor.Interceptor;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.*;
 import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 
@@ -175,13 +174,13 @@ public class HttpNetworkExecutor implements NetworkExecutor<HippoHttpRequest<?>>
                 return new NetworkResponse();
             }
             NetworkResponse networkResponse = null;
-            HttpUriRequest httpUriRequest = createHttpRequest(request);
-            addHeaders(httpUriRequest, request);
-            // 用户自定义参数
-            prepareRequest(httpUriRequest);
             HttpResponse httpResponse = null;
             byte[] responseContents = null;
             try {
+                HttpUriRequest httpUriRequest = createHttpRequest(request);
+                addHeaders(httpUriRequest, request);
+                // 用户自定义参数
+                prepareRequest(httpUriRequest);
                 Logger.d(TAG, "Url: " + request.getUrl());
                 request.setUriRequest(httpUriRequest);
                 httpResponse = httpClient.execute(httpUriRequest);
