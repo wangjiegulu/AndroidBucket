@@ -68,7 +68,7 @@ public class ABActivity extends Activity implements ABActivityViewer, ABActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (shouldCallBack()) {
+        if (null != baseActivityManager && isActivityLifeCycleAutoCallBack) {
             baseActivityManager.dispatchActivityDestory();
         }
         if (presenter != null) {
