@@ -25,7 +25,7 @@ public class ABActivity extends Activity implements ABActivityViewer, ABActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (shouldCallBack()) {
+        if (shouldCallBack() && !isFinishing()) {
             baseActivityManager.dispatchActivityCreate(savedInstanceState);
         }
     }
@@ -51,7 +51,7 @@ public class ABActivity extends Activity implements ABActivityViewer, ABActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (shouldCallBack()) {
+        if (shouldCallBack()&& !isFinishing()) {
             baseActivityManager.dispatchActivityResume();
         }
     }
@@ -60,7 +60,7 @@ public class ABActivity extends Activity implements ABActivityViewer, ABActivity
     @Override
     protected void onPause() {
         super.onPause();
-        if (shouldCallBack()) {
+        if (shouldCallBack()&& !isFinishing()) {
             baseActivityManager.dispatchActivityPause();
         }
     }

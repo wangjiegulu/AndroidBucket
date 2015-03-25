@@ -30,7 +30,7 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (shouldCallBack()) {
+        if (shouldCallBack() && !isFinishing()) {
             baseActivityManager.dispatchActivityCreate(savedInstanceState);
         }
 
@@ -68,7 +68,7 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     @Override
     protected void onResume() {
         super.onResume();
-        if (shouldCallBack()) {
+        if (shouldCallBack() && !isFinishing()) {
             baseActivityManager.dispatchActivityResume();
         }
     }
@@ -76,7 +76,7 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     @Override
     protected void onPause() {
         super.onPause();
-        if (shouldCallBack()) {
+        if (shouldCallBack() && !isFinishing()) {
             baseActivityManager.dispatchActivityPause();
         }
     }
@@ -99,7 +99,7 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     }
 
     private boolean shouldCallBack() {
-        return null != baseActivityManager && isActivityLifeCycleAutoCallBack && !isFinishing();
+        return null != baseActivityManager && isActivityLifeCycleAutoCallBack;
     }
 
 
