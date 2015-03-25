@@ -27,6 +27,7 @@
 
          -->
     <property file="ant.properties"/>
+
     <!-- if sdk.dir was not set from one of the property file, then
          get it from the ANDROID_HOME env var.
          This must be done before we load project.properties since
@@ -75,7 +76,6 @@
             </fileset>
         </path>
     </target>
-
     <!-- Import the actual build file.
 
          To customize existing targets, there are two options:

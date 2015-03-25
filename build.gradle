@@ -15,11 +15,10 @@ repositories {
 android {
 
     compileSdkVersion 21 // 使用SDK的版本，请配置你SDK中有的最新版本
-    buildToolsVersion "21.1.1" // buildTools 版本，你SDK中有哪个版本配哪个版本，建议更新到最新的版本
+    buildToolsVersion "21.0.2" // buildTools 版本，你SDK中有哪个版本配哪个版本，建议更新到最新的版本
 
 
     defaultConfig {
-        applicationId "com.kanchufang.privatedoctor" // 原来的包名，现在叫applicationId
         minSdkVersion 9
         targetSdkVersion 21
         versionCode 67
@@ -28,7 +27,7 @@ android {
 
     buildTypes { // 配置打包的版本
         release { // 发行版
-            runProguard false // 是否混淆
+            minifyEnabled false // 是否混淆
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt' // 默认混淆文件
 //            proguardFiles 'proguard-project.txt' // 自定义混淆文件
         }
@@ -49,14 +48,28 @@ android {
             manifest.srcFile 'AndroidManifest.xml'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+    }
+
 }
 
 /**
  * https://gradle.org/docs/current/dsl/org.gradle.api.artifacts.dsl.DependencyHandler.html
  */
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:21.0.0'
-    compile 'com.android.support:support-v4:21.0.0'
-    compile(project(':LibModule')) // 包含module
+    compile fileTree(dir: '../libs', include: ['*.jar'])
+//    compile 'com.android.support:support-v4:21.0.0'
+//    compile 'com.android.support:recyclerview-v7:+'
+//    compile(project(':LibModule')) // 包含module
+
 }
