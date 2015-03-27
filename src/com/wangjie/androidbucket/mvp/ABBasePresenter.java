@@ -65,4 +65,20 @@ public class ABBasePresenter<V extends ABActivityViewer, I extends ABInteractor>
         HttpApplicationController.getInstance().addToRequestQueue(request);
     }
 
+    public V getViewer() {
+        return viewer;
+    }
+
+    public void setViewer(V viewer) {
+        this.viewer = viewer;
+    }
+
+    public I getInteractor() {
+        return interactor;
+    }
+
+    public void setInteractor(I interactor) {
+        this.interactor = interactor;
+    }
+
 }

@@ -47,6 +47,10 @@ public class SubLayout implements ISubLayout, ABActivityViewer, OnActivityLifeCy
         layout = LayoutInflater.from(context).inflate(resLayout, null);
     }
 
+    public void setContentView(View view) {
+        layout = view;
+    }
+
     public View getLayout() {
         return layout;
     }
