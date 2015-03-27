@@ -14,6 +14,9 @@ import com.wangjie.androidbucket.log.Logger;
 public abstract class RetryMission {
     private static final String TAG = RetryMission.class.getSimpleName();
     private static final int EXECUTE_MISSION = 0x4863;
+    private static final int EXECUTE_FAIL = 0x4864;
+    private static final int EXECUTE_INTERRUPTED = 0x4865;
+
     private static final long DEFAULT_DELAY = 60 * 1000l;
     /**
      * 当前对象是否处于激活状态
@@ -38,7 +41,17 @@ public abstract class RetryMission {
             super.handleMessage(msg);
             switch (msg.what) {
                 case EXECUTE_MISSION: // 执行mission
+                    if(isInterrupted){
+                        removeMessages(EXECUTE_MISSION);
+                        return;
+                    }
                     prepareRunMission();
+                    break;
+                case EXECUTE_FAIL: // 执行失败
+                    onFail(-1, "尝试完，重试次数：" + retryCounts);
+                    break;
+                case EXECUTE_INTERRUPTED: // 执行中断
+                    onInterrupted();
                     break;
                 default:
                     break;
@@ -93,7 +106,7 @@ public abstract class RetryMission {
         execute(retryCounts, 0l);
     }
 
-    public void execute(int retryCounts, long delay) {
+    public synchronized void execute(int retryCounts, long delay) {
         if (isActive) {
             Logger.i(TAG, "RetryMission[" + this + "] is already been Activated..." + getCountsInfo());
             return;
@@ -103,19 +116,19 @@ public abstract class RetryMission {
         this.retryCounts = retryCounts < 0 ? 0 : retryCounts;
         this.leftCounts = retryCounts < 0 ? 1 : retryCounts + 1;
         delay = delay < 0 ? 0 : delay;
-        handler.sendMessageDelayed(handler.obtainMessage(EXECUTE_MISSION), delay);
+        handler.sendEmptyMessageDelayed(EXECUTE_MISSION, delay);
     }
 
     /**
      * retry mission
      */
-    public void retry() {
-        if (!checkLeftCountsLegally()) {
+    public synchronized void retry() {
+        if (!checkLeftCountsLegally() || isInterrupted) {
             return;
         }
         long delay = currentDelay(retryCounts - leftCounts, retryCounts, leftCounts);
         Logger.i(TAG, "Mission retry after " + delay + "ms..." + getCountsInfo());
-        handler.sendMessageDelayed(handler.obtainMessage(EXECUTE_MISSION), delay);
+        handler.sendEmptyMessageDelayed(EXECUTE_MISSION, delay);
     }
 
     /**
@@ -126,7 +139,7 @@ public abstract class RetryMission {
     private boolean checkLeftCountsLegally() {
         if (leftCounts <= 0) {
             isActive = false;
-            onFail(-1, "尝试完，重试次数：" + retryCounts);
+            handler.sendEmptyMessage(EXECUTE_FAIL);
             return false;
         }
         return true;
@@ -154,14 +167,14 @@ public abstract class RetryMission {
     /**
      * Interrupted current mission
      */
-    public void interrupted() {
+    public synchronized void interrupted() {
         if (!isActive) {
             return;
         }
         handler.removeMessages(EXECUTE_MISSION);
         isActive = false;
         isInterrupted = true;
-        onInterrupted();
+        handler.sendEmptyMessage(EXECUTE_INTERRUPTED);
     }
 
     public boolean isInterrupted() {
