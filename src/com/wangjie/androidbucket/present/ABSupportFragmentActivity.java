@@ -60,7 +60,7 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (null != baseActivityManager && isActivityLifeCycleAutoCallBack) {
+        if (shouldCallBack()) {
             baseActivityManager.dispatchActivityDestory();
         }
     }
