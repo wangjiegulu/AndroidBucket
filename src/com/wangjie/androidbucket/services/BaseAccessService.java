@@ -29,4 +29,10 @@ public abstract class BaseAccessService<Params, Progress, Result>
     public void addListener(Collection<CancelableTask> cancelableTaskCollection) {
         this.cancelableTaskCollection = cancelableTaskCollection;
     }
+
+    @Override
+    protected void onPostExecute(Result result) {
+        super.onPostExecute(result);
+        remove();
+    }
 }

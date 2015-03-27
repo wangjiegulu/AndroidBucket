@@ -51,7 +51,7 @@ public class ABActivity extends Activity implements ABActivityViewer, ABActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (shouldCallBack()&& !isFinishing()) {
+        if (shouldCallBack() && !isFinishing()) {
             baseActivityManager.dispatchActivityResume();
         }
     }
@@ -60,7 +60,7 @@ public class ABActivity extends Activity implements ABActivityViewer, ABActivity
     @Override
     protected void onPause() {
         super.onPause();
-        if (shouldCallBack()&& !isFinishing()) {
+        if (shouldCallBack() && !isFinishing()) {
             baseActivityManager.dispatchActivityPause();
         }
     }
@@ -156,7 +156,7 @@ public class ABActivity extends Activity implements ABActivityViewer, ABActivity
 
     @Override
     public void closeAllTask() {
-        if(null != presenter){
+        if (null != presenter) {
             presenter.closeAllTask();
         }
     }

@@ -152,7 +152,7 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
 
     @Override
     public void closeAllTask() {
-        if(null != presenter){
+        if (null != presenter) {
             presenter.closeAllTask();
         }
     }
