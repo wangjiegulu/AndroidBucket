@@ -31,3 +31,6 @@ proguard/
 # User define
 out/
 proguard_logs/*
+
+build/
+.gradle/

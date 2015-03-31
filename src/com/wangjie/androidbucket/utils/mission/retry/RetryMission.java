@@ -167,7 +167,7 @@ public abstract class RetryMission {
     /**
      * Interrupted current mission
      */
-    public synchronized void interrupted() {
+    public synchronized void interrupt() {
         if (!isActive) {
             return;
         }

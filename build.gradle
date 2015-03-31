@@ -8,10 +8,6 @@ buildscript {
 }
 apply plugin: 'com.android.library' // 导入Android Application 插件，将此module 配置成application module
 
-repositories {
-    jcenter() // 仓库
-}
-
 android {
 
     compileSdkVersion 21 // 使用SDK的版本，请配置你SDK中有的最新版本
@@ -21,8 +17,8 @@ android {
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 21
-        versionCode 67
-        versionName "2.9.0"
+        versionCode 1
+        versionName "1.0.0"
     }
 
     buildTypes { // 配置打包的版本
