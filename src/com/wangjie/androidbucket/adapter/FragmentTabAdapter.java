@@ -1,11 +1,12 @@
 package com.wangjie.androidbucket.adapter;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import com.wangjie.androidbucket.R;
+import com.wangjie.androidbucket.application.ABApplication;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
 public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnCheckedChangeListener{
     private List<T> fragments; // 一个tab页面对应一个Fragment
     private RadioGroup rgs; // 用于切换tab
-    private FragmentActivity fragmentActivity; // Fragment所属的Activity
+    private FragmentManager fragmentActivity; // Fragment所属的Activity
     private int fragmentContentId; // Activity中所要被替换的区域的id
 
     private int currentTab; // 当前Tab页面索引
@@ -26,14 +27,14 @@ public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnChec
     private OnRgsExtraCheckedChangedListener onRgsExtraCheckedChangedListener; // 用于让调用者在切换tab时候增加新的功能
     private OnTabClickedListener onTabClickedListener; // 点击tab时回调
 
-    public FragmentTabAdapter(FragmentActivity fragmentActivity, List<T> fragments, int fragmentContentId, RadioGroup rgs) {
+    public FragmentTabAdapter(FragmentManager fragmentManager, List<T> fragments, int fragmentContentId, RadioGroup rgs) {
         this.fragments = fragments;
         this.rgs = rgs;
-        this.fragmentActivity = fragmentActivity;
+        this.fragmentActivity = fragmentManager;
         this.fragmentContentId = fragmentContentId;
 
         // 默认显示第一页
-        FragmentTransaction ft = fragmentActivity.getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.add(fragmentContentId, fragments.get(0));
         ft.commit();
 
@@ -46,7 +47,7 @@ public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnChec
     public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
         for(int i = 0; i < rgs.getChildCount(); i++){
             if(rgs.getChildAt(i).getId() == checkedId){
-                if(fragmentActivity.getString(R.string.tag_fragment_tab_click_only).equals(rgs.getChildAt(i).getTag())){
+                if(ABApplication.getInstance().getString(R.string.tag_fragment_tab_click_only).equals(rgs.getChildAt(i).getTag())){
                     ((RadioButton)rgs.getChildAt(currentTab)).setChecked(true);
                     if(null != onTabClickedListener){
                         onTabClickedListener.onTabClickedListener(rgs, checkedId, i);
@@ -105,7 +106,7 @@ public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnChec
      * @return
      */
     private FragmentTransaction obtainFragmentTransaction(int index){
-        FragmentTransaction ft = fragmentActivity.getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = fragmentActivity.beginTransaction();
         // 设置切换动画
         if(index > currentTab){
             ft.setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out);
