@@ -8,6 +8,16 @@ AndroidBucket
 
 ###使用方法<br/>
         clone代码，并在项目中引入AndroidBucket。
+        
+###Gradle
+        compile 'com.github.wangjiegulu:AndroidBucket:1.0.1'
+###Maven
+        <dependency>
+          <groupId>com.github.wangjiegulu</groupId>
+          <artifactId>AndroidBucket</artifactId>
+          <version>1.0.1</version>
+          <type>aar</type>
+        </dependency>
 
 ###线程池、日志、程序崩溃捕捉处理等配置方法<br/>
         新建MyApplication，继承ABApplication，根据需要实现里面的方法
