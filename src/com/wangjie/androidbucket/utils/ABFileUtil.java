@@ -242,46 +242,6 @@ public class ABFileUtil {
 
 
     /**
-     * 获取某个文件夹的大小 ，单位是kb
-     *
-     * @param relativePath
-     * @return 返回-1表示这是个文件而不是文件夹
-     * @author com.tiantian
-     */
-    public static int getFolderSize(String relativePath) {
-        int fileLength = 0;
-//		File dir = new File(path);
-        File dir = creatSDDir(relativePath);
-        if (dir.isDirectory()) {
-            File[] files = dir.listFiles();
-            for (File file : files) {
-                fileLength += file.length();
-            }
-        } else {
-            return -1;
-        }
-        return fileLength / 1024;
-    }
-
-    /**
-     * 清空指定文件夹
-     *
-     * @param relativePath
-     * @author com.tiantian
-     */
-    public static void deleteFiles(String relativePath) {
-//		File dir = new File(path);
-        File dir = creatSDDir(relativePath);
-        if (dir.isDirectory()) {
-            File[] files = dir.listFiles();
-            for (File file : files) {
-                file.delete();
-            }
-        }
-    }
-
-
-    /**
      * 把uri转为File对象
      *
      * @param context
@@ -290,10 +250,11 @@ public class ABFileUtil {
      */
     public static File uri2File(Context context, Uri uri) {
         // 而managedquery在api 11 被弃用，所以要转为使用CursorLoader,并使用loadInBackground来返回
+        Cursor cursor = null;
         try {
             String[] projection = {MediaStore.Images.Media.DATA};
             CursorLoader loader = new CursorLoader(context, uri, projection, null, null, null);
-            Cursor cursor = loader.loadInBackground();
+            cursor = loader.loadInBackground();
             if (null == cursor) {
                 return null;
             }
@@ -302,6 +263,10 @@ public class ABFileUtil {
             return new File(cursor.getString(column_index));
         } catch (Exception ex) {
             Logger.e(TAG, ex);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return null;
     }

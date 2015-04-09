@@ -36,6 +36,7 @@ public class FileDownloadUtil {
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public static File download(String url, String filePath, NameValuePair... headers) throws IOException {
         File file = new File(filePath);
+
         HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(url);
         if (!ABTextUtil.isEmpty(headers)) {
