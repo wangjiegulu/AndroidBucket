@@ -93,6 +93,21 @@ public abstract class HippoHttpRequest<T> extends HippoRequest<T> {
         urlParams = new ArrayList<>();
     }
 
+    public HippoHttpRequest(int method,
+                            String url,
+                            NameValuePair[] headers,
+                            byte[] body,
+                            RequestListener<T> listener,
+                            HippoResponse.ErrorListener errorListener,
+                            int retryCount) {
+        super(listener, errorListener, retryCount);
+        this.method = method;
+        this.url = url;
+        this.headers = headers;
+        this.body = body;
+        urlParams = new ArrayList<>();
+    }
+
     public int getMethod() {
         return method;
     }

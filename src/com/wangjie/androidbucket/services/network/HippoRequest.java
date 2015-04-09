@@ -84,9 +84,17 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
 
 
     public HippoRequest(RequestListener<T> listener, HippoResponse.ErrorListener errorListener) {
+        this(listener, errorListener, -1);
+    }
+
+    public HippoRequest(RequestListener<T> listener, HippoResponse.ErrorListener errorListener, int retryCount) {
         this.listener = listener;
         this.errorListener = errorListener;
-        this.retryPolicy = new RetryPolicy();
+        if (retryCount >= 0) {
+            this.retryPolicy = new RetryPolicy(retryCount);
+        } else {
+            this.retryPolicy = new RetryPolicy();
+        }
         setState(State.READY);
     }
 

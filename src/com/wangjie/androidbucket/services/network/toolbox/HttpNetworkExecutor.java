@@ -1,6 +1,7 @@
 package com.wangjie.androidbucket.services.network.toolbox;
 
 import com.wangjie.androidbucket.log.Logger;
+import com.wangjie.androidbucket.services.NetworkUtils;
 import com.wangjie.androidbucket.services.network.HippoHttpRequest;
 import com.wangjie.androidbucket.services.network.HippoRequest;
 import com.wangjie.androidbucket.services.network.NetworkExecutor;
@@ -41,15 +42,9 @@ public class HttpNetworkExecutor implements NetworkExecutor<HippoHttpRequest<?>>
      */
     private HttpClient httpClient;
 
-
     public HttpNetworkExecutor(HttpClient httpClient) {
         this(new ByteArrayPool(DEFAULT_POOL_SIZE));
         this.httpClient = httpClient;
-    }
-
-    public HttpNetworkExecutor() {
-        this(new ByteArrayPool(DEFAULT_POOL_SIZE));
-        httpClient = new DefaultHttpClient();
     }
 
     private HttpNetworkExecutor(ByteArrayPool mPool) {
@@ -183,7 +178,11 @@ public class HttpNetworkExecutor implements NetworkExecutor<HippoHttpRequest<?>>
                 prepareRequest(httpUriRequest);
                 Logger.d(TAG, "Url: " + request.getUrl());
                 request.setUriRequest(httpUriRequest);
-                httpResponse = httpClient.execute(httpUriRequest);
+                if (NetworkUtils.IS_HOST_REACHABLE) {
+                    httpResponse = httpClient.execute(httpUriRequest);
+                } else {
+                    httpResponse = new DefaultHttpClient().execute(httpUriRequest);
+                }
                 request.setState(HippoRequest.State.FINISHING);
                 responseContents = entityToBytes(httpResponse.getEntity());
                 // 如果接收到的回复为空，默认赋值为长度为0的byte数组
