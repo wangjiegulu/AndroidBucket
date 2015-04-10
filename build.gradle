@@ -1,9 +1,6 @@
 buildscript {
     repositories {
         jcenter() //你所使用的仓库
-        flatDir {
-            dirs 'libs'
-        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.0.0' // Gradle 的Android 插件版本
@@ -60,12 +57,14 @@ android {
         exclude 'META-INF/dependencies.txt'
     }
 
+    lintOptions {
+        abortOnError false
+    }
 }
 
 /**
  * https://gradle.org/docs/current/dsl/org.gradle.api.artifacts.dsl.DependencyHandler.html
  */
 dependencies {
-    compile 'com.android.support:support-v4:21.0.0'
-    compile 'com.android.support:recyclerview-v7:+'
+    compile fileTree(dir: 'libs', include: '*.jar')
 }
