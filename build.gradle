@@ -3,10 +3,12 @@ buildscript {
         jcenter() //你所使用的仓库
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0' // Gradle 的Android 插件版本
+        classpath 'com.android.tools.build:gradle:1.1.1' // Gradle 的Android 插件版本
     }
 }
+
 apply plugin: 'com.android.library' // 导入Android Application 插件，将此module 配置成application module
+apply plugin: 'maven'
 
 android {
 
@@ -60,11 +62,15 @@ android {
     lintOptions {
         abortOnError false
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 /**
  * https://gradle.org/docs/current/dsl/org.gradle.api.artifacts.dsl.DependencyHandler.html
  */
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    provided fileTree(dir: 'libs', include: '*.jar')
 }
