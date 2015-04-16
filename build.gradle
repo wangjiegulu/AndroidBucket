@@ -8,7 +8,6 @@ buildscript {
 }
 
 apply plugin: 'com.android.library' // 导入Android Application 插件，将此module 配置成application module
-apply plugin: 'maven'
 
 android {
 
@@ -72,5 +71,5 @@ android {
  * https://gradle.org/docs/current/dsl/org.gradle.api.artifacts.dsl.DependencyHandler.html
  */
 dependencies {
-    provided fileTree(dir: 'libs', include: '*.jar')
+    compile fileTree(dir: 'libs', include: '*.jar')
 }
