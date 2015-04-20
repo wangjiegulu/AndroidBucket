@@ -148,8 +148,5 @@ public abstract class BaseAccessService<Params, Progress, Result> implements Can
         FINISHED,
         PENDING,
         RUNNING;
-
-        private Status() {
-        }
     }
 }
