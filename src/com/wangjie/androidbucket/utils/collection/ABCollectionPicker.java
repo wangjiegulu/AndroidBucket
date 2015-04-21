@@ -107,4 +107,43 @@ public class ABCollectionPicker {
         return picked;
     }
 
+
+    /**
+     * 可从集合中自定义规则匹配不同类型的对象
+     * @param <E>
+     * @param <T>
+     */
+    public static interface ABPickerAnyController<E, T> {
+        boolean isPicked(E expect, T iterTarget);
+    }
+    public static <E, T> T pickAnyFirst(E expect, Collection<T> collection, ABPickerAnyController<E, T> pickerController) {
+        if (null == expect || ABTextUtil.isEmpty(collection)) {
+            return null;
+        }
+        T picked = null;
+        for (T t : collection) {
+            if (pickerController.isPicked(expect, t)) {
+                picked = t;
+                break;
+            }
+        }
+        return picked;
+    }
+    public static <E, T> List<T> pick(E expect, Collection<T> collection, ABPickerAnyController<E, T> pickerController) {
+        if (null == expect || ABTextUtil.isEmpty(collection)) {
+            return null;
+        }
+        if (null == pickerController) {
+            Logger.e(TAG, "PickerController can not be null!");
+            return null;
+        }
+        List<T> picked = new ArrayList<>();
+        for (T t : collection) {
+            if (pickerController.isPicked(expect, t)) {
+                picked.add(t);
+            }
+        }
+        return picked;
+    }
+
 }
