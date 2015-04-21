@@ -120,15 +120,6 @@ public class ABHttpUtil {
      *
      * @return
      */
-    public static HttpClient getSSLHttpClient() {
-        return getSSLHttpClient(httpConfig.getSoTimeout(), httpConfig.getConnectionTimeout());
-    }
-
-    /**
-     * 获取SSL连接
-     *
-     * @return
-     */
     public static HttpClient getSSLHttpClient(int soTimeout, int connectionTimeout) {
         try {
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());

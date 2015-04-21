@@ -215,6 +215,10 @@ public class HttpNetworkExecutor implements NetworkExecutor<HippoHttpRequest<?>>
                 Logger.w(TAG, e);
                 networkResponse = new NetworkResponse(new HippoException("Wrong arguments: " + e.getMessage(), e));
                 return networkResponse;
+            } catch (Exception e) {
+                Logger.w(TAG, e);
+                networkResponse = new NetworkResponse(new HippoException("Wrong arguments: " + e.getMessage(), e));
+                return networkResponse;
             }
         }
     }
