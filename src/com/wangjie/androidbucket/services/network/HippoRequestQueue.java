@@ -1,7 +1,6 @@
 package com.wangjie.androidbucket.services.network;
 
 import com.wangjie.androidbucket.log.Logger;
-import com.wangjie.androidbucket.services.BaseAccessResponse;
 
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -41,19 +40,19 @@ public class HippoRequestQueue {
     /**
      * 网络请求执行
      */
-    private NetworkExecutor networkExecutor;
+    private Network network;
 
-    public HippoRequestQueue(NetworkExecutor networkExecutor) {
-        this(networkExecutor, MAX_THREAD_POOL_SIZE);
+    public HippoRequestQueue(Network network) {
+        this(network, MAX_THREAD_POOL_SIZE);
     }
 
     /**
      * 构造方法，初始化Queue
      */
-    public HippoRequestQueue(NetworkExecutor networkExecutor, int threadPoolSize) {
+    public HippoRequestQueue(Network network, int threadPoolSize) {
         waitingQueue = new PriorityBlockingQueue<>();
         this.threadPoolSize = threadPoolSize;
-        this.networkExecutor = networkExecutor;
+        this.network = network;
         start();
     }
 
@@ -82,7 +81,7 @@ public class HippoRequestQueue {
         try {
             hippoNetworkDispatchers = new HippoNetworkDispatcher[threadPoolSize];
             for (int i = 0; i < hippoNetworkDispatchers.length; i++) {
-                hippoNetworkDispatchers[i] = new HippoNetworkDispatcher(waitingQueue, networkExecutor);
+                hippoNetworkDispatchers[i] = new HippoNetworkDispatcher(waitingQueue, network);
                 hippoNetworkDispatchers[i].start();
             }
         } catch (Exception e) {
@@ -90,12 +89,12 @@ public class HippoRequestQueue {
         }
     }
 
-    public static HippoRequestQueue newHippoRequestQueue(NetworkExecutor networkExecutor) {
-        return new HippoRequestQueue(networkExecutor);
+    public static HippoRequestQueue newHippoRequestQueue(Network network) {
+        return new HippoRequestQueue(network);
     }
 
-    public static HippoRequestQueue newHippoRequestQueue(NetworkExecutor networkExecutor,
+    public static HippoRequestQueue newHippoRequestQueue(Network network,
                                                          int threadPoolSize) {
-        return new HippoRequestQueue(networkExecutor, threadPoolSize);
+        return new HippoRequestQueue(network, threadPoolSize);
     }
 }

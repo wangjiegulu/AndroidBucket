@@ -21,7 +21,7 @@ public abstract class BaseAccessService<Params, Progress, Result> implements Can
 
     public static final Executor THREAD_POOL_EXECUTOR = Executors.newFixedThreadPool(MAX_THREAD_COUNT);
 
-    public static final String TAG = BaseAccessService.class.getSimpleName();
+    private static final String TAG = BaseAccessService.class.getSimpleName();
 
     private Executor threadPoolExecutor = THREAD_POOL_EXECUTOR;
 
@@ -48,7 +48,7 @@ public abstract class BaseAccessService<Params, Progress, Result> implements Can
             protected void done() {
                 try {
                     notifyResult(get());
-                } catch (InterruptedException | ExecutionException e) {
+                } catch (InterruptedException | ExecutionException |  CancellationException e) {
                     Logger.e(TAG, e);
                 }
             }

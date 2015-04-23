@@ -1,7 +1,9 @@
 package com.wangjie.androidbucket.services.network;
 
+import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.CancelableTask;
 import com.wangjie.androidbucket.services.network.exception.HippoException;
+import com.wangjie.androidbucket.services.network.exception.RetryFailedException;
 
 import java.util.Collection;
 
@@ -14,6 +16,8 @@ import java.util.Collection;
  * @ModifyDescription Add life cycle control for request
  */
 public abstract class HippoRequest<T> implements Comparable<HippoRequest>, CancelableTask {
+
+    private static final String TAG = HippoRequest.class.getSimpleName();
 
     /**
      * Sequence
@@ -28,7 +32,16 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
      * Running state
      */
     protected State state;
+
+    /**
+     * Request collection
+     */
     private Collection<CancelableTask> cancelableTaskCollection;
+
+    /**
+     * Executing network
+     */
+    private Network network;
 
     /**
      * Called when request get turn to run
@@ -68,7 +81,11 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
         }
     }
 
-    public static enum State {
+    public void setNetwork(Network network) {
+        this.network = network;
+    }
+
+    public enum State {
         READY, EXECUTING, CANCELING, CANCELED, FINISHING, FINISHED;
     }
 
@@ -105,7 +122,7 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
      */
     public abstract HippoResponse<T> parseResponse(NetworkResponse response);
 
-    public void retry(HippoException e) throws HippoException {
+    public void retry(HippoException e) throws RetryFailedException {
         retryPolicy.retry(e);
     }
 
@@ -153,8 +170,15 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
         if (state == State.FINISHING) {
             return;
         }
+        if (network != null) {
+            try {
+                network.notify();
+            } catch (Exception e) {
+                // Ignore
+                Logger.w(TAG, "Ignore this thread exception.", e);
+            }
+        }
         setState(State.CANCELING);
-        Thread.interrupted();
     }
 
     public void setState(State state) {

@@ -4,7 +4,7 @@ import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.NetworkUtils;
 import com.wangjie.androidbucket.services.network.HippoHttpRequest;
 import com.wangjie.androidbucket.services.network.HippoRequest;
-import com.wangjie.androidbucket.services.network.NetworkExecutor;
+import com.wangjie.androidbucket.services.network.Network;
 import com.wangjie.androidbucket.services.network.NetworkResponse;
 import com.wangjie.androidbucket.services.network.exception.HippoException;
 import com.wangjie.androidbucket.services.network.interceptor.Interceptor;
@@ -29,9 +29,9 @@ import java.util.Set;
  * @Description
  * @Createdate 14-9-24 14:47
  */
-public class HttpNetworkExecutor implements NetworkExecutor<HippoHttpRequest<?>> {
+public class HttpNetwork implements Network<HippoHttpRequest<?>> {
 
-    public static final String TAG = HttpNetworkExecutor.class.getSimpleName();
+    public static final String TAG = HttpNetwork.class.getSimpleName();
 
     private static int DEFAULT_POOL_SIZE = 4096;
 
@@ -42,12 +42,12 @@ public class HttpNetworkExecutor implements NetworkExecutor<HippoHttpRequest<?>>
      */
     private HttpClient httpClient;
 
-    public HttpNetworkExecutor(HttpClient httpClient) {
+    public HttpNetwork(HttpClient httpClient) {
         this(new ByteArrayPool(DEFAULT_POOL_SIZE));
         this.httpClient = httpClient;
     }
 
-    private HttpNetworkExecutor(ByteArrayPool mPool) {
+    private HttpNetwork(ByteArrayPool mPool) {
         this.mPool = mPool;
     }
 

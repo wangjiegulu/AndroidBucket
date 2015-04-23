@@ -5,7 +5,7 @@ import com.wangjie.androidbucket.services.BaseAccessResponse;
 import com.wangjie.androidbucket.services.network.HippoRequest;
 import com.wangjie.androidbucket.services.network.HippoRequestQueue;
 import com.wangjie.androidbucket.services.network.http.SSLSocketFactoryEx;
-import com.wangjie.androidbucket.services.network.toolbox.HttpNetworkExecutor;
+import com.wangjie.androidbucket.services.network.toolbox.HttpNetwork;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ClientConnectionManager;
@@ -55,7 +55,7 @@ public class HttpApplicationController extends ABApplication {
 
     protected HippoRequestQueue getHttpRequestQueue() {
         if (httpRequestQueue == null) {
-            HttpNetworkExecutor networkExecutor = new HttpNetworkExecutor(getSSLHttpClient(80, 9094, 20000, 20000));
+            HttpNetwork networkExecutor = new HttpNetwork(getSSLHttpClient(80, 9094, 20000, 20000));
             httpRequestQueue = HippoRequestQueue.newHippoRequestQueue(networkExecutor);
         }
         return httpRequestQueue;

@@ -25,7 +25,7 @@ public class HippoNetworkDispatcher extends Thread {
 
     private boolean quit;
 
-    private NetworkExecutor networkExecutor;
+    private Network network;
 
     private Handler mHandler;
 
@@ -34,9 +34,9 @@ public class HippoNetworkDispatcher extends Thread {
     private PreExecuteRunnable mPreExecuteRunnable;
 
     public HippoNetworkDispatcher(PriorityBlockingQueue<HippoRequest> queue,
-                                  NetworkExecutor networkExecutor) {
+                                  Network network) {
         this.queue = queue;
-        this.networkExecutor = networkExecutor;
+        this.network = network;
         quit = false;
         mHandler = new Handler(Looper.getMainLooper());
         mResponseDispatcherRunnable = new ResponseDispatcherRunnable();
@@ -72,7 +72,7 @@ public class HippoNetworkDispatcher extends Thread {
             NetworkResponse networkResponse = null;
             try {
                 // Perform network request
-                networkResponse = networkExecutor.performRequest(request);
+                networkResponse = network.performRequest(request);
             } catch (HippoException e) {
                 networkResponse = new NetworkResponse(e);
                 Logger.e(TAG, e);

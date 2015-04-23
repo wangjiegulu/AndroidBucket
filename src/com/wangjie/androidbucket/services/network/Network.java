@@ -8,6 +8,6 @@ import com.wangjie.androidbucket.services.network.exception.HippoException;
  * @Description
  * @Createdate 14-9-25 11:48
  */
-public interface NetworkExecutor<T extends HippoRequest<?>> {
+public interface Network<T extends HippoRequest<?>> {
     public NetworkResponse performRequest(T hippoRequest) throws HippoException;
 }
