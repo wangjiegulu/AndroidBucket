@@ -10,7 +10,6 @@ import com.wangjie.androidbucket.R;
 import com.wangjie.androidbucket.utils.ABTextUtil;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,12 +17,12 @@ import java.util.Map;
  * Date: 14-3-26
  * Time: 下午5:31
  */
-public class SheetAdapter extends BaseAdapter{
+public class SheetAdapter extends BaseAdapter {
     Context context;
-    List<Map<String, String>> list;
+    List<String> list;
     private int itemSelectorBg;
 
-    public SheetAdapter(Context context, List<Map<String, String>> list, int itemSelectorBg) {
+    public SheetAdapter(Context context, List<String> list, int itemSelectorBg) {
         this.context = context;
         this.list = list;
         this.itemSelectorBg = itemSelectorBg;
@@ -47,7 +46,7 @@ public class SheetAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(null == convertView){
+        if (null == convertView) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.ab_sheet_item, null);
             holder.title = (TextView) convertView.findViewById(R.id.ab_sheet_item_title_tv);
@@ -55,14 +54,14 @@ public class SheetAdapter extends BaseAdapter{
             int padding = ABTextUtil.dip2px(context, 12);
             holder.title.setPadding(padding, padding, padding, padding);
             convertView.setTag(holder);
-        }else{
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.title.setText(list.get(position).get(SheetDialog.KEY_TITLE));
+        holder.title.setText(list.get(position));
         return convertView;
     }
 
-    class ViewHolder{
+    class ViewHolder {
         TextView title;
     }
 

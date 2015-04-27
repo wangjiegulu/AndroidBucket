@@ -4,15 +4,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.*;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
 import com.wangjie.androidbucket.R;
 import com.wangjie.androidbucket.log.Logger;
-import com.wangjie.androidbucket.utils.ABTextUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * ios中的Sheet风格对话框
@@ -25,7 +23,6 @@ public class SheetDialog extends Dialog implements AdapterView.OnItemClickListen
     private static final String TAG = SheetDialog.class.getSimpleName();
     private ListView popupLv; // 菜单ListView
     private int itemSelectorBg;
-    private Context context;
 
     private String title;
     private String cancel;
@@ -33,11 +30,10 @@ public class SheetDialog extends Dialog implements AdapterView.OnItemClickListen
 
     private OnVertMenuItemClickListener listener;
 
-    public static final String KEY_TITLE = "title";
-
-    public static interface OnVertMenuItemClickListener{
+    public interface OnVertMenuItemClickListener {
         /**
          * 菜单item点击回调方法
+         *
          * @param parent
          * @param view
          * @param position
@@ -48,6 +44,7 @@ public class SheetDialog extends Dialog implements AdapterView.OnItemClickListen
 
     /**
      * 创建一个对话框
+     *
      * @param context
      * @param itemSelectorBg 如果是大于小于0，则使用默认的点击背景效果
      * @param title
@@ -56,42 +53,39 @@ public class SheetDialog extends Dialog implements AdapterView.OnItemClickListen
      * @param listener
      * @return
      */
-    public static Dialog createVerticalMenu(Context context, int itemSelectorBg, String title, String cancel, String[] items, OnVertMenuItemClickListener listener){
+    public static Dialog createVerticalMenu(Context context, int itemSelectorBg, String title, String cancel, String[] items, OnVertMenuItemClickListener listener) {
         SheetDialog verticalMenu = new SheetDialog(context, itemSelectorBg, title, cancel, items, listener);
         return verticalMenu;
     }
 
     public SheetDialog(Context context) {
-        super(context);
-    }
-
-    public SheetDialog(Context context, int theme) {
-        super(context, theme);
-    }
-
-    public SheetDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
+        super(context, R.style.customDialogStyle);
+        initialWindow((Activity) context);
     }
 
     public SheetDialog(Context context, int itemSelectorBg, String title, String cancel, String[] items, OnVertMenuItemClickListener listener) {
         super(context, R.style.customDialogStyle);
-        this.context = context;
         this.listener = listener;
         this.itemSelectorBg = itemSelectorBg;
         this.title = title;
         this.cancel = cancel;
         this.items = items;
 
+        initialWindow((Activity) context);
 
+        initView();
+    }
+
+    private void initialWindow(Activity context) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         //        lp.dimAmount = 0.5f; // 设置进度条周边暗度（0.0f ~ 1.0f）
         lp.dimAmount = 0.3f; // 设置全黑
         getWindow().setAttributes(lp);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
-        WindowManager.LayoutParams wl = ((Activity)context).getWindow().getAttributes();
+        WindowManager.LayoutParams wl = context.getWindow().getAttributes();
         wl.x = 0;
-        wl.y = ((Activity)context).getWindowManager().getDefaultDisplay().getHeight();
+        wl.y = context.getWindowManager().getDefaultDisplay().getHeight();
         //设置显示位置
         this.onWindowAttributesChanged(wl);
 
@@ -99,23 +93,17 @@ public class SheetDialog extends Dialog implements AdapterView.OnItemClickListen
         this.getWindow().setWindowAnimations(R.style.animDialogPushUp);
 
         this.setCanceledOnTouchOutside(true);
-
-        initView();
     }
 
 
     /**
      * 初始化菜单
      */
-    private void initView() {
-        LayoutInflater inflater = LayoutInflater.from(context);
+    protected void initView() {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.ab_sheet, null);
-        List<Map<String, String>> itemsL = getMenuData();
-        if(null == itemsL){
-            return;
-        }
 
-        SheetAdapter adapter = new SheetAdapter(context, itemsL, itemSelectorBg);
+        SheetAdapter adapter = new SheetAdapter(getContext(), getMenuData(), itemSelectorBg);
 
         popupLv = (ListView) view.findViewById(R.id.ab_sheet_lv);
         TextView titleTv = (TextView) view.findViewById(R.id.ab_sheet_title_tv);
@@ -124,18 +112,16 @@ public class SheetDialog extends Dialog implements AdapterView.OnItemClickListen
 //        int padding = ABTextUtil.dip2px(context, 12);
 //        cancelTv.setPadding(padding, padding, padding, padding);
 
-        cancelTv.setText(cancel);
+        cancelTv.setText(getCancel());
         cancelTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SheetDialog.this.dismiss();
             }
         });
-        titleTv.setText(title);
+        titleTv.setText(getTitle());
         popupLv.setAdapter(adapter);
         popupLv.setOnItemClickListener(this);
-
-
 
         this.setContentView(view);
 
@@ -143,30 +129,28 @@ public class SheetDialog extends Dialog implements AdapterView.OnItemClickListen
 
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getCancel() {
+        return cancel;
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if(null != listener){
+        if (null != listener) {
             listener.onDropDownMenuItemClick(parent, view, position, id);
         }
 
     }
 
-    private List<Map<String, String>> getMenuData() {
-//        String[] itemTitles = iDropMenu.getDropDownMenuItems();
-        if(null == items || items.length <= 0){
+    protected List<String> getMenuData() {
+        if (null == items || items.length <= 0) {
             Logger.d(TAG, "menu items have no items!");
-            return null;
+            return new ArrayList<>();
         }
-        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-        Map<String, String> map;
-
-        for(int i = 0; i < items.length; i++){
-            map = new HashMap<String, String>();
-            map.put(KEY_TITLE, items[i]);
-            list.add(map);
-        }
-
-        return list;
+        return Arrays.asList(items);
     }
 
     public ListView getPopupLv() {
@@ -176,8 +160,6 @@ public class SheetDialog extends Dialog implements AdapterView.OnItemClickListen
     public void setPopupLv(ListView popupLv) {
         this.popupLv = popupLv;
     }
-
-
 
 
 }
