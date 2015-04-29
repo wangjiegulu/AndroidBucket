@@ -18,8 +18,8 @@ android {
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 21
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.2"
     }
 
     buildTypes { // 配置打包的版本
@@ -71,7 +71,9 @@ android {
  * https://gradle.org/docs/current/dsl/org.gradle.api.artifacts.dsl.DependencyHandler.html
  */
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-//    compile 'com.android.support:support-v4:21.0.0'
-//    compile 'com.android.support:recyclerview-v7:+'
+//    compile fileTree(dir: 'libs', include: '*.jar')
+
+    compile 'com.android.support:support-v4:21.0.3'
+    compile 'com.android.support:recyclerview-v7:21.0.3'
+    compile 'com.android.support:appcompat-v7:21.0.3'
 }
