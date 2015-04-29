@@ -17,7 +17,7 @@ import java.util.concurrent.*;
 @TargetApi(Build.VERSION_CODES.CUPCAKE)
 public abstract class BaseAccessService<Params, Progress, Result> implements CancelableTask {
 
-    private static final int MAX_THREAD_COUNT = 64;
+    private static final int MAX_THREAD_COUNT = 16;
 
     public static final Executor THREAD_POOL_EXECUTOR = Executors.newFixedThreadPool(MAX_THREAD_COUNT);
 
@@ -133,7 +133,6 @@ public abstract class BaseAccessService<Params, Progress, Result> implements Can
             @Override
             public void run() {
                 onPostExecute(result);
-                remove();
                 status = Status.FINISHED;
             }
         });

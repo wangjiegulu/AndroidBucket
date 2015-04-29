@@ -2,6 +2,7 @@ package com.wangjie.androidbucket.core.file.utils;
 
 import android.annotation.TargetApi;
 import android.os.Build;
+import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.utils.ABIOUtil;
 import com.wangjie.androidbucket.utils.ABTextUtil;
 import org.apache.http.HttpResponse;
@@ -59,11 +60,10 @@ public class FileDownloadUtil {
                 fos.flush();
             }
         } catch (IOException e) {
-            throw e;
+            Logger.e("download", e);
         } finally {
             ABIOUtil.closeIO(is, fos);
         }
-
         return file;
     }
 
