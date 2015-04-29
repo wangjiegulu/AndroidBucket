@@ -3,6 +3,7 @@ package com.wangjie.androidbucket.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import com.wangjie.androidbucket.R;
@@ -26,8 +27,9 @@ public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnChec
 
     private OnRgsExtraCheckedChangedListener onRgsExtraCheckedChangedListener; // 用于让调用者在切换tab时候增加新的功能
     private OnTabClickedListener onTabClickedListener; // 点击tab时回调
+    private OnTabDoubleClickListener onTabDoubleClickListener;
 
-    public FragmentTabAdapter(FragmentManager fragmentManager, List<T> fragments, int fragmentContentId, RadioGroup rgs) {
+    public FragmentTabAdapter(FragmentManager fragmentManager, List<T> fragments, int fragmentContentId, RadioGroup rgs, OnTabDoubleClickListener onTabDoubleClickListener) {
         this.fragments = fragments;
         this.rgs = rgs;
         this.fragmentActivity = fragmentManager;
@@ -39,7 +41,11 @@ public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnChec
         ft.commit();
 
         rgs.setOnCheckedChangeListener(this);
-
+        //双击tab
+        if(onTabDoubleClickListener != null){
+            this.onTabDoubleClickListener = onTabDoubleClickListener;
+            this.onTabDoubleClickListener.setOnTabDoubliClickedListener(rgs, 0 ,currentTab);
+        }
     }
 
 
@@ -74,6 +80,10 @@ public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnChec
                 // 如果设置了切换tab额外功能功能接口
                 if(null != onRgsExtraCheckedChangedListener){
                     onRgsExtraCheckedChangedListener.OnRgsExtraCheckedChanged(radioGroup, checkedId, i);
+                }
+
+                if(null != onTabDoubleClickListener) {
+                    this.onTabDoubleClickListener.setOnTabDoubliClickedListener(radioGroup, checkedId, i);
                 }
                 break;
             }
@@ -152,4 +162,7 @@ public class FragmentTabAdapter<T extends Fragment> implements RadioGroup.OnChec
         }
     }
 
+    public static interface OnTabDoubleClickListener {
+        void setOnTabDoubliClickedListener(RadioGroup radioGroup, int radiobuttonId, int index);
+    }
 }
