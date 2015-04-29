@@ -112,11 +112,8 @@ public class ABTextUtil {
         return null != objs && objs.length >= count;
     }
 
-    public static boolean isEquals(Object obj1, Object obj2) {
-        if (null != obj1) {
-            return obj1.equals(obj2);
-        }
-        return null == obj2;
+    public static boolean isEquals(Object a, Object b) {
+        return (a == null) ? (b == null) : a.equals(b);
     }
 
     public static String trim(CharSequence charSequence) {
