@@ -167,7 +167,7 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
     }
 
     public void abort() {
-        if (state == State.FINISHING) {
+        if (state == State.FINISHING || state == State.FINISHED) {
             return;
         }
         if (network != null) {
