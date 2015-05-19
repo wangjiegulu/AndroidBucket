@@ -35,7 +35,7 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
 
     private static int DEFAULT_POOL_SIZE = 4096;
 
-    private final ByteArrayPool mPool;
+    private static final ByteArrayPool mPool = new ByteArrayPool(DEFAULT_POOL_SIZE);
 
     /**
      * HttpClient
@@ -43,19 +43,13 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
     private HttpClient httpClient;
 
     public HttpNetwork(HttpClient httpClient) {
-        this(new ByteArrayPool(DEFAULT_POOL_SIZE));
         this.httpClient = httpClient;
     }
-
-    private HttpNetwork(ByteArrayPool mPool) {
-        this.mPool = mPool;
-    }
-
 
     /**
      * Reads the contents of HttpEntity into a byte[].
      */
-    private byte[] entityToBytes(HttpEntity entity) throws IOException, HippoException {
+    public static byte[] entityToBytes(HttpEntity entity) throws IOException, HippoException {
         PoolingByteArrayOutputStream bytes =
                 new PoolingByteArrayOutputStream(mPool, (int) entity.getContentLength());
         byte[] buffer = null;
