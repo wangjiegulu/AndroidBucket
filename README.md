@@ -10,12 +10,12 @@ AndroidBucket
         clone代码，并在项目中引入AndroidBucket。
         
 ###Gradle
-        compile 'com.github.wangjiegulu:AndroidBucket:1.0.1'
+        compile 'com.github.wangjiegulu:AndroidBucket:1.0.2'
 ###Maven
         <dependency>
           <groupId>com.github.wangjiegulu</groupId>
           <artifactId>AndroidBucket</artifactId>
-          <version>1.0.1</version>
+          <version>1.0.2</version>
           <type>aar</type>
         </dependency>
 
