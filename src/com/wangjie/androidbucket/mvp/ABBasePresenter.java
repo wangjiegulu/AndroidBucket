@@ -49,13 +49,10 @@ public class ABBasePresenter<V extends ABActivityViewer, I extends ABInteractor>
         while (iter.hasNext()) {
             CancelableTask task = iter.next();
             Logger.i(TAG, "closeAllTask: " + task);
-            try {
-                task.cancel(true);
-                iter.remove();
-            } catch (Exception e) {
-                Logger.w(TAG, e);
-            }
+            task.cancel(true);
+            iter.remove();
         }
+
     }
 
     public <U, R> void goRuntask(Runtask<U, R> runtask) {

@@ -1,6 +1,7 @@
 package com.wangjie.androidbucket.thread;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import com.wangjie.androidbucket.services.CancelableTask;
 
@@ -25,7 +26,7 @@ public abstract class Runtask<U, R> implements Runnable, CancelableTask {
 
     private boolean isCanceled;
 
-    protected Handler rHandler = new Handler() {
+    protected Handler rHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
