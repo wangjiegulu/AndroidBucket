@@ -41,13 +41,10 @@ public class ABSupportFragmentActivity extends FragmentActivity implements ABAct
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        synchronized (((Object) this).getClass()) {
             if (isFirstFocused && hasFocus) {
                 isFirstFocused = false;
                 onWindowInitialized();
             }
-        }
-
     }
 
     /**

@@ -34,11 +34,9 @@ public class ABActivity extends Activity implements ABActivityViewer, ABActivity
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        synchronized (((Object) this).getClass()) {
             if (isFirstFocused && hasFocus) {
                 isFirstFocused = false;
                 onWindowInitialized();
-            }
         }
     }
 

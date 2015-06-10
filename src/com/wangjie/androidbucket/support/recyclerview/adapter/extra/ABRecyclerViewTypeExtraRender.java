@@ -9,7 +9,7 @@ import com.wangjie.androidbucket.adapter.typeadapter.ABAdapterTypeRender;
  * Email: tiantian.china.2@gmail.com
  * Date: 1/22/15.
  */
-public class ABRecyclerViewTypeExtraRender implements ABAdapterTypeRender<ABRecyclerViewTypeExtraHolder> {
+/*public*/ class ABRecyclerViewTypeExtraRender implements ABAdapterTypeRender<ABRecyclerViewTypeExtraHolder> {
     protected ABRecyclerViewTypeExtraHolder holder;
 
     protected ABRecyclerViewTypeExtraRender(View extraView) {

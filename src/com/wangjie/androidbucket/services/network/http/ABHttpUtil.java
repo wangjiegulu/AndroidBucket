@@ -226,8 +226,8 @@ public class ABHttpUtil {
             return strResult;
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
-            throw new RuntimeException(e);
         }
+        return null;
     }
 
     private static HttpResponse getHttpResponse(int soTimeout, int connectionTimeout, HttpUriRequest httpRequest, String url) throws IOException {
