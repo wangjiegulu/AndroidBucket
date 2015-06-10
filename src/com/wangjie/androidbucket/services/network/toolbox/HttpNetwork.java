@@ -8,6 +8,7 @@ import com.wangjie.androidbucket.services.network.Network;
 import com.wangjie.androidbucket.services.network.NetworkResponse;
 import com.wangjie.androidbucket.services.network.exception.HippoException;
 import com.wangjie.androidbucket.services.network.interceptor.Interceptor;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -40,9 +41,9 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
     /**
      * HttpClient
      */
-    private HttpClient httpClient;
+    private DefaultHttpClient httpClient;
 
-    public HttpNetwork(HttpClient httpClient) {
+    public HttpNetwork(DefaultHttpClient httpClient) {
         this.httpClient = httpClient;
     }
 
@@ -84,7 +85,6 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
      * @param httpUriRequest
      */
     protected void prepareRequest(HttpUriRequest httpUriRequest) {
-
     }
 
     private void addHeaders(HttpUriRequest httpUriRequest, HippoHttpRequest request) {
@@ -93,10 +93,6 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
                 httpUriRequest.setHeader(new BasicHeader(nameValuePair.getName(), nameValuePair.getValue()));
             }
         }
-    }
-
-    public void setHttpClient(HttpClient httpClient) {
-        this.httpClient = httpClient;
     }
 
     private Set<Interceptor> interceptors = new HashSet<>();
@@ -154,9 +150,12 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
 
     @Override
     public NetworkResponse performRequest(HippoHttpRequest<?> request) throws HippoException {
+        DefaultHttpClient client;
         if (httpClient == null) {
             Logger.d(TAG, "Use default http client.");
-            httpClient = new DefaultHttpClient();
+            client = new DefaultHttpClient();
+        } else {
+            client = httpClient;
         }
         while (true) {
             if (request.isCancel()) {
@@ -173,8 +172,11 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
                 Logger.d(TAG, "Url: " + request.getUrl());
                 request.setUriRequest(httpUriRequest);
                 if (NetworkUtils.IS_HOST_REACHABLE) {
+                    client.getCookieStore().clear();
                     httpResponse = httpClient.execute(httpUriRequest);
                 } else {
+                    client = new DefaultHttpClient();
+                    client.getCookieStore().clear();
                     httpResponse = new DefaultHttpClient().execute(httpUriRequest);
                 }
                 request.setState(HippoRequest.State.FINISHING);
@@ -198,8 +200,15 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
                 if (httpResponse != null) {
                     int statusCode = httpResponse.getStatusLine().getStatusCode();
                     Logger.w(TAG, "Http response status code: " + statusCode);
-                    if (responseContents != null) {
-                        networkResponse = new NetworkResponse(new HippoException("Error status code: " + statusCode), responseContents);
+                    try {
+                        responseContents = entityToBytes(httpResponse.getEntity());
+                    } catch (IOException ignored) {
+                    } finally {
+                        if (responseContents != null) {
+                            networkResponse = new NetworkResponse(new HippoException("Error status code: " + statusCode), responseContents);
+                        } else {
+                            networkResponse = new NetworkResponse(new HippoException("No network connection.", e));
+                        }
                     }
                 } else {
                     networkResponse = new NetworkResponse(new HippoException("No network connection.", e));
