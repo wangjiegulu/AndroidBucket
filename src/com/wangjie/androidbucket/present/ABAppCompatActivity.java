@@ -2,21 +2,18 @@ package com.wangjie.androidbucket.present;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 import com.wangjie.androidbucket.manager.BaseActivityManager;
 import com.wangjie.androidbucket.mvp.ABActivityViewer;
 import com.wangjie.androidbucket.mvp.ABBasePresenter;
 
 /**
- * Created by wangjie on 6/15/14.
+ * Author: wangjie
+ * Email: tiantian.china.2@gmail.com
+ * Date: 6/10/15.
  */
-/**
- * @deprecated Use {@link com.wangjie.androidbucket.present.ABAppCompatActivity} instead.
- */
-@Deprecated
-public class ABActionBarActivity extends ActionBarActivity implements ABActivityViewer, ABActivityCommon {
-
+public class ABAppCompatActivity extends AppCompatActivity implements ABActivityViewer, ABActivityCommon {
     private BaseActivityManager baseActivityManager;
 
     private boolean isFirstFocused = true;
@@ -38,9 +35,9 @@ public class ABActionBarActivity extends ActionBarActivity implements ABActivity
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-            if (isFirstFocused && hasFocus) {
-                isFirstFocused = false;
-                onWindowInitialized();
+        if (isFirstFocused && hasFocus) {
+            isFirstFocused = false;
+            onWindowInitialized();
         }
     }
 
@@ -162,6 +159,4 @@ public class ABActionBarActivity extends ActionBarActivity implements ABActivity
             presenter.closeAllTask();
         }
     }
-
-
 }
