@@ -3,6 +3,7 @@ package com.wangjie.androidbucket.services;
 import android.annotation.TargetApi;
 import android.os.*;
 import android.os.Process;
+
 import com.wangjie.androidbucket.log.Logger;
 
 import java.util.Collection;
@@ -47,8 +48,9 @@ public abstract class BaseAccessService<Params, Progress, Result> implements Can
             @Override
             protected void done() {
                 try {
-                    notifyResult(get());
-                } catch (InterruptedException | ExecutionException |  CancellationException e) {
+                    if (status != Status.CANCEL)
+                        notifyResult(get());
+                } catch (InterruptedException | ExecutionException | CancellationException e) {
                     Logger.e(TAG, e);
                 }
             }
@@ -140,10 +142,12 @@ public abstract class BaseAccessService<Params, Progress, Result> implements Can
 
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
+        status = Status.CANCEL;
         return futureTask.cancel(mayInterruptIfRunning);
     }
 
     public enum Status {
+        CANCEL,
         FINISHED,
         PENDING,
         RUNNING;

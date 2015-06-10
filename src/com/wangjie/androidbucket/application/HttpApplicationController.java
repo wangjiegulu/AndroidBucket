@@ -1,17 +1,21 @@
 package com.wangjie.androidbucket.application;
 
 import android.util.Log;
+
 import com.wangjie.androidbucket.services.BaseAccessResponse;
 import com.wangjie.androidbucket.services.network.HippoRequest;
 import com.wangjie.androidbucket.services.network.HippoRequestQueue;
 import com.wangjie.androidbucket.services.network.http.SSLSocketFactoryEx;
 import com.wangjie.androidbucket.services.network.toolbox.HttpNetwork;
+
 import org.apache.http.HttpVersion;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -21,6 +25,7 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 
 import java.security.KeyStore;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Hubert He
@@ -78,7 +83,7 @@ public class HttpApplicationController extends ABApplication {
      *
      * @return
      */
-    protected HttpClient getSSLHttpClient(int httpPort, int httpsPort, int soTimeout, int connectionTimeout) {
+    protected DefaultHttpClient getSSLHttpClient(int httpPort, int httpsPort, int soTimeout, int connectionTimeout) {
         try {
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
             trustStore.load(null, null);
@@ -98,9 +103,8 @@ public class HttpApplicationController extends ABApplication {
             registry.register(new Scheme("http", sf, httpPort));
             registry.register(new Scheme("https", sf, httpsPort));
 
-
             ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
-
+            ccm.closeIdleConnections(120, TimeUnit.SECONDS);
             return new DefaultHttpClient(ccm, params);
         } catch (Exception e) {
             return new DefaultHttpClient();

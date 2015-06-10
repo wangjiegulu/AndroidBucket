@@ -1,6 +1,5 @@
 package com.wangjie.androidbucket.services.network.http;
 
-import com.wangjie.androidbucket.services.BaseAccessParameter;
 import com.wangjie.androidbucket.utils.ABTextUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -15,7 +14,7 @@ import java.util.List;
  * @Description Http访问参数
  * @Createdate 14-9-4 10:09
  */
-public class HttpAccessParameter extends BaseAccessParameter {
+public class HttpAccessParameter  {
 
 
     public enum SessionEnableMethod {ENABLE, DISABLE, AUTO}

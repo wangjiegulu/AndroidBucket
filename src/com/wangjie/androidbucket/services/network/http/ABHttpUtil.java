@@ -1,9 +1,11 @@
 package com.wangjie.androidbucket.services.network.http;
 
 import android.util.Log;
+
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.network.http.interceptor.HttpMethodInterceptor;
 import com.wangjie.androidbucket.utils.ABTextUtil;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
@@ -28,6 +30,7 @@ import org.apache.http.protocol.HTTP;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.CookieStore;
 import java.security.KeyStore;
 import java.util.Arrays;
 import java.util.Map;
@@ -120,7 +123,7 @@ public class ABHttpUtil {
      *
      * @return
      */
-    public static HttpClient getSSLHttpClient(int soTimeout, int connectionTimeout) {
+    public static DefaultHttpClient getSSLHttpClient(int soTimeout, int connectionTimeout) {
         try {
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
             trustStore.load(null, null);
@@ -228,15 +231,15 @@ public class ABHttpUtil {
     }
 
     private static HttpResponse getHttpResponse(int soTimeout, int connectionTimeout, HttpUriRequest httpRequest, String url) throws IOException {
-        HttpClient httpClient;
+        DefaultHttpClient httpClient;
         if (!isEnableSSL(url)) {
             Logger.d(TAG, "Initial none SSL HTTP connection.");
             httpClient = new DefaultHttpClient();
-
         } else {
             Logger.d(TAG, "Initial SSL HTTP connection.");
             httpClient = ABHttpUtil.getSSLHttpClient(soTimeout, connectionTimeout);
         }
+        httpClient.getCookieStore().clear();
         return httpClient.execute(httpRequest);
     }
 
@@ -304,26 +307,6 @@ public class ABHttpUtil {
 
     private static boolean isEnableSSL(String url) {
         return url.toLowerCase().startsWith("https");
-    }
-
-
-    /**
-     * map转为NameValuePairs
-     *
-     * @param map
-     * @return
-     */
-    public static NameValuePair[] convert2NameValuePairs(Map<String, Object> map) {
-        if (ABTextUtil.isEmpty(map)) {
-            return null;
-        }
-        NameValuePair[] nvps = new NameValuePair[map.size()];
-        int i = 0;
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-            nvps[i] = new BasicNameValuePair(entry.getKey(), entry.getValue() + "");
-            i++;
-        }
-        return nvps;
     }
 
 
