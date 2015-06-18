@@ -9,13 +9,10 @@ import com.wangjie.androidbucket.services.network.http.SSLSocketFactoryEx;
 import com.wangjie.androidbucket.services.network.toolbox.HttpNetwork;
 
 import org.apache.http.HttpVersion;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -35,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class HttpApplicationController extends ABApplication {
 
-    public static final String TAG = HttpApplicationController.class.getSimpleName();
+    private static final String TAG = HttpApplicationController.class.getSimpleName();
 
     /**
      * 请求队列
@@ -60,7 +57,7 @@ public class HttpApplicationController extends ABApplication {
 
     protected HippoRequestQueue getHttpRequestQueue() {
         if (httpRequestQueue == null) {
-            HttpNetwork networkExecutor = new HttpNetwork(getSSLHttpClient(80, 9094, 20000, 20000));
+            HttpNetwork networkExecutor = new HttpNetwork(getHttpClient(80, 9094, 20000, 20000));
             httpRequestQueue = HippoRequestQueue.newHippoRequestQueue(networkExecutor);
         }
         return httpRequestQueue;
@@ -83,7 +80,7 @@ public class HttpApplicationController extends ABApplication {
      *
      * @return
      */
-    protected DefaultHttpClient getSSLHttpClient(int httpPort, int httpsPort, int soTimeout, int connectionTimeout) {
+    protected DefaultHttpClient getHttpClient(int httpPort, int httpsPort, int soTimeout, int connectionTimeout) {
         try {
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
             trustStore.load(null, null);

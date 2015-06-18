@@ -45,14 +45,11 @@ public class ABBasePresenter<V extends ABActivityViewer, I extends ABInteractor>
 
     @Override
     public void closeAllTask() {
-        Iterator<CancelableTask> iter = cancelableTaskList.iterator();
-        while (iter.hasNext()) {
-            CancelableTask task = iter.next();
+        for (CancelableTask task : cancelableTaskList) {
             Logger.i(TAG, "closeAllTask: " + task);
             task.cancel(true);
-            iter.remove();
         }
-
+        cancelableTaskList.clear();
     }
 
     public <U, R> void goRuntask(Runtask<U, R> runtask) {

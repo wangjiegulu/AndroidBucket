@@ -7,6 +7,7 @@ import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.wangjie.androidbucket.R;
 import com.wangjie.androidbucket.log.Logger;
 
@@ -108,9 +109,6 @@ public class SheetDialog extends Dialog implements AdapterView.OnItemClickListen
         popupLv = (ListView) view.findViewById(R.id.ab_sheet_lv);
         TextView titleTv = (TextView) view.findViewById(R.id.ab_sheet_title_tv);
         TextView cancelTv = (TextView) view.findViewById(R.id.ab_sheet_cancel_tv);
-//        cancelTv.setBackgroundResource(R.drawable.selector_bg_sheet_item);
-//        int padding = ABTextUtil.dip2px(context, 12);
-//        cancelTv.setPadding(padding, padding, padding, padding);
 
         cancelTv.setText(getCancel());
         cancelTv.setOnClickListener(new View.OnClickListener() {

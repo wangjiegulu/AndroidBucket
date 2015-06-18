@@ -150,18 +150,15 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
 
     @Override
     public NetworkResponse performRequest(HippoHttpRequest<?> request) throws HippoException {
-        DefaultHttpClient client;
         if (httpClient == null) {
             Logger.d(TAG, "Use default http client.");
-            client = new DefaultHttpClient();
-        } else {
-            client = httpClient;
+            httpClient = new DefaultHttpClient();
         }
         while (true) {
             if (request.isCancel()) {
                 return new NetworkResponse();
             }
-            NetworkResponse networkResponse = null;
+            NetworkResponse networkResponse;
             HttpResponse httpResponse = null;
             byte[] responseContents = null;
             try {
@@ -171,14 +168,10 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
                 prepareRequest(httpUriRequest);
                 Logger.d(TAG, "Url: " + request.getUrl());
                 request.setUriRequest(httpUriRequest);
-                if (NetworkUtils.IS_HOST_REACHABLE) {
-                    client.getCookieStore().clear();
-                    httpResponse = httpClient.execute(httpUriRequest);
-                } else {
-                    client = new DefaultHttpClient();
-                    client.getCookieStore().clear();
-                    httpResponse = new DefaultHttpClient().execute(httpUriRequest);
-                }
+                httpClient.getCookieStore().clear();
+                httpResponse = httpClient.execute(httpUriRequest);
+                int statusCode = httpResponse.getStatusLine().getStatusCode();
+                Logger.w(TAG, "Http response status code: " + statusCode);
                 request.setState(HippoRequest.State.FINISHING);
                 responseContents = entityToBytes(httpResponse.getEntity());
                 // 如果接收到的回复为空，默认赋值为长度为0的byte数组
@@ -199,7 +192,6 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
                 Logger.w(TAG, "Http access exception: " + e.getMessage());
                 if (httpResponse != null) {
                     int statusCode = httpResponse.getStatusLine().getStatusCode();
-                    Logger.w(TAG, "Http response status code: " + statusCode);
                     try {
                         responseContents = entityToBytes(httpResponse.getEntity());
                     } catch (IOException ignored) {
