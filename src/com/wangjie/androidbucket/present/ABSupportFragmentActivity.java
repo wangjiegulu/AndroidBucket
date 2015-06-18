@@ -11,6 +11,10 @@ import com.wangjie.androidbucket.mvp.ABBasePresenter;
 /**
  * Created by wangjie on 6/15/14.
  */
+/**
+ * @deprecated Use {@link com.wangjie.androidbucket.present.ABAppCompatActivity} instead.
+ */
+@Deprecated
 public class ABSupportFragmentActivity extends FragmentActivity implements ABActivityViewer, ABActivityCommon {
     private BaseActivityManager baseActivityManager;
 

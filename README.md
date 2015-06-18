@@ -9,13 +9,13 @@ AndroidBucket
 ###使用方法<br/>
         clone代码，并在项目中引入AndroidBucket。
         
-###Gradle
-        compile 'com.github.wangjiegulu:AndroidBucket:1.0.2'
-###Maven
+###Gradle([Check newest version](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22AndroidBucket%22))
+        compile 'com.github.wangjiegulu:AndroidBucket:x.x.x'
+###Maven([Check newest version](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22AndroidBucket%22))
         <dependency>
           <groupId>com.github.wangjiegulu</groupId>
           <artifactId>AndroidBucket</artifactId>
-          <version>1.0.2</version>
+          <version>x.x.x</version>
           <type>aar</type>
         </dependency>
 
