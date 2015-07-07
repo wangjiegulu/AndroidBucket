@@ -2,36 +2,23 @@ package com.wangjie.androidbucket.services.network.http;
 
 import android.util.Log;
 
+import com.wangjie.androidbucket.application.HttpApplicationController;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.network.http.interceptor.HttpMethodInterceptor;
 import com.wangjie.androidbucket.utils.ABTextUtil;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.CookieStore;
-import java.security.KeyStore;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -51,7 +38,7 @@ public class ABHttpUtil {
         httpConfig = new HttpConfig();
     }
 
-    public static interface OnHttpSessionConnectListener {
+    public interface OnHttpSessionConnectListener {
         String getDomain();
 
         int[] getPorts();
@@ -72,84 +59,13 @@ public class ABHttpUtil {
         ABHttpUtil.interceptor = interceptor;
     }
 
-
-    /**
-     * 获取SSL连接
-     *
-     * @param httpConfig HTTP配置
-     * @return
-     */
-    public static HttpClient getSSLHttpClient(HttpConfig httpConfig) {
-        try {
-            // 获取一个可用的HttpConfig
-            httpConfig = getDefaultHttpConfig(httpConfig);
-
-            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            trustStore.load(null, null);
-
-            SSLSocketFactory sf = new SSLSocketFactoryEx(trustStore);
-            sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-
-            HttpParams params = new BasicHttpParams();
-
-            // 设置超时时间
-            HttpConnectionParams.setConnectionTimeout(params, httpConfig.getConnectionTimeout());
-            HttpConnectionParams.setSoTimeout(params, httpConfig.getSoTimeout());
-            HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-            HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-
-            SchemeRegistry registry = new SchemeRegistry();
-
-            int[] ports;
-            if (null == onHttpSessionConnectListener || null == (ports = onHttpSessionConnectListener.getPorts()) || ports.length < 2) {
-                registry.register(new Scheme("http", sf, httpConfig.getHttpPort()));
-                registry.register(new Scheme("https", sf, httpConfig.getHttpsPort()));
-            } else {
-                registry.register(new Scheme("http", sf, ports[0]));
-                registry.register(new Scheme("https", sf, ports[1]));
-            }
-
-
-            ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
-
-            return new DefaultHttpClient(ccm, params);
-        } catch (Exception e) {
-            return new DefaultHttpClient();
-        }
-    }
-
     /**
      * 获取SSL连接
      *
      * @return
      */
     public static DefaultHttpClient getSSLHttpClient(int soTimeout, int connectionTimeout) {
-        try {
-            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            trustStore.load(null, null);
-
-            SSLSocketFactory sf = new SSLSocketFactoryEx(trustStore);
-            sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-
-            HttpParams params = new BasicHttpParams();
-
-            // 设置超时时间
-            HttpConnectionParams.setConnectionTimeout(params, connectionTimeout);
-            HttpConnectionParams.setSoTimeout(params, soTimeout);
-            HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-            HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-
-            SchemeRegistry registry = new SchemeRegistry();
-            registry.register(new Scheme("http", sf, httpConfig.getHttpPort()));
-            registry.register(new Scheme("https", sf, httpConfig.getHttpsPort()));
-
-
-            ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
-
-            return new DefaultHttpClient(ccm, params);
-        } catch (Exception e) {
-            return new DefaultHttpClient();
-        }
+        return HttpApplicationController.getInstance().getHttpClient();
     }
 
 
@@ -217,10 +133,9 @@ public class ABHttpUtil {
         }
         try {
             // 将流转换为字符串
-            HttpResponse httpResponse = getHttpResponse(soTimeout,
-                    connectionTimeout,
-                    httpRequest,
-                    url);
+            HttpResponse httpResponse = getHttpResponse(
+                    httpRequest
+            );
             String strResult = ABTextUtil.inputStream2StringFromGZIP(httpResponse.getEntity().getContent());
             Logger.d(TAG, String.format("Response from server value(\"%s\")", strResult));
             return strResult;
@@ -230,15 +145,8 @@ public class ABHttpUtil {
         return null;
     }
 
-    private static HttpResponse getHttpResponse(int soTimeout, int connectionTimeout, HttpUriRequest httpRequest, String url) throws IOException {
-        DefaultHttpClient httpClient;
-        if (!isEnableSSL(url)) {
-            Logger.d(TAG, "Initial none SSL HTTP connection.");
-            httpClient = new DefaultHttpClient();
-        } else {
-            Logger.d(TAG, "Initial SSL HTTP connection.");
-            httpClient = ABHttpUtil.getSSLHttpClient(soTimeout, connectionTimeout);
-        }
+    private static HttpResponse getHttpResponse(HttpUriRequest httpRequest) throws IOException {
+        DefaultHttpClient httpClient = HttpApplicationController.getInstance().getHttpClient();
         httpClient.getCookieStore().clear();
         return httpClient.execute(httpRequest);
     }
@@ -308,6 +216,5 @@ public class ABHttpUtil {
     private static boolean isEnableSSL(String url) {
         return url.toLowerCase().startsWith("https");
     }
-
 
 }

@@ -9,6 +9,7 @@ import com.wangjie.androidbucket.services.network.http.SSLSocketFactoryEx;
 import com.wangjie.androidbucket.services.network.toolbox.HttpNetwork;
 
 import org.apache.http.HttpVersion;
+import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -57,7 +58,7 @@ public class HttpApplicationController extends ABApplication {
 
     protected HippoRequestQueue getHttpRequestQueue() {
         if (httpRequestQueue == null) {
-            HttpNetwork networkExecutor = new HttpNetwork(getHttpClient(80, 9094, 20000, 20000));
+            HttpNetwork networkExecutor = new HttpNetwork();
             httpRequestQueue = HippoRequestQueue.newHippoRequestQueue(networkExecutor);
         }
         return httpRequestQueue;
@@ -80,7 +81,11 @@ public class HttpApplicationController extends ABApplication {
      *
      * @return
      */
-    protected DefaultHttpClient getHttpClient(int httpPort, int httpsPort, int soTimeout, int connectionTimeout) {
+    public DefaultHttpClient getHttpClient() {
+        int httpPort = 80;
+        int httpsPort = 443;
+        int soTimeout = 20000;
+        int connectionTimeout = 20000;
         try {
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
             trustStore.load(null, null);

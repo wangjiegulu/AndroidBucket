@@ -1,5 +1,6 @@
 package com.wangjie.androidbucket.services.network.toolbox;
 
+import com.wangjie.androidbucket.application.HttpApplicationController;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.NetworkUtils;
 import com.wangjie.androidbucket.services.network.HippoHttpRequest;
@@ -38,13 +39,7 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
 
     private static final ByteArrayPool mPool = new ByteArrayPool(DEFAULT_POOL_SIZE);
 
-    /**
-     * HttpClient
-     */
-    private DefaultHttpClient httpClient;
-
-    public HttpNetwork(DefaultHttpClient httpClient) {
-        this.httpClient = httpClient;
+    public HttpNetwork() {
     }
 
     /**
@@ -150,10 +145,7 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
 
     @Override
     public NetworkResponse performRequest(HippoHttpRequest<?> request) throws HippoException {
-        if (httpClient == null) {
-            Logger.d(TAG, "Use default http client.");
-            httpClient = new DefaultHttpClient();
-        }
+        DefaultHttpClient httpClient = HttpApplicationController.getInstance().getHttpClient();
         while (true) {
             if (request.isCancel()) {
                 return new NetworkResponse();
@@ -182,9 +174,9 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
                 networkResponse = new NetworkResponse(responseContents);
                 return networkResponse;
             } catch (SocketTimeoutException e) {
-                attemptRetryOnException(request, new HippoException("Socket Timeout"));
+                return new NetworkResponse(new HippoException("Socket Timeout"));
             } catch (ConnectTimeoutException e) {
-                attemptRetryOnException(request, new HippoException("Connect Timeout"));
+                return new NetworkResponse(new HippoException("Connect Timeout"));
             } catch (HippoException e) {
                 networkResponse = new NetworkResponse(e);
                 return networkResponse;
