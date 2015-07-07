@@ -5,6 +5,8 @@ import android.os.Looper;
 import android.os.Message;
 import com.wangjie.androidbucket.log.Logger;
 
+import java.lang.ref.WeakReference;
+
 /**
  * 可重试的Mission
  * Author: wangjie
@@ -35,29 +37,66 @@ public abstract class RetryMission {
      */
     private int leftCounts = 1;
 
-    private Handler handler = new Handler(Looper.getMainLooper()) {
+    private Handler handler = new MyHandler(Looper.getMainLooper(), this);
+
+    private class MyHandler extends Handler {
+        private WeakReference<RetryMission> retryMissionWeakReference;
+
+        public MyHandler(Looper looper, RetryMission retryMission) {
+            super(looper);
+            this.retryMissionWeakReference = new WeakReference<RetryMission>(retryMission);
+        }
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            RetryMission retryMission = retryMissionWeakReference.get();
+            if (null == retryMission) {
+                return;
+            }
             switch (msg.what) {
                 case EXECUTE_MISSION: // 执行mission
-                    if(isInterrupted){
+                    if (retryMission.isInterrupted) {
                         removeMessages(EXECUTE_MISSION);
                         return;
                     }
-                    prepareRunMission();
+                    retryMission.prepareRunMission();
                     break;
                 case EXECUTE_FAIL: // 执行失败
-                    onFail(-1, "尝试完，重试次数：" + retryCounts);
+                    retryMission.onFail(-1, "尝试完，重试次数：" + retryMission.retryCounts);
                     break;
                 case EXECUTE_INTERRUPTED: // 执行中断
-                    onInterrupted();
+                    retryMission.onInterrupted();
                     break;
                 default:
                     break;
             }
         }
-    };
+    }
+
+//    private Handler handler = new Handler(Looper.getMainLooper()) {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what) {
+//                case EXECUTE_MISSION: // 执行mission
+//                    if(isInterrupted){
+//                        removeMessages(EXECUTE_MISSION);
+//                        return;
+//                    }
+//                    prepareRunMission();
+//                    break;
+//                case EXECUTE_FAIL: // 执行失败
+//                    onFail(-1, "尝试完，重试次数：" + retryCounts);
+//                    break;
+//                case EXECUTE_INTERRUPTED: // 执行中断
+//                    onInterrupted();
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+//    };
 
 
     /**
@@ -67,7 +106,7 @@ public abstract class RetryMission {
      * @param leftCounts
      * @return
      */
-    protected long currentDelay(int currentCount, int retryCounts, int leftCounts){
+    protected long currentDelay(int currentCount, int retryCounts, int leftCounts) {
         return DEFAULT_DELAY;
     }
 
@@ -79,7 +118,8 @@ public abstract class RetryMission {
     /**
      * tryCount用完（leftCount为0），并且没有成功
      */
-    protected void onFail(int errorCode, String errorMessage){}
+    protected void onFail(int errorCode, String errorMessage) {
+    }
 
     /**
      * 中断成功后回调

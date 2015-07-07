@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.os.Message;
 import com.wangjie.androidbucket.services.CancelableTask;
 
+import java.lang.ref.WeakReference;
 import java.util.Collection;
 
 /**
@@ -26,24 +27,56 @@ public abstract class Runtask<U, R> implements Runnable, CancelableTask {
 
     private boolean isCanceled;
 
-    protected Handler rHandler = new Handler(Looper.getMainLooper()) {
+    protected Handler rHandler = new MyHandler(Looper.getMainLooper(), this);
+
+    private class MyHandler extends Handler {
+        WeakReference<Runtask<U, R>> runtaskWeakReference;
+
+        public MyHandler(Looper looper, Runtask<U, R> runtask) {
+            super(looper);
+            this.runtaskWeakReference = new WeakReference<>(runtask);
+        }
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            Runtask<U, R> runtask = runtaskWeakReference.get();
+            if (null == runtask) {
+                return;
+            }
             switch (msg.arg1) {
                 case TASK_BEFORE_UI:
-                    onBefore();
+                    runtask.onBefore();
                     break;
                 case TASK_UPDATE_UI:
-                    onUpdateUiCallBack((U) msg.obj);
+                    runtask.onUpdateUiCallBack((U) msg.obj);
                     break;
                 case TASK_RESULT:
-                    onResult((R) msg.obj);
+                    runtask.onResult((R) msg.obj);
                     break;
             }
 
         }
-    };
+    }
+
+//    protected Handler rHandler = new Handler(Looper.getMainLooper()) {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.arg1) {
+//                case TASK_BEFORE_UI:
+//                    onBefore();
+//                    break;
+//                case TASK_UPDATE_UI:
+//                    onUpdateUiCallBack((U) msg.obj);
+//                    break;
+//                case TASK_RESULT:
+//                    onResult((R) msg.obj);
+//                    break;
+//            }
+//
+//        }
+//    };
 
 
     @Override

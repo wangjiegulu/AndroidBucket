@@ -303,5 +303,16 @@ public class ABTextUtil {
         return (int) ((data[0] << 8) | data[1] & 0xFF);
     }
 
+    public static String getExceptionStackTrace(Throwable throwable) {
+        if (null == throwable) {
+            return "null";
+        }
+        StringBuilder sb = new StringBuilder(throwable.getMessage()).append("\n");
+        StackTraceElement[] elements = throwable.getStackTrace();
+        for (StackTraceElement element : elements) {
+            sb.append(element.toString()).append("\r\n");
+        }
+        return sb.toString();
+    }
 
 }

@@ -11,13 +11,13 @@ apply plugin: 'com.android.library' // 导入Android Application 插件，将此
 
 android {
 
-    compileSdkVersion 21 // 使用SDK的版本，请配置你SDK中有的最新版本
+    compileSdkVersion 22 // 使用SDK的版本，请配置你SDK中有的最新版本
     buildToolsVersion "22.0.1" // buildTools 版本，你SDK中有哪个版本配哪个版本，建议更新到最新的版本
 
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 2
         versionName "1.0.5"
     }
@@ -71,9 +71,9 @@ android {
  * https://gradle.org/docs/current/dsl/org.gradle.api.artifacts.dsl.DependencyHandler.html
  */
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+//    compile fileTree(dir: 'libs', include: '*.jar')
 
-//    compile 'com.android.support:support-v4:22.2.0'
-//    compile 'com.android.support:appcompat-v7:22.2.0'
-//    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:recyclerview-v7:22.2.0'
 }

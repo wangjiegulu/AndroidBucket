@@ -1,5 +1,7 @@
 package com.wangjie.androidbucket.utils;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
@@ -133,6 +135,23 @@ public class ABViewUtil {
                         0, 0, 0, 1, 0
                 });
         return new ColorMatrixColorFilter(matrix);
+    }
+
+    public static ColorStateList createColorStateList(int normal, int pressed) {
+        return createColorStateList(normal, pressed, Color.GRAY);
+    }
+    public static ColorStateList createColorStateList(int normal, int pressed, int unable) {
+        return createColorStateList(normal, pressed, pressed, pressed, unable);
+    }
+    public static ColorStateList createColorStateList(int normal, int pressed, int focused, int checked, int unable) {
+        int[] colors = new int[]{pressed, focused, checked, normal, unable};
+        int[][] states = new int[5][];
+        states[0] = new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled};
+        states[1] = new int[]{android.R.attr.state_focused, android.R.attr.state_enabled};
+        states[2] = new int[]{android.R.attr.state_checked, android.R.attr.state_enabled};
+        states[3] = new int[]{android.R.attr.state_enabled};
+        states[4] = new int[]{};
+        return new ColorStateList(states, colors);
     }
 
 }

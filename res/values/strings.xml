@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AndroidBucket</string>
+    <!--<string name="app_name">AndroidBucket</string>-->
 
 
     <string name="tag_fragment_tab_click_only">TAG_FRAGMENT_TAB_CLICK_ONLY</string>

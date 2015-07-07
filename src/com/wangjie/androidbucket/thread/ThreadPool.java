@@ -36,7 +36,7 @@ public class ThreadPool {
             Logger.e(TAG, "ThreadPool没有被初始化，请在Application中进行初始化操作...");
             return;
         }
-//        runtask.onBefore();
+//        runtaskWeakReference.onBefore();
         threadPool.execute(runtask);
     }
 
