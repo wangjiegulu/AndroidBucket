@@ -1,6 +1,7 @@
 package com.wangjie.androidbucket.present;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -21,6 +22,8 @@ public class ABAppCompatActivity extends AppCompatActivity implements ABActivity
     protected boolean isActivityLifeCycleAutoCallBack = true;
 
     private ABBasePresenter presenter;
+
+    private ProgressDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,12 +133,19 @@ public class ABAppCompatActivity extends AppCompatActivity implements ABActivity
 
     @Override
     public void showLoadingDialog(String message) {
-
+        if (null == loadingDialog) {
+            loadingDialog = new ProgressDialog(this);
+            loadingDialog.setCanceledOnTouchOutside(false);
+        }
+        loadingDialog.setMessage(message);
+        loadingDialog.show();
     }
 
     @Override
     public void cancelLoadingDialog() {
-
+        if (null != loadingDialog) {
+            loadingDialog.cancel();
+        }
     }
 
     @Override

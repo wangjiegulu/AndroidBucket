@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.content.CursorLoader;
 import android.webkit.MimeTypeMap;
 import com.wangjie.androidbucket.log.Logger;
@@ -435,11 +436,11 @@ public class ABFileUtil {
      * @param applicationDir
      * @return
      */
-    public static String getApplicationPath(Context context, String applicationDir) {
+    public static String getApplicationPath(Context context, @Nullable String applicationDir) {
         // check whether the device has external storage
         if (ABAppUtil.haveSDCard()) {
             String sdcardPath = Environment.getExternalStorageDirectory().toString()
-                    + File.separator + applicationDir + File.separator;
+                    + File.separator + (ABTextUtil.isEmpty(applicationDir) ? "" : applicationDir + File.separator);
             Logger.d(TAG, "have sdcard! sdcard path: " + sdcardPath);
             return sdcardPath;
         } else {

@@ -29,7 +29,10 @@ import com.wangjie.androidbucket.log.Logger;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * 当前程序是否后台运行
@@ -47,7 +50,7 @@ import java.util.*;
  * 获取当前应用的版本号
  * 收集设备信息并以Properties返回
  * 收集设备信息并以String返回
- * <p/>
+ * <p>
  * Created with IntelliJ IDEA.
  * Author: wangjie  email:tiantian.china.2@gmail.com
  * Date: 13-6-5
@@ -558,6 +561,11 @@ public class ABAppUtil {
 
     /**
      * 返回状态：当前的网络链接状态
+     * 0：其他
+     * 1：WIFI
+     * 2：2G
+     * 3：3G
+     * 4：4G
      *
      * @return 没有网络，2G，3G，4G，WIFI
      */
@@ -579,4 +587,12 @@ public class ABAppUtil {
 
         return netWorkType;
     }
+
+    /**
+     * Check if this device has a camera
+     */
+    public static boolean checkCameraHardware(Context context) {
+        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+    }
+
 }
