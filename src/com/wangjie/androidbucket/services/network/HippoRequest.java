@@ -110,7 +110,7 @@ public abstract class HippoRequest<T> implements Comparable<HippoRequest>, Cance
         if (retryCount >= 0) {
             this.retryPolicy = new RetryPolicy(retryCount);
         } else {
-            this.retryPolicy = new RetryPolicy();
+            this.retryPolicy = new RetryPolicy(0);
         }
         setState(State.READY);
     }

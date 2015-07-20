@@ -24,6 +24,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
 import com.wangjie.androidbucket.application.ABApplication;
 import com.wangjie.androidbucket.log.Logger;
 
@@ -263,17 +264,15 @@ public class ABAppUtil {
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public static String getDeviceIMEI(Context context) {
         String deviceId;
-        if (isPhone(context)) {
-            TelephonyManager telephony = (TelephonyManager) context
-                    .getSystemService(Context.TELEPHONY_SERVICE);
-            deviceId = telephony.getDeviceId();
-        } else {
+        TelephonyManager telephony = (TelephonyManager) context
+                .getSystemService(Context.TELEPHONY_SERVICE);
+        deviceId = telephony.getDeviceId();
+        if (deviceId == null) {
             deviceId = Settings.Secure.getString(context.getContentResolver(),
                     Settings.Secure.ANDROID_ID);
-
         }
         Logger.d(TAG, "当前设备IMEI码: " + deviceId);
-        return deviceId;
+        return deviceId != null ? deviceId : "Unknown";
     }
 
     /**
@@ -376,9 +375,8 @@ public class ABAppUtil {
         Properties prop = collectDeviceInfo(context);
         Set deviceInfos = prop.keySet();
         StringBuilder deviceInfoStr = new StringBuilder("{\n");
-        for (Iterator iter = deviceInfos.iterator(); iter.hasNext(); ) {
-            Object item = iter.next();
-            deviceInfoStr.append("\t\t\t" + item + ":" + prop.get(item) + ", \n");
+        for (Object item : deviceInfos) {
+            deviceInfoStr.append("\t\t\t").append(item).append(":").append(prop.get(item)).append(", \n");
         }
         deviceInfoStr.append("}");
         return deviceInfoStr.toString();

@@ -9,6 +9,7 @@ import android.media.ExifInterface;
 import android.os.Build;
 import android.util.Base64;
 import android.view.View;
+
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.utils.ABIOUtil;
 import com.wangjie.androidbucket.utils.ABViewUtil;

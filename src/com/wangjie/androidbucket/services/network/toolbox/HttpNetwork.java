@@ -1,5 +1,6 @@
 package com.wangjie.androidbucket.services.network.toolbox;
 
+import com.wangjie.androidbucket.application.HttpApplicationController;
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.services.NetworkUtils;
 import com.wangjie.androidbucket.services.network.HippoHttpRequest;
@@ -38,13 +39,7 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
 
     private static final ByteArrayPool mPool = new ByteArrayPool(DEFAULT_POOL_SIZE);
 
-    /**
-     * HttpClient
-     */
-    private DefaultHttpClient httpClient;
-
-    public HttpNetwork(DefaultHttpClient httpClient) {
-        this.httpClient = httpClient;
+    public HttpNetwork() {
     }
 
     /**
@@ -150,18 +145,12 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
 
     @Override
     public NetworkResponse performRequest(HippoHttpRequest<?> request) throws HippoException {
-        DefaultHttpClient client;
-        if (httpClient == null) {
-            Logger.d(TAG, "Use default http client.");
-            client = new DefaultHttpClient();
-        } else {
-            client = httpClient;
-        }
+        DefaultHttpClient httpClient = HttpApplicationController.getInstance().getHttpClient();
         while (true) {
             if (request.isCancel()) {
                 return new NetworkResponse();
             }
-            NetworkResponse networkResponse = null;
+            NetworkResponse networkResponse;
             HttpResponse httpResponse = null;
             byte[] responseContents = null;
             try {
@@ -171,14 +160,10 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
                 prepareRequest(httpUriRequest);
                 Logger.d(TAG, "Url: " + request.getUrl());
                 request.setUriRequest(httpUriRequest);
-                if (NetworkUtils.IS_HOST_REACHABLE) {
-                    client.getCookieStore().clear();
-                    httpResponse = httpClient.execute(httpUriRequest);
-                } else {
-                    client = new DefaultHttpClient();
-                    client.getCookieStore().clear();
-                    httpResponse = new DefaultHttpClient().execute(httpUriRequest);
-                }
+                httpClient.getCookieStore().clear();
+                httpResponse = httpClient.execute(httpUriRequest);
+                int statusCode = httpResponse.getStatusLine().getStatusCode();
+                Logger.w(TAG, "Http response status code: " + statusCode);
                 request.setState(HippoRequest.State.FINISHING);
                 responseContents = entityToBytes(httpResponse.getEntity());
                 // 如果接收到的回复为空，默认赋值为长度为0的byte数组
@@ -189,9 +174,9 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
                 networkResponse = new NetworkResponse(responseContents);
                 return networkResponse;
             } catch (SocketTimeoutException e) {
-                attemptRetryOnException(request, new HippoException("Socket Timeout"));
+                return new NetworkResponse(new HippoException("Socket Timeout"));
             } catch (ConnectTimeoutException e) {
-                attemptRetryOnException(request, new HippoException("Connect Timeout"));
+                return new NetworkResponse(new HippoException("Connect Timeout"));
             } catch (HippoException e) {
                 networkResponse = new NetworkResponse(e);
                 return networkResponse;
@@ -199,7 +184,6 @@ public class HttpNetwork implements Network<HippoHttpRequest<?>> {
                 Logger.w(TAG, "Http access exception: " + e.getMessage());
                 if (httpResponse != null) {
                     int statusCode = httpResponse.getStatusLine().getStatusCode();
-                    Logger.w(TAG, "Http response status code: " + statusCode);
                     try {
                         responseContents = entityToBytes(httpResponse.getEntity());
                     } catch (IOException ignored) {
