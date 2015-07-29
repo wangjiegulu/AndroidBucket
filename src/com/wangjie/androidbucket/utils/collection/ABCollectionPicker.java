@@ -110,12 +110,14 @@ public class ABCollectionPicker {
 
     /**
      * 可从集合中自定义规则匹配不同类型的对象
+     *
      * @param <E>
      * @param <T>
      */
     public static interface ABPickerAnyController<E, T> {
         boolean isPicked(E expect, T iterTarget);
     }
+
     public static <E, T> T pickAnyFirst(E expect, Collection<T> collection, ABPickerAnyController<E, T> pickerController) {
         if (null == expect || ABTextUtil.isEmpty(collection)) {
             return null;
@@ -129,6 +131,23 @@ public class ABCollectionPicker {
         }
         return picked;
     }
+
+    public static <E, T> T pickAnyFirstReverse(E expect, List<T> collection, ABPickerAnyController<E, T> pickerController) {
+        if (null == expect || ABTextUtil.isEmpty(collection)) {
+            return null;
+        }
+        T picked = null;
+        for (int i = collection.size() - 1; i > 0; i--) {
+            T t = collection.get(i);
+            if (pickerController.isPicked(expect, t)) {
+                picked = t;
+                break;
+            }
+        }
+        return picked;
+    }
+
+
     public static <E, T> List<T> pick(E expect, Collection<T> collection, ABPickerAnyController<E, T> pickerController) {
         if (null == expect || ABTextUtil.isEmpty(collection)) {
             return null;
