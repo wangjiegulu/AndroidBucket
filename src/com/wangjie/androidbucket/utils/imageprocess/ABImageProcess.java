@@ -9,7 +9,6 @@ import android.media.ExifInterface;
 import android.os.Build;
 import android.util.Base64;
 import android.view.View;
-
 import com.wangjie.androidbucket.log.Logger;
 import com.wangjie.androidbucket.utils.ABIOUtil;
 import com.wangjie.androidbucket.utils.ABViewUtil;
@@ -751,7 +750,11 @@ public class ABImageProcess {
     public static Drawable getResourceDrawableBounded(Context context, int drawableResId, int bound) {
         Drawable drawable = null;
         try {
-            drawable = context.getResources().getDrawable(drawableResId);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                drawable = context.getResources().getDrawable(drawableResId, null);
+            } else {
+                drawable = context.getResources().getDrawable(drawableResId);
+            }
             drawable.setBounds(0, 0, bound, bound);
         } catch (Exception ex) {
             Logger.e(TAG, ex);

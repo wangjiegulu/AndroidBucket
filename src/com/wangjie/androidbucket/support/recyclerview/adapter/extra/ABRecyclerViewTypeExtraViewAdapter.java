@@ -39,6 +39,10 @@ public abstract class ABRecyclerViewTypeExtraViewAdapter extends RecyclerView.Ad
         return hasHeaderView() ? innerPosition - 1 : innerPosition;
     }
 
+    public int realItemPositionToInnerPosition(int realItemPosition) {
+        return hasHeaderView() ? realItemPosition + 1 : realItemPosition;
+    }
+
     @TargetApi(Build.VERSION_CODES.DONUT)
     @Override
     public ABRecyclerViewTypeExtraHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
