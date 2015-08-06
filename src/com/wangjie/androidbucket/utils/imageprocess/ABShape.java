@@ -1,12 +1,12 @@
 package com.wangjie.androidbucket.utils.imageprocess;
 
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.*;
 import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
+import android.os.Build;
+import com.wangjie.androidbucket.utils.ABViewUtil;
 
 /**
  * Author: wangjie
@@ -69,5 +69,21 @@ public class ABShape {
         paint.setStyle(Paint.Style.FILL);
         return sd;
     }
+
+
+    public static Drawable generateCornerRippleCompat(int normalColor, int pressedColor) {
+        return generateCornerRippleCompat(normalColor, pressedColor);
+    }
+    public static Drawable generateCornerRippleCompat(int normalColor, int pressedColor, int corner) {
+        Drawable drawable;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            drawable = new RippleDrawable(ABViewUtil.createColorStateList(normalColor, pressedColor),
+                    generateCornerShapeDrawable(normalColor, corner), null);
+        }else{
+            drawable = selectorClickColorCornerSimple(normalColor, pressedColor, corner);
+        }
+        return drawable;
+    }
+
 
 }
