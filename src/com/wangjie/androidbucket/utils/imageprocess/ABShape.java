@@ -71,10 +71,10 @@ public class ABShape {
     }
 
 
-    public static Drawable generateCornerRippleCompat(int normalColor, int pressedColor) {
-        return generateCornerRippleCompat(normalColor, pressedColor);
+    public static Drawable selectorCornerRippleCompat(int normalColor, int pressedColor) {
+        return selectorCornerRippleCompat(normalColor, pressedColor);
     }
-    public static Drawable generateCornerRippleCompat(int normalColor, int pressedColor, int corner) {
+    public static Drawable selectorCornerRippleCompat(int normalColor, int pressedColor, int corner) {
         Drawable drawable;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             drawable = new RippleDrawable(ABViewUtil.createColorStateList(normalColor, pressedColor),
