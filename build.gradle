@@ -29,7 +29,7 @@ android {
 //            proguardFiles 'proguard-project.txt' // 自定义混淆文件
         }
         debug { // debug 版
-
+            minifyEnabled false // 是否混淆
         }
     }
 

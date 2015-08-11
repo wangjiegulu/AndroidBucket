@@ -72,7 +72,7 @@ public class ABShape {
 
 
     public static Drawable selectorCornerRippleCompat(int normalColor, int pressedColor) {
-        return selectorCornerRippleCompat(normalColor, pressedColor);
+        return selectorCornerRippleCompat(normalColor, pressedColor, 0);
     }
     public static Drawable selectorCornerRippleCompat(int normalColor, int pressedColor, int corner) {
         Drawable drawable;
