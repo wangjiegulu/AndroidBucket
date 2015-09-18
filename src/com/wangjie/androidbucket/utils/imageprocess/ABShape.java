@@ -1,6 +1,9 @@
 package com.wangjie.androidbucket.utils.imageprocess;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.*;
 import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RoundRectShape;
@@ -85,5 +88,28 @@ public class ABShape {
         return drawable;
     }
 
+    /**
+     * 为Drawable着色
+     * @param context
+     * @param drawable
+     * @param color
+     * @param mode
+     * @return
+     */
+    public static Drawable setDrawableColorFilterCompat(Context context, Drawable drawable, int color, PorterDuff.Mode mode) {
+        Drawable icon = drawable.mutate();
+        icon.setColorFilter(color, mode);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            return icon;
+        }
+
+//      Note that on KitKat, setting a ColorFilter on a Drawable contained in a StateListDrawable
+//      apparently doesn't work, although it does on later versions, so we have to render the colored
+//      bitmap into a BitmapDrawable and then put that into the StateListDrawable
+
+        Bitmap bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        return new BitmapDrawable(context.getResources(), bitmap);
+    }
 
 }
