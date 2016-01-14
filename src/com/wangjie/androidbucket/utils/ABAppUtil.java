@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -235,9 +236,26 @@ public class ABAppUtil {
      * @return
      */
     public static int getDeviceWidth(Context context) {
+        return getDeviceSize(context).x;
+    }
+
+    /**
+     * 获取设备的高宽
+     *
+     * @param context
+     * @return
+     */
+    public static Point getDeviceSize(Context context) {
         WindowManager manager = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
-        return manager.getDefaultDisplay().getWidth();
+        Point point = new Point();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR2) {
+            point.x = manager.getDefaultDisplay().getWidth();
+            point.y = manager.getDefaultDisplay().getHeight();
+        } else {
+            manager.getDefaultDisplay().getSize(point);
+        }
+        return point;
     }
 
     /**
@@ -247,9 +265,7 @@ public class ABAppUtil {
      * @return
      */
     public static int getDeviceHeight(Context context) {
-        WindowManager manager = (WindowManager) context
-                .getSystemService(Context.WINDOW_SERVICE);
-        return manager.getDefaultDisplay().getHeight();
+        return getDeviceSize(context).y;
     }
 
     /**
@@ -591,22 +607,23 @@ public class ABAppUtil {
         return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
 
-    public static String getIp(Context context){
-        WifiManager wm=(WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+    public static String getIp(Context context) {
+        WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         //检查Wifi状态
-        if(!wm.isWifiEnabled())
+        if (!wm.isWifiEnabled())
             wm.setWifiEnabled(true);
-        WifiInfo wi=wm.getConnectionInfo();
+        WifiInfo wi = wm.getConnectionInfo();
         //获取32位整型IP地址
-        int ipAdd=wi.getIpAddress();
+        int ipAdd = wi.getIpAddress();
         //把整型地址转换成“*.*.*.*”地址
         return intToIp(ipAdd);
     }
+
     private static String intToIp(int i) {
-        return (i & 0xFF ) + "." +
-                ((i >> 8 ) & 0xFF) + "." +
-                ((i >> 16 ) & 0xFF) + "." +
-                ( i >> 24 & 0xFF) ;
+        return (i & 0xFF) + "." +
+                ((i >> 8) & 0xFF) + "." +
+                ((i >> 16) & 0xFF) + "." +
+                (i >> 24 & 0xFF);
     }
 
 }

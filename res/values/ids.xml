@@ -14,4 +14,6 @@
 
     <item type="id" name="ab__id_adapter_item_type_render" />
 
+    <item type="id" name="ab__id_view_holder_cache" />
+
 </resources>

@@ -10,6 +10,7 @@ import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import com.wangjie.androidbucket.R;
 
 import java.util.List;
 
@@ -31,10 +32,10 @@ public class ABViewUtil {
      */
     @SuppressWarnings("unchecked")
     public static <T extends View> T obtainView(View convertView, int id) {
-        SparseArray<View> holder = (SparseArray<View>) convertView.getTag();
+        SparseArray<View> holder = (SparseArray<View>) convertView.getTag(R.id.ab__id_view_holder_cache);
         if (holder == null) {
             holder = new SparseArray<View>();
-            convertView.setTag(holder);
+            convertView.setTag(R.id.ab__id_view_holder_cache, holder);
         }
         View childView = holder.get(id);
         if (childView == null) {
